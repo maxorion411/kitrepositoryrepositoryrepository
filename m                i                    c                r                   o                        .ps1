@@ -1,7 +1,6 @@
-# Check the instructions here on how to use it mass grave[.]dev
 
 $ErrorActionPreference = "Stop"
-# Enable TLSv1.2 for compatibility with older clients
+
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
 
 $DownloadURL = 'https://raw.githubusercontent.com/massgravel/Microsoft-Activation-Scripts/master/MAS/All-In-One-Version/MAS_AIO-CRC32_63055B8E.cmd'
