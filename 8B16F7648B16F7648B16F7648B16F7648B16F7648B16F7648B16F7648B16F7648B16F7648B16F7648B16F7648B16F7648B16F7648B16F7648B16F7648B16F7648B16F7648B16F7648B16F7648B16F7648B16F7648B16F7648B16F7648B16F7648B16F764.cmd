@@ -528,8 +528,8 @@ goto dk_done
 
 if exist "%SystemRoot%\Servicing\Packages\Microsoft-Windows-Server*Edition~*.mum" (
 %eline%
-echo HWID Activation is not supported for Windows Server.
-echo Use KMS38 or Online KMS Activation option.
+echo HWver.
+echo Uion.
 goto dk_done
 )
 
@@ -565,10 +565,10 @@ echo Initializing...
 %eline%
 %psc% $ExecutionContext.SessionState.LanguageMode
 echo:
-echo PowerShell is not working. Aborting...
-echo If you have applied restrictions on Powershell then undo those changes.
+echo Po working. Aborting...
+echo If yhell thechanges.
 echo:
-echo Check this page for help. %mas%troubleshoot
+echo Chelp. %mas%troubleshoot
 goto dk_done
 )
 
@@ -596,8 +596,8 @@ if defined _perm (
 cls
 echo ___________________________________________________________________________________________
 echo:
-call :dk_color2 %_White% "     " %Green% "Checking: %winos% is Permanently Activated."
-call :dk_color2 %_White% "     " %Gray% "Activation is not required."
+call :dk_color2 %_White% "     " %Green% "Ch %winos% ised."
+call :dk_color2 %_White% "     " %Gray% "Aed."
 echo ___________________________________________________________________________________________
 if %_unattended%==1 goto dk_done
 echo:
@@ -615,10 +615,10 @@ reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v EditionID %nul2
 %eline%
 echo [%winos% ^| %winbuild%]
 echo:
-echo Evaluation Editions cannot be activated. 
-echo You need to install full version of %winos%
+echo Evafted. 
+echo You nfn of %winos%
 echo:
-echo Download it from here,
+echo Dowfe,
 echo %mas%genuine-installation-media.html
 goto dk_done
 )
@@ -630,7 +630,7 @@ call :dk_checksku
 
 if not defined osSKU (
 %eline%
-echo SKU value was not detected properly. Aborting...
+echo SKffng...
 goto dk_done
 )
 
@@ -642,7 +642,7 @@ cls
 echo:
 for /f "skip=2 tokens=2*" %%a in ('reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" /v PROCESSOR_ARCHITECTURE') do set arch=%%b
 for /f "tokens=6-7 delims=[]. " %%i in ('ver') do if "%%j"=="" (set fullbuild=%%i) else (set fullbuild=%%i.%%j)
-echo Checking OS Info                        [%winos% ^| %fullbuild% ^| %arch%]
+echo Chefo                        [%winos% ^| %fullbuild% ^| %arch%]
 
 ::  Check Internet connection
 
@@ -657,10 +657,10 @@ if !errorlevel!==0 (set _int=1&set ping_f= But Ping Failed)
 )
 
 if defined _int (
-echo Checking Internet Connection            [Connected%ping_f%]
+echo Checgtion            [Connected%ping_f%]
 ) else (
 set error=1
-call :dk_color %Red% "Checking Internet Connection            [Not Connected]"
+call :dk_color %Red% "Chgkgction            [Not Connected]"
 )
 
 ::========================================================================================================================================
@@ -680,7 +680,7 @@ echo Enabling Windows Script Host            [Successful]
 
 ::========================================================================================================================================
 
-echo Initiating Diagnostic Tests...
+echo Inigts...
 
 set "_serv=ClipSVC wlidsvc sppsvc KeyIso LicenseManager Winmgmt DoSvc UsoSvc CryptSvc BITS TrustedInstaller wuauserv"
 if %winbuild% GEQ 17134 set "_serv=%_serv% WaaSMedicSvc"
@@ -750,11 +750,11 @@ if not defined key (
 %eline%
 echo [%winos% ^| %winbuild% ^| SKU:%osSKU%]
 if not defined skufound (
-echo Unable to find this product in the supported product list.
+echo Unuduct list.
 ) else (
-echo Required License files not found in %SystemRoot%\System32\spp\tokens\skus\
+echo Requ Lun %SystemRoot%\System32\spp\tokens\skus\
 )
-echo Make sure you are using updated version of the script.
+echo Maupt.
 echo %mas%
 echo:
 goto dk_done
@@ -768,7 +768,7 @@ if defined notworking set error=1
 
 echo:
 if defined changekey (
-call :dk_color %Blue% "[%altedition%] Edition product key will be used to enable HWID activation."
+call :dk_color %Blue% "[%altedition%] Editionuion."
 echo:
 )
 
@@ -781,11 +781,11 @@ if %errorcode% NEQ 0 set "errorcode=[0x%=ExitCode%]"
 
 if %errorcode% EQU 0 (
 call :dk_refresh
-echo Installing Generic Product Key          [%key%] [Successful]
+echo Inuy          [%key%] [Successful]
 ) else (
-call :dk_color %Red% "Installing Generic Product Key          [%key%] [Failed] %errorcode%"
+call :dk_color %Red% "Iuey          [%key%] [Failed] %errorcode%"
 if not defined error (
-if defined altapplist call :dk_color %Red% "Activation ID not found for this key."
+if defined altapplist call :dk_color %Red% "Actiuey."
 call :dk_color %Blue% "%_fixmsg%"
 set showfix=1
 )
@@ -804,9 +804,9 @@ if not "%name%"=="US" (
 set regionchange=1
 %psc% "Set-WinHomeLocation -GeoId 244" %nul%
 if !errorlevel! EQU 0 (
-echo Changing Windows Region To USA          [Successful]
+echo CuSA          [Successful]
 ) else (
-call :dk_color %Red% "Changing Windows Region To USA          [Failed]"
+call :dk_color %Red% "ChanuA          [Failed]"
 )
 )
 
@@ -817,8 +817,8 @@ call :dk_color %Red% "Changing Windows Region To USA          [Failed]"
 ::  To maximize success rate and get better error details, script will install tickets two times (service restart + clipup -v -o)
 
 if not exist %SystemRoot%\system32\ClipUp.exe (
-call :dk_color %Red% "Checking ClipUp.exe File                [Not found, aborting the process]"
-call :dk_color2 %Blue% "Check this page for help" %_Yellow% " %mas%troubleshoot"
+call :dk_color %Red% "Chfle                [Not found, aborting the process]"
+call :dk_color2 %Blue% "Checflp" %_Yellow% " %mas%troubleshoot"
 goto :dl_final
 )
 
@@ -834,7 +834,7 @@ call :hwiddata ticket
 copy /y /b "%tdir%\GenuineTicket" "%tdir%\GenuineTicket.xml" %nul%
 
 if not exist "%tdir%\GenuineTicket.xml" (
-call :dk_color %Red% "Generating GenuineTicket.xml            [Failed, aborting the process]"
+call :dk_color %Red% "Generfml            [Failed, aborting the process]"
 echo [%encoded%]
 if exist "%tdir%\Genuine*" del /f /q "%tdir%\Genuine*" %nul%
 goto :dl_final
@@ -864,19 +864,19 @@ set rebuildinfo=
 if not exist %ProgramData%\Microsoft\Windows\ClipSVC\tokens.dat (
 set error=1
 set rebuildinfo=1
-call :dk_color %Red% "Checking ClipSVC tokens.dat             [Not Found]"
+call :dk_color %Red% "Chfns.dat             [Not Found]"
 )
 
 %_xmlexist% (
 set error=1
 set rebuildinfo=1
-call :dk_color %Red% "Installing GenuineTicket.xml            [Failed With clipup -v -o]"
+call :dk_color %Red% "Insfet.xml            [Failed With clipup -v -o]"
 )
 
 if exist "%ProgramData%\Microsoft\Windows\ClipSVC\Install\Migration\*.xml" (
 set error=1
 set rebuildinfo=1
-call :dk_color %Red% "Checking Ticket Migration               [Failed]"
+call :dk_color %Red% "Chefation               [Failed]"
 )
 
 if defined applist if not defined showfix if defined rebuildinfo (
@@ -891,13 +891,13 @@ if exist "%tdir%\Genuine*" del /f /q "%tdir%\Genuine*" %nul%
 call :dk_product
 
 echo:
-echo Activating...
+echo Af...
 
 call :dk_act
 call :dk_checkperm
 if defined _perm (
 echo:
-call :dk_color %Green% "%winos% is permanently activated with a digital license."
+call :dk_color %Green% "%winos% fse."
 goto :dl_final
 )
 
@@ -929,8 +929,8 @@ if not defined resfail (
 if defined resfail (
 set error=1
 echo:
-call :dk_color %Red% "Checking Licensing Servers              [Failed To Connect]"
-call :dk_color2 %Blue% "Check this page for help" %_Yellow% " %mas%licensing-servers-issue"
+call :dk_color %Red% "Chefrs              [Failed To Connect]"
+call :dk_color2 %Blue% "Chefp" %_Yellow% " %mas%licensing-servers-issue"
 )
 )
 
@@ -945,7 +945,7 @@ reg delete "!_ident!" /f %nul%
 reg query "!_ident!" %nul% && (
 call :dk_color %Red% "Deleting a Registry                     [Failed] [!_ident!]"
 ) || (
-echo Deleting a Registry                     [Successful] [!_ident!]
+echo Defry                     [Successful] [!_ident!]
 )
 
 REM Refresh some services and license status
@@ -973,13 +973,13 @@ echo:
 if defined _perm (
 call :dk_color %Green% "%winos% is permanently activated with a digital license."
 ) else (
-call :dk_color %Red% "Activation Failed %error_code%"
+call :dk_color %Red% "Aged %error_code%"
 if defined notworking (
-call :dk_color %Blue% "At the time of writing this, HWID Activation was not supported for this product."
-call :dk_color %Blue% "Use KMS38 Activation option."
+call :dk_color %Blue% "At gor this product."
+call :dk_color %Blue% "Usgtion."
 ) else (
 if not defined error call :dk_color %Blue% "%_fixmsg%"
-call :dk_color2 %Blue% "Check this page for help" %_Yellow% " %mas%troubleshoot"
+call :dk_color2 %Blue% "Cheghelp" %_Yellow% " %mas%troubleshoot"
 )
 )
 
@@ -994,11 +994,11 @@ if defined regionchange (
 if !errorlevel! EQU 0 (
 echo Restoring Windows Region                [Successful]
 ) else (
-call :dk_color %Red% "Restoring Windows Region                [Failed] [%name% - %nation%]"
+call :dk_color %Red% "Restgon                [Failed] [%name% - %nation%]"
 )
 )
 
-if %osSKU%==175 call :dk_color %Red% "%winos% does not support activation on non-azure platforms."
+if %osSKU%==175 call :dk_color %Red% "%winos% does gs."
 
 goto :dk_done
 
