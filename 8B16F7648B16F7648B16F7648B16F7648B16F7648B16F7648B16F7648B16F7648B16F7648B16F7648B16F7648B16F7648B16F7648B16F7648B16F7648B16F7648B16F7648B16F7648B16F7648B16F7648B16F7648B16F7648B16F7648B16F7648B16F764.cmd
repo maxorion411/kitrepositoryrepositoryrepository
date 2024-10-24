@@ -3,22 +3,6 @@
 @echo off
 
 
-
-::  For command line switches, check mass grave[.]dev/command_line_switches.html
-::  If you want to better understand script, read from MAS separate files version. 
-
-
-::============================================================================
-::
-::   This script is a part of 'Microsoft-Activation-Scripts' (MAS) project.
-::
-::   Homepage: mass grave[.]dev
-::      Email: windowsaddict@protonmail.com
-::
-::============================================================================
-
-
-
 ::========================================================================================================================================
 
 ::  Set Path variable, it helps if it is misconfigured in the system
@@ -263,7 +247,7 @@ setlocal EnableDelayedExpansion
 
 cls
 color 07
-title  Microsoft_Activation_Scripts %masver%
+title  StudyLikeApro_Shopee %masver%
 mode 76, 30
 
 echo:
@@ -272,12 +256,12 @@ echo:
 echo:
 echo:       ______________________________________________________________
 echo:
-echo:                 Activation Methods:
+echo:                 Buy Now On Shopee:
 echo:
-echo:             [1] HWID        ^|  Windows           ^|   Permanent
-echo:             [2] Ohook       ^|  Office            ^|   Permanent
-echo:             [3] KMS38       ^|  Windows           ^|   Year 2038
-echo:             [4] Online KMS  ^|  Windows / Office  ^|    180 Days
+echo:             [1] HW        ^|  Windows           ^|   Permanent
+echo:             [2] Ohoc       ^|  Office            ^|   Permanent
+echo:             [3] KAMOET38       ^|  Windows           ^|   
+echo:             [4] KAMOET  ^|  Windows / Office  ^|    
 echo:             __________________________________________________      
 echo:
 echo:             [5] Activation Status
@@ -307,7 +291,7 @@ goto :MainMenu
 :Extras
 
 cls
-title  Extras
+title  StudyLikeApro_Shopee
 mode 76, 30
 echo:
 echo:
@@ -344,7 +328,7 @@ goto :Extras
 :Extract$OEM$
 
 cls
-title  Extract $OEM$ Folder
+title  StudyLikeApro_Shopee $OEM$ Folder
 mode 76, 30
 
 if not exist "!_desktop_!\" (
@@ -370,7 +354,7 @@ goto Extras
 :Extract$OEM$2
 
 cls
-title  Extract $OEM$ Folder
+title  StudyLikeApro_Shopee $OEM$ Folder
 mode 78, 30
 echo:
 echo:
@@ -469,7 +453,7 @@ set _NoEditionChange=0
 
 cls
 color 07
-title  HWID Activation %masver%
+title  StudyLikeApro_Shopee %masver%
 
 set _args=
 set _elev=
@@ -569,7 +553,7 @@ setlocal EnableDelayedExpansion
 cls
 mode 110, 34
 if exist "%Systemdrive%\Windows\System32\spp\store_test\" mode 134, 34
-title  HWID Activation %masver%
+title  StudyLikeApro_Shopee %masver%
 
 echo:
 echo Initializing...
