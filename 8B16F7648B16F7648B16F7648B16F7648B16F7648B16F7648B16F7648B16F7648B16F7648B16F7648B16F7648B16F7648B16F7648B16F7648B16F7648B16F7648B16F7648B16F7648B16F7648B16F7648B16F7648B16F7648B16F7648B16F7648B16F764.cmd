@@ -249,7 +249,7 @@ setlocal EnableDelayedExpansion
 
 cls
 color 07
-title  Microsoft_Activation_Scripts %masver%
+title  Microsoft_Windows
 mode 76, 30
 
 echo:
@@ -260,16 +260,15 @@ echo:       ______________________________________________________________
 echo:
 echo:               
 echo:
-echo:             [1] HWID        ^|  Windows           ^|   Permanent
-echo:             [2] Ohk       ^|  Office            ^|   Permanent
+echo:             [1] HID        ^|  Windows           ^|   et
+echo:             [2] Ohk       ^|  Office            ^|   Pt
 echo:             [3] K38       ^|  Windows           ^|   
 echo:             [4] One S  ^|  Windows / Office  ^|    
 echo:             __________________________________________________      
 echo:
-echo:             [5] Activation Status
+echo:             [5] Acti Stat
 echo:             [6] Troubleshoot
 echo:             [7] Extras
-echo:             [8] Help
 echo:             [0] Exit
 echo:       ______________________________________________________________
 echo:
