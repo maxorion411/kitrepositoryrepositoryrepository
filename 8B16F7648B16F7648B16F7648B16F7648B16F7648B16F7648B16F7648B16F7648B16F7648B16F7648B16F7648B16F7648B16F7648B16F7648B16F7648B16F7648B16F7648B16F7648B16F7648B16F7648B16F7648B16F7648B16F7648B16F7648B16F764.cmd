@@ -118,15 +118,15 @@ set "eline=echo: &call :_color %Red% "==== ERROR ====" &echo:"
 
 if %winbuild% LSS 7600 (
 %nceline%
-echo Unsupported OS version detected [%winbuild%].
-echo Project is supported only for Windows 7/8/8.1/10/11 and their Server equivalent.
+echo U d [%winbuild%].
+echo Pr alent.
 goto MASend
 )
 
 for %%# in (powershell.exe) do @if "%%~$PATH:#"=="" (
 %nceline%
-echo Unable to find powershell.exe in the system.
-echo Aborting...
+echo Un m.
+echo Ab g...
 goto MASend
 )
 
@@ -151,10 +151,10 @@ setlocal EnableDelayedExpansion
 echo "!_batf!" | find /i "!_ttemp!" %nul1% && (
 if /i not "!_work!"=="!_ttemp!" (
 %nceline%
-echo Script is launched from the temp folder,
-echo Most likely you are running the script directly from the archive file.
+echo Scr folder,
+echo Mos rchive file.
 echo:
-echo Extract the archive file and launch the script from the extracted folder.
+echo Extr folder.
 goto MASend
 )
 )
@@ -166,8 +166,8 @@ goto MASend
 %nul1% fltmc || (
 if not defined _elev %psc% "start cmd.exe -arg '/c \"!_PSarg:'=''!\"' -verb runas" && exit /b
 %nceline%
-echo This script needs admin rights.
-echo To do so, right click on this script and select 'Run as administrator'.
+echo This ts.
+echo To d rator'.
 goto MASend
 )
 
