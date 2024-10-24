@@ -1,6 +1,5 @@
 @set masver=2.6
 @setlocal DisableDelayedExpansion
-@echo off
 
 
 
@@ -50,13 +49,6 @@ set "mas=ht%blank%tps%blank%://mass%blank%grave.dev/"
 
 sc query Null | find /i "RUNNING"
 if %errorlevel% NEQ 0 (
-echo:
-echo Null service is not running, script may crash...
-echo:
-echo:
-echo Help - %mas%troubleshoot.html
-echo:
-echo:
 ping 127.0.0.1 -n 10
 )
 cls
@@ -65,9 +57,6 @@ cls
 
 pushd "%~dp0"
 >nul findstr /v "$" "%~nx0" && (
-echo:
-echo Error: Script either has LF line ending issue or an empty line at the end of the script is missing.
-echo:
 ping 127.0.0.1 -n 6 >nul
 popd
 exit /b
@@ -92,7 +81,6 @@ if /i "%%A"=="-el"                    set _elev=1
 )
 )
 
-if defined _args echo "%_args%" | find /i "/" >nul && set _MASunattended=1
 
 ::========================================================================================================================================
 
@@ -111,22 +99,16 @@ if %winbuild% GEQ 10586 reg query "HKCU\Console" /v ForceV2 %nul2% | find /i "0x
 
 call :_colorprep
 
-set "nceline=echo: &echo ==== ERROR ==== &echo:"
-set "eline=echo: &call :_color %Red% "==== ERROR ====" &echo:"
 
 ::========================================================================================================================================
 
 if %winbuild% LSS 7600 (
 %nceline%
-echo U d [%winbuild%].
-echo Pr alent.
 goto MASend
 )
 
 for %%# in (powershell.exe) do @if "%%~$PATH:#"=="" (
 %nceline%
-echo Un m.
-echo Ab g...
 goto MASend
 )
 
@@ -148,13 +130,8 @@ setlocal EnableDelayedExpansion
 
 ::========================================================================================================================================
 
-echo "!_batf!" | find /i "!_ttemp!" %nul1% && (
 if /i not "!_work!"=="!_ttemp!" (
 %nceline%
-echo Scr folder,
-echo Mos rchive file.
-echo:
-echo Extr folder.
 goto MASend
 )
 )
@@ -166,8 +143,6 @@ goto MASend
 %nul1% fltmc || (
 if not defined _elev %psc% "start cmd.exe -arg '/c \"!_PSarg:'=''!\"' -verb runas" && exit /b
 %nceline%
-echo This ts.
-echo To d rator'.
 goto MASend
 )
 
@@ -196,19 +171,11 @@ set -=
 set old=
 
 for /f "delims=[] tokens=2" %%# in ('ping -4 -n 1 updatecheck.mass%-%grave.dev') do (
-if not [%%#]==[] (echo "%%#" | find "127.69" %nul1% && (echo "%%#" | find "127.69.%masver%" %nul1% || set old=1))
 )
 
 if defined old (
-echo ________________________________________________
 %eline%
-echo You are running outdated version MAS %masver%
-echo ________________________________________________
-echo:
 if not defined _MASunattended (
-echo [1] Get Latest MAS
-echo [0] Continue Anyway
-echo:
 call :_color %_Green% "Enter a menu option in the Keyboard [1,0] :"
 choice /C:10 /N
 if !errorlevel!==2 rem
@@ -222,12 +189,6 @@ cls
 ::  Run script with parameters in unattended mode
 
 set _elev=
-if defined _args echo "%_args%" | find /i "/S" %nul% && (set "_silent=%nul%") || (set _silent=)
-if defined _args echo "%_args%" | find /i "/" %nul% && (
-echo "%_args%" | find /i "/HWID"   %nul% && (setlocal & cls & (call :HWIDActivation   %_args% %_silent%) & endlocal)
-echo "%_args%" | find /i "/KMS38"  %nul% && (setlocal & cls & (call :KMS38Activation  %_args% %_silent%) & endlocal)
-echo "%_args%" | find /i "/KMS-"   %nul% && (setlocal & cls & (call :KMSActivation    %_args% %_silent%) & endlocal)
-echo "%_args%" | find /i "/Ohook"  %nul% && (setlocal & cls & (call :OhookActivation  %_args% %_silent%) & endlocal)
 exit /b
 )
 
@@ -252,27 +213,6 @@ color 07
 title  Microsoft_Activation_Scripts %masver%
 mode 76, 30
 
-echo:
-echo:
-echo:
-echo:
-echo:       ______________________________________________________________
-echo:
-echo:               
-echo:
-echo:             [1] HWID        ^|  Windows           ^|   Permanent
-echo:             [2] Ohk       ^|  Office            ^|   Permanent
-echo:             [3] K38       ^|  Windows           ^|   
-echo:             [4] One S  ^|  Windows / Office  ^|    
-echo:             __________________________________________________      
-echo:
-echo:             [5] Activation Status
-echo:             [6] Troubleshoot
-echo:             [7] Extras
-echo:             [8] Help
-echo:             [0] Exit
-echo:       ______________________________________________________________
-echo:
 call :_color2 %_White% "          " %_Green% "Enter a menu option in the Keyboard [1,2,3,4,5,6,7,8,0] :"
 choice /C:123456780 /N
 set _erl=%errorlevel%
@@ -295,25 +235,6 @@ goto :MainMenu
 cls
 title  Extras
 mode 76, 30
-echo:
-echo:
-echo:
-echo:
-echo:
-echo:       ______________________________________________________________
-echo:
-echo:             [1] Change Windows Edition
-echo:
-echo:             [2] Extract $OEM$ Folder
-echo:
-echo:             [3] Activation Status [vbs]
-echo:
-echo:             [4] Download Genuine Windows / Office
-echo:             __________________________________________________      
-echo:                                                                     
-echo:             [0] Go to Main Menu
-echo:       ______________________________________________________________
-echo:
 call :_color2 %_White% "           " %_Green% "Enter a menu option in the Keyboard [1,2,3,4,0] :"
 choice /C:12340 /N
 set _erl=%errorlevel%
@@ -335,9 +256,6 @@ mode 76, 30
 
 if not exist "!_desktop_!\" (
 %eline%
-echo Desktop location was not detected, aborting...
-echo _____________________________________________________
-echo:
 call :_color %_Yellow% "Press any key to go back..."
 pause >nul
 goto Extras
@@ -345,9 +263,6 @@ goto Extras
 
 if exist "!_desktop_!\$OEM$\" (
 %eline%
-echo $OEM$ folder already exists on the Desktop.
-echo _____________________________________________________
-echo:
 call :_color %_Yellow% "Press any key to go back..."
 pause >nul
 goto Extras
@@ -358,28 +273,7 @@ goto Extras
 cls
 title  Extract $OEM$ Folder
 mode 78, 30
-echo:
-echo:
-echo:
-echo:
-echo:                     Extract $OEM$ folder on the desktop           
-echo:           ________________________________________________________
-echo:
-echo:              [1] HWID
-echo:              [2] Ohook
-echo:              [3] KMS38
-echo:              [4] Online KMS
-echo:
-echo:              [5] HWID       ^(Windows^) ^+ Ohook      ^(Office^)
-echo:              [6] HWID       ^(Windows^) ^+ Online KMS ^(Office^)
-echo:              [7] KMS38      ^(Windows^) ^+ Ohook      ^(Office^)
-echo:              [8] KMS38      ^(Windows^) ^+ Online KMS ^(Office^)
-echo:              [9] Online KMS ^(Windows^) ^+ Ohook      ^(Office^)
-echo:
 call :_color2 %_White% "              [R] " %_Green% "ReadMe"
-echo:              [0] Go Back
-echo:           ________________________________________________________
-echo:  
 call :_color2 %_White% "           " %_Green% "Enter a menu option in the Keyboard:"
 choice /C:123456789R0 /N
 set _erl=%errorlevel%
@@ -407,11 +301,6 @@ md "!_dir!\"
 copy /y /b "!_batf!" "!_dir!\MAS_AIO.cmd" %nul%
 
 (
-echo @echo off
-echo fltmc ^>nul ^|^| exit /b
-echo call "%%~dp0MAS_AIO.cmd" %para%
-echo cd \
-echo ^(goto^) 2^>nul ^& ^(if "%%~dp0"=="%%SystemRoot%%\Setup\Scripts\" rd /s /q "%%~dp0"^)
 )>"!_dir!\SetupComplete.cmd"
 
 set _error=
@@ -420,19 +309,11 @@ if not exist "!_dir!\SetupComplete.cmd" set _error=1
 
 if defined _error (
 %eline%
-echo Failed to extract $OEM$ folder on the Desktop.
 ) else (
-echo:
 call :_color %Blue% "%_oem%"
 call :_color %Green% "$OEM$ folder is successfully created on the Desktop."
 )
-echo "%_oem%" | find /i "KMS38" 1>nul && (
-echo:
-echo To KMS38 activate Server Cor/Acor editions ^(No GUI Versions^),
-echo Check this page %mas%oem-folder
 )
-echo ___________________________________________________________________
-echo:
 call :_color %_Yellow% "Press any key to go back..."
 pause >nul
 goto Extras
@@ -441,7 +322,6 @@ goto Extras
 
 :HWIDActivation
 @setlocal DisableDelayedExpansion
-@echo off
 
 ::  To activate, run the script with "/HWID" parameter or change 0 to 1 in below line
 set _act=0
@@ -489,7 +369,6 @@ if %winbuild% LSS 10586 set _NCS=0
 if %winbuild% GEQ 10586 reg query "HKCU\Console" /v ForceV2 %nul2% | find /i "0x0" %nul1% && (set _NCS=0)
 
 if %_NCS% EQU 1 (
-for /F %%a in ('echo prompt $E ^| cmd') do set "esc=%%a"
 set     "Red="41;97m""
 set    "Gray="100;97m""
 set   "Green="42;97m""
@@ -507,8 +386,6 @@ set  "_Green="Black" "Green""
 set "_Yellow="Black" "Yellow""
 )
 
-set "nceline=echo: &echo ==== ERROR ==== &echo:"
-set "eline=echo: &call :dk_color %Red% "==== ERROR ====" &echo:"
 if %~z0 GEQ 200000 (
 set "_exitmsg=Go back"
 set "_fixmsg=Go back to Main Menu, select Troubleshoot and run Fix Licensing option."
@@ -521,16 +398,11 @@ set "_fixmsg=In MAS folder, run Troubleshoot script and select Fix Licensing opt
 
 if %winbuild% LSS 10240 (
 %eline%
-echo Unsupported OS version detected [%winbuild%].
-echo HWID Activation is supported only for Windows 10/11.
-echo Use Online KMS Activation option.
 goto dk_done
 )
 
 if exist "%SystemRoot%\Servicing\Packages\Microsoft-Windows-Server*Edition~*.mum" (
 %eline%
-echo HWID Activation is not supported for Windows Server.
-echo Use KMS38 or Online KMS Activation option.
 goto dk_done
 )
 
@@ -557,19 +429,12 @@ mode 110, 34
 if exist "%Systemdrive%\Windows\System32\spp\store_test\" mode 134, 34
 title   %masver%
 
-echo:
-echo Initializing...
 
 ::  Check PowerShell
 
 %psc% $ExecutionContext.SessionState.LanguageMode %nul2% | find /i "Full" %nul1% || (
 %eline%
 %psc% $ExecutionContext.SessionState.LanguageMode
-echo:
-echo PowerShell is not working. Aborting...
-echo If you have applied restrictions on Powershell then undo those changes.
-echo:
-echo Check this page for help. %mas%troubleshoot
 goto dk_done
 )
 
@@ -582,10 +447,7 @@ call :dk_ckeckwmic
 
 sc start sppsvc %nul%
 if %errorlevel% NEQ 1056 if %errorlevel% NEQ 0 (
-echo:
-echo Error code: %errorlevel%
 call :dk_color %Red% "Failed to start [sppsvc] service, rest of the process may take a long time..."
-echo:
 )
 
 ::========================================================================================================================================
@@ -595,13 +457,9 @@ echo:
 call :dk_checkperm
 if defined _perm (
 cls
-echo ___________________________________________________________________________________________
-echo:
 call :dk_color2 %_White% "     " %Green% "Checking: %winos% is Permanently Activated."
 call :dk_color2 %_White% "     " %Gray% "Activation is not required."
-echo ___________________________________________________________________________________________
 if %_unattended%==1 goto dk_done
-echo:
 choice /C:10 /N /M ">    [1] Activate [0] %_exitmsg% : "
 if errorlevel 2 exit /b
 )
@@ -614,13 +472,6 @@ cls
 if exist "%SystemRoot%\Servicing\Packages\Microsoft-Windows-*EvalEdition~*.mum" (
 reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v EditionID %nul2% | find /i "Eval" %nul1% && (
 %eline%
-echo [%winos% ^| %winbuild%]
-echo:
-echo Evaluation Editions cannot be activated. 
-echo You need to install full version of %winos%
-echo:
-echo Download it from here,
-echo %mas%genuine-installation-media.html
 goto dk_done
 )
 )
@@ -631,7 +482,6 @@ call :dk_checksku
 
 if not defined osSKU (
 %eline%
-echo SKU value was not detected properly. Aborting...
 goto dk_done
 )
 
@@ -640,10 +490,8 @@ goto dk_done
 set error=
 
 cls
-echo:
 for /f "skip=2 tokens=2*" %%a in ('reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" /v PROCESSOR_ARCHITECTURE') do set arch=%%b
 for /f "tokens=6-7 delims=[]. " %%i in ('ver') do if "%%j"=="" (set fullbuild=%%i) else (set fullbuild=%%i.%%j)
-echo Checking OS Info                        [%winos% ^| %fullbuild% ^| %arch%]
 
 ::  Check Internet connection
 
@@ -658,7 +506,6 @@ if !errorlevel!==0 (set _int=1&set ping_f= But Ping Failed)
 )
 
 if defined _int (
-echo Checking Internet Connection            [Connected%ping_f%]
 ) else (
 set error=1
 call :dk_color %Red% "Checking Internet Connection            [Not Connected]"
@@ -676,12 +523,10 @@ if %_WSH% EQU 0 (
 reg add "HKLM\Software\Microsoft\Windows Script Host\Settings" /v Enabled /t REG_DWORD /d 1 /f %nul%
 reg add "HKCU\Software\Microsoft\Windows Script Host\Settings" /v Enabled /t REG_DWORD /d 1 /f %nul%
 if not "%arch%"=="x86" reg add "HKLM\Software\Microsoft\Windows Script Host\Settings" /v Enabled /t REG_DWORD /d 1 /f /reg:32 %nul%
-echo Enabling Windows Script Host            [Successful]
 )
 
 ::========================================================================================================================================
 
-echo Initiating Diagnostic Tests...
 
 set "_serv=ClipSVC wlidsvc sppsvc KeyIso LicenseManager Winmgmt DoSvc UsoSvc CryptSvc BITS TrustedInstaller wuauserv"
 if %winbuild% GEQ 17134 set "_serv=%_serv% WaaSMedicSvc"
@@ -711,7 +556,6 @@ reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate /s %nul2% | fin
 
 if defined updatesblock call :dk_color %Gray% "Checking Update Blocker In Registry     [Found]"
 
-if defined applist echo: %serv_e% | find /i "wuauserv" %nul% && (
 call :dk_color %Blue% "Windows Update is not working. Enable it incase if you have disabled it."
 reg query HKLM\SYSTEM\CurrentControlSet\Services\wuauserv /v WubLock %nul% && call :dk_color %Blue% "Sordum Windows Update Blocker tool has been used to block updates."
 )
@@ -749,15 +593,9 @@ call :dk_color %Red% "Checking Alternate Edition For HWID     [%altedition% Acti
 
 if not defined key (
 %eline%
-echo [%winos% ^| %winbuild% ^| SKU:%osSKU%]
 if not defined skufound (
-echo Unable to find this product in the supported product list.
 ) else (
-echo Required License files not found in %SystemRoot%\System32\spp\tokens\skus\
 )
-echo Make sure you are using updated version of the script.
-echo %mas%
-echo:
 goto dk_done
 )
 
@@ -767,10 +605,8 @@ if defined notworking set error=1
 
 ::  Install key
 
-echo:
 if defined changekey (
 call :dk_color %Blue% "[%altedition%] Edition product key will be used to enable HWID activation."
-echo:
 )
 
 if %_wmic% EQU 1 wmic path SoftwareLicensingService where __CLASS='SoftwareLicensingService' call InstallProductKey ProductKey="%key%" %nul%
@@ -782,7 +618,6 @@ if %errorcode% NEQ 0 set "errorcode=[0x%=ExitCode%]"
 
 if %errorcode% EQU 0 (
 call :dk_refresh
-echo Installing Generic Product Key          [%key%] [Successful]
 ) else (
 call :dk_color %Red% "Installing Generic Product Key          [%key%] [Failed] %errorcode%"
 if not defined error (
@@ -805,7 +640,6 @@ if not "%name%"=="US" (
 set regionchange=1
 %psc% "Set-WinHomeLocation -GeoId 244" %nul%
 if !errorlevel! EQU 0 (
-echo Changing Windows Region To USA          [Successful]
 ) else (
 call :dk_color %Red% "Changing Windows Region To USA          [Failed]"
 )
@@ -836,11 +670,9 @@ copy /y /b "%tdir%\GenuineTicket" "%tdir%\GenuineTicket.xml" %nul%
 
 if not exist "%tdir%\GenuineTicket.xml" (
 call :dk_color %Red% "Generating GenuineTicket.xml            [Failed, aborting the process]"
-echo [%encoded%]
 if exist "%tdir%\Genuine*" del /f /q "%tdir%\Genuine*" %nul%
 goto :dl_final
 ) else (
-echo Generating GenuineTicket.xml            [Successful]
 )
 
 set "_xmlexist=if exist "%tdir%\GenuineTicket.xml""
@@ -891,13 +723,10 @@ if exist "%tdir%\Genuine*" del /f /q "%tdir%\Genuine*" %nul%
 
 call :dk_product
 
-echo:
-echo Activating...
 
 call :dk_act
 call :dk_checkperm
 if defined _perm (
-echo:
 call :dk_color %Green% "%winos% is permanently activated with a digital license."
 goto :dl_final
 )
@@ -929,7 +758,6 @@ if not defined resfail (
 
 if defined resfail (
 set error=1
-echo:
 call :dk_color %Red% "Checking Licensing Servers              [Failed To Connect]"
 call :dk_color2 %Blue% "Check this page for help" %_Yellow% " %mas%licensing-servers-issue"
 )
@@ -940,13 +768,11 @@ call :dk_color2 %Blue% "Check this page for help" %_Yellow% " %mas%licensing-ser
 ::  Clear store ID related registry to fix activation incase error not found
 
 if not defined error (
-echo:
 set "_ident=HKU\S-1-5-19\SOFTWARE\Microsoft\IdentityCRL"
 reg delete "!_ident!" /f %nul%
 reg query "!_ident!" %nul% && (
 call :dk_color %Red% "Deleting a Registry                     [Failed] [!_ident!]"
 ) || (
-echo Deleting a Registry                     [Successful] [!_ident!]
 )
 
 REM Refresh some services and license status
@@ -960,9 +786,7 @@ call :dk_checkperm
 REM Check Internet related error codes
 
 if not defined error if not defined _perm (
-echo "%error_code%" | findstr /i "0x80072e 0x80072f 0x800704cf" %nul% && (
 set error=1
-echo:
 call :dk_color %Red% "Checking Internet Issues                [Found] %error_code%"
 call :dk_color2 %Blue% "Check this page for help" %_Yellow% " %mas%licensing-servers-issue"
 )
@@ -970,7 +794,6 @@ call :dk_color2 %Blue% "Check this page for help" %_Yellow% " %mas%licensing-ser
 
 ::==========================================================================================================================================
 
-echo:
 if defined _perm (
 call :dk_color %Green% "%winos% is permanently activated with a digital license."
 ) else (
@@ -988,12 +811,10 @@ call :dk_color2 %Blue% "Check this page for help" %_Yellow% " %mas%troubleshoot"
 
 :dl_final
 
-echo:
 
 if defined regionchange (
 %psc% "Set-WinHomeLocation -GeoId %nation%" %nul%
 if !errorlevel! EQU 0 (
-echo Restoring Windows Region                [Successful]
 ) else (
 call :dk_color %Red% "Restoring Windows Region                [Failed] [%name% - %nation%]"
 )
@@ -1035,7 +856,6 @@ exit /b
 :dk_checkperm
 
 if %_wmic% EQU 1 wmic path SoftwareLicensingProduct where (LicenseStatus='1' and GracePeriodRemaining='0' and PartialProductKey is not NULL) get Name /value %nul2% | findstr /i "Windows" %nul1% && set _perm=1||set _perm=
-if %_wmic% EQU 0 %psc% "(([WMISEARCHER]'SELECT Name FROM SoftwareLicensingProduct WHERE LicenseStatus=1 AND GracePeriodRemaining=0 AND PartialProductKey IS NOT NULL').Get()).Name | %% {echo ('Name='+$_)}" %nul2% | findstr /i "Windows" %nul1% && set _perm=1||set _perm=
 exit /b
 
 ::  Refresh license status
@@ -1065,7 +885,6 @@ exit /b
 
 set applist=
 if %_wmic% EQU 1 set "chkapp=for /f "tokens=2 delims==" %%a in ('"wmic path SoftwareLicensingProduct where (ApplicationID='55c92734-d682-4d71-983e-d6ec3f16059f') get ID /VALUE" %nul6%')"
-if %_wmic% EQU 0 set "chkapp=for /f "tokens=2 delims==" %%a in ('%psc% "(([WMISEARCHER]'SELECT ID FROM SoftwareLicensingProduct WHERE ApplicationID=''55c92734-d682-4d71-983e-d6ec3f16059f''').Get()).ID ^| %% {echo ('ID='+$_)}" %nul6%')"
 %chkapp% do (if defined applist (call set "applist=!applist! %%a") else (call set "applist=%%a"))
 exit /b
 
@@ -1108,7 +927,6 @@ set d1=%d1% $meth.SetImplementationFlags(128); $TypeBuilder.CreateType()::Brandi
 
 set winos=
 for /f "delims=" %%s in ('"%psc% %d1%"') do if not errorlevel 1 (set winos=%%s)
-echo "%winos%" | find /i "Windows" %nul1% || (
 for /f "skip=2 tokens=2*" %%a in ('reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v ProductName %nul6%') do set "winos=%%b"
 if %winbuild% GEQ 22000 (
 set winos=!winos:Windows 10=Windows 11!
@@ -1220,7 +1038,6 @@ if defined checkerror if defined serv_e (set "serv_e=!serv_e!, %%#-!errorcode!")
 if defined serv_e (
 set error=1
 call :dk_color %Red% "Starting Services                       [Failed] [%serv_e%]"
-echo %serv_e% | findstr /i "ClipSVC-1058 sppsvc-1058" %nul% && (
 call :dk_color %Blue% "Restart the system to fix this error."
 set showfix=1
 )
@@ -1241,7 +1058,6 @@ for /f "skip=2 tokens=2*" %%A in ('reg query "HKLM\SOFTWARE\Microsoft\Windows\Cu
 if /i not "%imagestate%"=="IMAGE_STATE_COMPLETE" (
 set error=1
 call :dk_color %Red% "Checking Windows Setup State            [%imagestate%]"
-echo "%imagestate%" | find /i "RESEAL" %nul% && (
 set showfix=1
 call :dk_color %Blue% "You need to run it in normal mode in case you are running it in Audit Mode."
 )
@@ -1258,12 +1074,10 @@ call :dk_color2 %Red% "Checking WinPE                          " %Blue% "[WinPE 
 set wpainfo=
 set wpaerror=
 for /f "delims=" %%a in ('%psc% "$f=[io.file]::ReadAllText('!_batp!') -split ':wpatest\:.*';iex ($f[1]);" %nul6%') do (set wpainfo=%%a)
-echo "%wpainfo%" | find /i "Error Found" %nul% && (
 set error=1
 set wpaerror=1
 call :dk_color %Red% "Checking WPA Registry Error             [%wpainfo%]"
 ) || (
-echo Checking WPA Registry Count             [%wpainfo%]
 )
 
 
@@ -1332,7 +1146,6 @@ if %_wmic% EQU 1 wmic path Win32_ComputerSystem get CreationClassName /value %nu
 if %_wmic% EQU 0 %psc% "Get-CIMInstance -Class Win32_ComputerSystem | Select-Object -Property CreationClassName" %nul2% | find /i "computersystem" %nul1%
 
 if %errorlevel% NEQ 0 set wmifailed=1
-echo "%error_code%" | findstr /i "0x800410 0x800440" %nul1% && set wmifailed=1& ::  https://learn.microsoft.com/en-us/windows/win32/wmisdk/wmi-error-constants
 if defined wmifailed (
 set error=1
 call :dk_color %Red% "Checking WMI                            [Not Responding]"
@@ -1497,7 +1310,6 @@ $wpaKey.Close()
 :dk_color
 
 if %_NCS% EQU 1 (
-echo %esc%[%~1%~2%esc%[0m
 ) else (
 %psc% write-host -back '%1' -fore '%2' '%3'
 )
@@ -1506,7 +1318,6 @@ exit /b
 :dk_color2
 
 if %_NCS% EQU 1 (
-echo %esc%[%~1%~2%esc%[%~3%~4%esc%[0m
 ) else (
 %psc% write-host -back '%1' -fore '%2' '%3' -NoNewline; write-host -back '%4' -fore '%5' '%6'
 )
@@ -1516,7 +1327,6 @@ exit /b
 
 :dk_done
 
-echo:
 if %_unattended%==1 timeout /t 2 & exit /b
 call :dk_color %_Yellow% "Press any key to %_exitmsg%..."
 pause %nul1%
@@ -1583,7 +1393,6 @@ REM Detect key
 
 if %1==key if %osSKU%==%%C if not defined key (
 set skufound=1
-echo "!applist! !altapplist!" | find /i "%%A" %nul1% && (
 if %%F==1 set notworking=1
 set key=%%B
 )
@@ -1594,7 +1403,6 @@ REM Generate ticket
 if %1==ticket if "%key%"=="%%B" (
 set "string=OSMajorVersion=5;OSMinorVersion=1;OSPlatformId=2;PP=0;Pfn=Microsoft.Windows.%%C.%%D_8wekyb3d8bbwe;PKeyIID=465145217131314304264339481117862266242033457260311819664735280;$([char]0)"
 for /f "tokens=* delims=" %%i in ('%psc% [conv%f%ert]::ToBas%f%e64String([Text.En%f%coding]::Uni%f%code.GetBytes("""!string!"""^)^)') do set "encoded=%%i"
-echo "!encoded!" | find "AAAA" %nul1% || exit /b
 
 <nul set /p "=<?xml version="1.0" encoding="utf-8"?><genuineAuthorization xmlns="http://www.microsoft.com/DRM/SL/GenuineAuthorization/1.0"><version>1.0</version><genuineProperties origin="sppclient"><properties>OA3xOriginalProductId=;OA3xOriginalProductKey=;SessionId=!encoded!;TimeStampClient=2022-10-11T12:00:00Z</properties><signatures><signature name="clientLockboxKey" method="rsa-sha256">%%E=</signature></signatures></genuineProperties></genuineAuthorization>" >"%tdir%\GenuineTicket"
 )
@@ -1629,8 +1437,6 @@ for %%# in (
 139_ProfessionalCountrySpecific-Zn_01eb852c-424d-4060-94b8-c10d799d7364_4de7cb65-cdf1-4de9-8ae8-e3cce27b9f2c_VK7%f%JG-NPH%f%TM-C9%f%7JM-9MP%f%GT-3V%f%66T_Professional
 ) do (
 for /f "tokens=1-6 delims=_" %%A in ("%%#") do if %osSKU%==%%A (
-echo "!applist! !altapplist!" | find /i "%%C" %nul1% && (
-echo "!applist!" | find /i "%%D" %nul1% && (
 set altkey=%%E
 set altedition=%%F
 ) || (
@@ -1646,7 +1452,6 @@ exit /b
 
 :OhookActivation
 @setlocal DisableDelayedExpansion
-@echo off
 
 ::  To activate Office with Ohook activation, run the script with "/Ohook" parameter or change 0 to 1 in below line
 set _act=0
@@ -1694,7 +1499,6 @@ if %winbuild% LSS 10586 set _NCS=0
 if %winbuild% GEQ 10586 reg query "HKCU\Console" /v ForceV2 %nul2% | find /i "0x0" %nul1% && (set _NCS=0)
 
 if %_NCS% EQU 1 (
-for /F %%a in ('echo prompt $E ^| cmd') do set "esc=%%a"
 set     "Red="41;97m""
 set    "Gray="100;97m""
 set   "Green="42;97m""
@@ -1712,8 +1516,6 @@ set  "_Green="Black" "Green""
 set "_Yellow="Black" "Yellow""
 )
 
-set "nceline=echo: &echo ==== ERROR ==== &echo:"
-set "eline=echo: &call :dk_color %Red% "==== ERROR ====" &echo:"
 if %~z0 GEQ 200000 (
 set "_exitmsg=Go back"
 set "_fixmsg=Go back to Main Menu, select Troubleshoot and run Fix Licensing option."
@@ -1726,8 +1528,6 @@ set "_fixmsg=In MAS folder, run Troubleshoot script and select Fix Licensing opt
 
 if %winbuild% LSS 9200 (
 %eline%
-echo Unsupported OS version detected [%winbuild%].
-echo Ohook Activation is supported on Windows 8 and later and their server equivalent.
 goto dk_done
 )
 
@@ -1758,22 +1558,6 @@ cls
 mode 76, 25
 title  Ohook Activation %masver%
 
-echo:
-echo:
-echo:
-echo:
-echo         ____________________________________________________________
-echo:
-echo                 [1] Install Ohook Office Activation
-echo:
-echo                 [2] Uninstall Ohook
-echo                 ____________________________________________
-echo:
-echo                 [3] Download Office
-echo:
-echo                 [0] %_exitmsg%
-echo         ____________________________________________________________
-echo: 
 call :dk_color2 %_White% "              " %_Green% "Enter a menu option in the Keyboard [1,2,3,0]"
 choice /C:1230 /N
 set _el=!errorlevel!
@@ -1794,19 +1578,12 @@ mode 130, 32
 
 title  Ohook Activation %masver%
 
-echo:
-echo Initializing...
 
 ::  Check PowerShell
 
 %psc% $ExecutionContext.SessionState.LanguageMode %nul2% | find /i "Full" %nul1% || (
 %eline%
 %psc% $ExecutionContext.SessionState.LanguageMode
-echo:
-echo PowerShell is not working. Aborting...
-echo If you have applied restrictions on Powershell then undo those changes.
-echo:
-echo Check this page for help. %mas%troubleshoot
 goto dk_done
 )
 
@@ -1819,10 +1596,7 @@ call :dk_ckeckwmic
 
 sc start sppsvc %nul%
 if %errorlevel% NEQ 1056 if %errorlevel% NEQ 0 (
-echo:
-echo Error code: %errorlevel%
 call :dk_color %Red% "Failed to start [sppsvc] service, rest of the process may take a long time..."
-echo:
 )
 
 ::========================================================================================================================================
@@ -1830,10 +1604,8 @@ echo:
 set error=
 
 cls
-echo:
 for /f "skip=2 tokens=2*" %%a in ('reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" /v PROCESSOR_ARCHITECTURE') do set osarch=%%b
 for /f "tokens=6-7 delims=[]. " %%i in ('ver') do if "%%j"=="" (set fullbuild=%%i) else (set fullbuild=%%i.%%j)
-echo Checking OS Info                        [%winos% ^| %fullbuild% ^| %osarch%]
 
 ::========================================================================================================================================
 
@@ -1847,12 +1619,10 @@ if %_WSH% EQU 0 (
 reg add "HKLM\Software\Microsoft\Windows Script Host\Settings" /v Enabled /t REG_DWORD /d 1 /f %nul%
 reg add "HKCU\Software\Microsoft\Windows Script Host\Settings" /v Enabled /t REG_DWORD /d 1 /f %nul%
 if not "%arch%"=="x86" reg add "HKLM\Software\Microsoft\Windows Script Host\Settings" /v Enabled /t REG_DWORD /d 1 /f /reg:32 %nul%
-echo Enabling Windows Script Host            [Successful]
 )
 
 ::========================================================================================================================================
 
-echo Initiating Diagnostic Tests...
 
 set "_serv=sppsvc Winmgmt"
 set officeact=1
@@ -1874,7 +1644,6 @@ for /f "skip=2 tokens=2*" %%a in ('"reg query %_68%\14.0\Common\InstallRoot /v P
 if %winbuild% GEQ 10240 %psc% "Get-AppxPackage -name "Microsoft.Office.Desktop"" | find /i "Office" %nul1% && set o16uwp=Office UWP 
 
 if not "%o14msi%%o14c2r%%o16uwp%"=="" (
-echo:
 call :dk_color %Red% "Checking Unsupported Office Install     [ %o14msi%%o14c2r%%o16uwp%]"
 )
 
@@ -1904,7 +1673,6 @@ set error=1
 
 if "%o16c2r%%o15c2r%%o16msi%%o15msi%"=="" (
 set error=1
-echo:
 if not "%o14msi%%o14c2r%%o16uwp%"=="" (
 call :dk_color %Red% "Checking Supported Office Install       [Not Found]"
 ) else (
@@ -1912,13 +1680,8 @@ call :dk_color %Red% "Checking Installed Office               [Not Found]"
 )
 
 if %winbuild% GEQ 10240 %psc% "Get-AppxPackage -name "Microsoft.MicrosoftOfficeHub"" | find /i "Office" %nul1% && (
-echo:
-echo You have only Office dashboard app installed, you need to install full Office version.
 )
-echo:
 call :dk_color %Blue% "Download and install Office from below URL and try again."
-echo:
-echo %mas%genuine-installation-media.html
 goto dk_done
 )
 
@@ -1944,9 +1707,7 @@ for /f "skip=2 tokens=2*" %%a in ('"reg query %o15c2r_reg% /v InstallPath" %nul6
 for /f "skip=2 tokens=2*" %%a in ('"reg query %o15c2r_reg%\Configuration /v Platform" %nul6%') do (set "_oArch=%%b")
 if not defined _oArch for /f "skip=2 tokens=2*" %%a in ('"reg query %o15c2r_reg%\propertyBag /v Platform" %nul6%') do (set "_oArch=%%b")
 
-echo "%o15c2r_reg%" | find /i "Wow6432Node" %nul1% && (set _tok=10) || (set _tok=9)
 for /f "tokens=%_tok% delims=\" %%a in ('reg query %o15c2r_reg%\ProductReleaseIDs\Active %nul6% ^| findstr /i "Retail Volume"') do (
-echo "!_oIds!" | find /i " %%a " %nul1% || (set "_oIds= !_oIds! %%a ")
 )
 
 set "_oLPath=%_oRoot%\Licenses"
@@ -1961,8 +1722,6 @@ if [%_oArch%]==[x86] set "_sppcPath=%SystemRoot%\SysWOW64\sppc.dll"
 set "_sppcPath=%SystemRoot%\System32\sppc.dll"
 )
 
-echo:
-echo Activating Office 15.0 %_oArch% C2R...
 
 if not defined _oIds (
 call :dk_color %Red% "Checking Installed Products             [Product IDs not found. Aborting activation...]"
@@ -1988,9 +1747,7 @@ set oVer=16
 for /f "skip=2 tokens=2*" %%a in ('"reg query %o16c2r_reg% /v InstallPath" %nul6%') do (set "_oRoot=%%b\root")
 for /f "skip=2 tokens=2*" %%a in ('"reg query %o16c2r_reg%\Configuration /v Platform" %nul6%') do (set "_oArch=%%b")
 
-echo "%o16c2r_reg%" | find /i "Wow6432Node" %nul1% && (set _tok=9) || (set _tok=8)
 for /f "tokens=%_tok% delims=\" %%a in ('reg query "%o16c2r_reg%\ProductReleaseIDs" /s /f ".16" /k %nul6% ^| findstr /i "Retail Volume"') do (
-echo "!_oIds!" | find /i " %%a " %nul1% || (set "_oIds= !_oIds! %%a ")
 )
 set _oIds=%_oIds:.16=%
 
@@ -2006,8 +1763,6 @@ if [%_oArch%]==[x86] set "_sppcPath=%SystemRoot%\SysWOW64\sppc.dll"
 set "_sppcPath=%SystemRoot%\System32\sppc.dll"
 )
 
-echo:
-echo Activating Office 16.0 %_oArch% C2R...
 
 if not defined _oIds (
 call :dk_color %Red% "Checking Installed Products             [Product IDs not found. Aborting activation...]"
@@ -2053,7 +1808,6 @@ reg delete %%#\Software\Microsoft\Office\16.0\Registration /f %nul%
 )
 )
 
-if defined sub_next echo Removing Office vNext Block             [Successful]
 
 ::========================================================================================================================================
 
@@ -2067,7 +1821,6 @@ reg query "%%#\Volatile Environment" %nul% && (
 reg add %%#\Software\Microsoft\Office\16.0\Common\Licensing\Resiliency /v "TimeOfLastHeartbeatFailure" /t REG_SZ /d "2040-01-01T00:00:00Z" /f %nul%
 )
 )
-echo Adding Reg Keys To Skip License Check   [Successful]
 )
 
 ::========================================================================================================================================
@@ -2076,7 +1829,6 @@ echo Adding Reg Keys To Skip License Check   [Successful]
 ::  Add registry keys for volume products so that 'non-genuine' banner won't appear 
 ::  Script already is using MAK instead of GVLK so it won't appear anyway, but registry keys are added incase Office installs default GVLK grace key for volume products
 
-echo "%_oIds%" | find /i "Volume" %nul1% && (
 if %winbuild% GEQ 9200 (
 if not [%osarch%]==[x86] (
 reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPlatform\0ff1ce15-a989-479d-af46-f275c6370663" /f /reg:32 %nul%
@@ -2084,7 +1836,6 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPla
 )
 reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPlatform\0ff1ce15-a989-479d-af46-f275c6370663" /f %nul%
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPlatform\0ff1ce15-a989-479d-af46-f275c6370663" /f /v KeyManagementServiceName /t REG_SZ /d "10.0.0.10" %nul%
-echo Adding a Reg To Prevent Banner          [Successful]
 )
 )
 
@@ -2103,11 +1854,9 @@ set upk_result=0
 set allapplist=
 
 if %_wmic% EQU 1 set "chkapp=for /f "tokens=2 delims==" %%a in ('"wmic path SoftwareLicensingProduct where (ApplicationID='0ff1ce15-a989-479d-af46-f275c6370663' and PartialProductKey is not null) get ID /VALUE" %nul6%')"
-if %_wmic% EQU 0 set "chkapp=for /f "tokens=2 delims==" %%a in ('%psc% "(([WMISEARCHER]'SELECT ID FROM SoftwareLicensingProduct WHERE ApplicationID=''0ff1ce15-a989-479d-af46-f275c6370663'' AND PartialProductKey IS NOT NULL').Get()).ID ^| %% {echo ('ID='+$_)}" %nul6%')"
 %chkapp% do (if defined allapplist (call set "allapplist=!allapplist! %%a") else (call set "allapplist=%%a"))
 
 for %%# in (%allapplist%) do (
-echo "%_allactid%" | find /i "%%#" %nul1% || (
 cscript //nologo %windir%\system32\slmgr.vbs /upk %%# %nul% && (
 set upk_result=1
 ) || (
@@ -2117,8 +1866,6 @@ set upk_result=2
 )
 )
 
-if not %upk_result%==0 echo:
-if %upk_result%==1 echo Uninstalling Other/Grace Keys           [Successful]
 if %upk_result%==2 call :dk_color %Red% "Uninstalling Other/Grace Keys           [Failed]"
 
 ::========================================================================================================================================
@@ -2133,14 +1880,11 @@ if !errorlevel! NEQ 0 cscript //nologo %windir%\system32\slmgr.vbs /rilc %nul%
 
 ::========================================================================================================================================
 
-echo:
 if not defined error (
 call :dk_color %Green% "Office is permanently activated."
-echo Help: %mas%troubleshoot
 ) else (
 call :dk_color %Red% "Some errors were detected."
 if not defined ierror if not defined showfix if not defined serv_cor if not defined serv_cste call :dk_color %Blue% "%_fixmsg%"
-echo:
 call :dk_color2 %Blue% "Check this page for help" %_Yellow% " %mas%troubleshoot"
 )
 
@@ -2159,9 +1903,6 @@ set _unerror=
 call :oh_reset
 call :oh_getpath
 
-echo:
-echo Uninstalling Ohook Activation...
-echo:
 
 if defined o16c2r_reg (for /f "skip=2 tokens=2*" %%a in ('"reg query %o16c2r_reg% /v InstallPath" %nul6%') do (set "_16CHook=%%b\root\vfs"))
 if defined o15c2r_reg (for /f "skip=2 tokens=2*" %%a in ('"reg query %o15c2r_reg% /v InstallPath" %nul6%') do (set "_15CHook=%%b\root\vfs"))
@@ -2190,8 +1931,6 @@ if exist "%%~A\Microsoft %%~G\root\vfs\%%#\sppc*dll" (set _present=1& del /s /f 
 )
 
 reg query HKCU\Software\Microsoft\Office\16.0\Common\Licensing\Resiliency %nul% && (
-echo:
-echo Deleting - Registry keys to skip license check
 reg delete HKCU\Software\Microsoft\Office\16.0\Common\Licensing\Resiliency /f
 
 for /f "tokens=* delims=" %%a in ('%psc% "Get-ChildItem -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList' | ForEach-Object { Split-Path -Path $_.PSPath -Leaf }" %nul6%') do (if defined _sid (set "_sid=!_sid! %%a") else (set "_sid=%%a"))
@@ -2202,8 +1941,6 @@ reg delete HKU\%%#\Software\Microsoft\Office\16.0\Common\Licensing\Resiliency /f
 )
 
 reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPlatform\0ff1ce15-a989-479d-af46-f275c6370663" %nul% && (
-echo:
-echo Deleting - Registry keys to prevent non-genuine banner
 reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPlatform\0ff1ce15-a989-479d-af46-f275c6370663" /f
 )
 
@@ -2211,11 +1948,8 @@ reg query "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows NT\CurrentVersion\Softwar
 reg delete "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPlatform\0ff1ce15-a989-479d-af46-f275c6370663" /f
 )
 
-echo __________________________________________________________________________________________
-echo:
 
 if not defined _present (
-echo Ohook Activation is not installed.
 ) else (
 if defined _unerror (
 call :dk_color %Red% "Failed to uninstall Ohook activation."
@@ -2224,7 +1958,6 @@ call :dk_color %Blue% "Close Office apps if they are running and try again."
 call :dk_color %Green% "Successfully uninstalled Ohook activation."
 )
 )
-echo __________________________________________________________________________________________
 
 goto :dk_done
 
@@ -2283,7 +2016,6 @@ if %errorcode% NEQ 0 set "errorcode=[0x%=ExitCode%]"
 
 if %errorcode% EQU 0 (
 call :dk_refresh
-echo Installing Generic Product Key          [%_key%] [%_prod%] [%_lic%] [Successful]
 ) else (
 call :dk_color %Red% "Installing Generic Product Key          [%_key%] [%_prod%] [Failed] %errorcode%"
 if not defined error (
@@ -2308,7 +2040,6 @@ if %oVer%==16 (
 )
 
 call :oh_actids
-echo "!oapplist!" | find /i "!_actid!" %nul1% && (
 call :dk_color %Gray% "Installing Missing License Files        [Office %oVer%.0 %_prod%] [Successful]"
 exit /b
 )
@@ -2339,7 +2070,6 @@ cscript //nologo %windir%\system32\slmgr.vbs /ilc "!_oLPath!\%%~nx#" %nul%
 )
 
 call :oh_actids
-echo "!oapplist!" | find /i "!_actid!" %nul1% && (
 call :dk_color %Gray% "Installing Missing License Files        [Office %oVer%.0 %_prod%] [Successful with /ilc Method]"
 ) || (
 set error=1
@@ -2370,16 +2100,11 @@ if not %errorlevel%==0 set ierror=1
 if not exist "%_hookPath%\sppc.dll" call :oh_extractdll "%_hookPath%\sppc.dll" "%offset%"
 if not exist "%_hookPath%\sppc.dll" set ierror=1
 
-echo:
 if not defined ierror (
-echo Symlinking System's sppc.dll To         ["%_hookPath%\sppcs.dll"] [Successful]
-echo Extracting Custom %_hook% To         ["%_hookPath%\sppc.dll"] [Successful]
 ) else (
 set error=1
 call :dk_color %Red% "Symlinking Systems sppc.dll             [Failed]"
 call :dk_color %Red% "Extracting Custom %_hook%            [Failed]"
-echo ["%_hookPath%\sppc.dll"]
-echo:
 call :dk_color %Blue% "Close ALL Office apps including Outlook and try again."
 call :dk_color %Blue% "If its still not resolved then restart system and try again."
 )
@@ -2390,7 +2115,6 @@ set error=1
 set ierror=1
 call :dk_color %Red% "Modifying Hash of Custom %_hook%     [Failed]"
 ) else (
-echo Modifying Hash of Custom %_hook%     [Successful]
 )
 )
 
@@ -2407,7 +2131,6 @@ set _lic=
 set _preview=
 set _License=%%#
 
-echo %%# | find /i "2024" %nul% && (
 if exist "!_oLPath!\ProPlus2024PreviewVL_*.xrm-ms" if not exist "!_oLPath!\ProPlus2024VL_*.xrm-ms" set _preview=-Preview
 )
 set _prod=%%#!_preview!
@@ -2415,7 +2138,6 @@ set _prod=%%#!_preview!
 call :ohookdata getinfo !_prod!
 
 if not [!_key!]==[] (
-echo "!oapplist!" | find /i "!_actid!" %nul1% || call :oh_installlic
 call :oh_installkey
 ) else (
 set error=1
@@ -2456,7 +2178,6 @@ set oVer=%1
 for /f "skip=2 tokens=2*" %%a in ('"reg query %2\Common\InstallRoot /v Path" %nul6%') do (set "_oRoot=%%b")
 if "%_oRoot:~-1%"=="\" set "_oRoot=%_oRoot:~0,-1%"
 
-echo "%2" | find /i "Wow6432Node" %nul1% && set _oArch=x86
 if not [%osarch%]==[x86] if not defined _oArch set _oArch=x64
 if [%osarch%]==[x86] set _oArch=x86
 
@@ -2471,8 +2192,6 @@ set "_sppcPath=%SystemRoot%\System32\sppc.dll"
 
 call :oh_msiproducts
 
-echo:
-echo Activating Office %1.0 %_oArch% MSI...
 
 if not defined _oIds (
 set error=1
@@ -2493,7 +2212,6 @@ exit /b
 
 set oapplist=
 if %_wmic% EQU 1 set "chkapp=for /f "tokens=2 delims==" %%a in ('"wmic path SoftwareLicensingProduct where (ApplicationID='0ff1ce15-a989-479d-af46-f275c6370663') get ID /VALUE" %nul6%')"
-if %_wmic% EQU 0 set "chkapp=for /f "tokens=2 delims==" %%a in ('%psc% "(([WMISEARCHER]'SELECT ID FROM SoftwareLicensingProduct WHERE ApplicationID=''0ff1ce15-a989-479d-af46-f275c6370663''').Get()).ID ^| %% {echo ('ID='+$_)}" %nul6%')"
 %chkapp% do (if defined oapplist (call set "oapplist=!oapplist! %%a") else (call set "oapplist=%%a"))
 exit /b
 
@@ -2711,7 +2429,6 @@ set _key=%%C
 set _actid=%%B
 set _allactid=!_allactid! %%B
 set _lic=%%D
-if %oVer%==16 (echo "%%D" | find /i "Subscription" %nul% && set _sublic=1)
 )
 )
 
@@ -2966,7 +2683,6 @@ M--u-D----BE-----QBW-GE-cgBG-Gk-b-Bl-Ek-bgBm-G8------CQ-B----FQ-cgBh-G4-cwBs-GE-
 
 :KMS38Activation
 @setlocal DisableDelayedExpansion
-@echo off
 
 ::  To activate, run the script with "/KMS38" parameter or change 0 to 1 in below line
 set _act=0
@@ -3018,7 +2734,6 @@ if %winbuild% LSS 10586 set _NCS=0
 if %winbuild% GEQ 10586 reg query "HKCU\Console" /v ForceV2 %nul2% | find /i "0x0" %nul1% && (set _NCS=0)
 
 if %_NCS% EQU 1 (
-for /F %%a in ('echo prompt $E ^| cmd') do set "esc=%%a"
 set     "Red="41;97m""
 set    "Gray="100;97m""
 set   "Green="42;97m""
@@ -3037,8 +2752,6 @@ set "_Yellow="Black" "Yellow""
 )
 
 set _k38=
-set "nceline=echo: &echo ==== ERROR ==== &echo:"
-set "eline=echo: &call :dk_color %Red% "==== ERROR ====" &echo:"
 if %~z0 GEQ 200000 (
 set "_exitmsg=Go back"
 set "_fixmsg=Go back to Main Menu, select Troubleshoot and run Fix Licensing option."
@@ -3053,8 +2766,6 @@ set "specific_kms=SOFTWARE\Microsoft\Windows NT\CurrentVersion\SoftwareProtectio
 
 if %winbuild% LSS 14393 (
 %eline%
-echo Unsupported OS version detected [%winbuild%].
-echo KMS38 Activation is supported for Windows 10/11/Server, build 14393 and later.
 goto dk_done
 )
 
@@ -3085,20 +2796,6 @@ cls
 mode 76, 25
 title  KMS38 Activation %masver%
 
-echo:
-echo:
-echo:
-echo:
-echo         ____________________________________________________________
-echo:
-echo                 [1] KMS38 Activation
-echo                 ____________________________________________
-echo:
-echo                 [2] Remove KM38 Protection
-echo:
-echo                 [0] %_exitmsg%
-echo         ____________________________________________________________
-echo: 
 call :dk_color2 %_White% "              " %_Green% "Enter a menu option in the Keyboard [1,2,0]"
 choice /C:120 /N
 set _el=!errorlevel!
@@ -3117,19 +2814,12 @@ mode 110, 34
 if exist "%Systemdrive%\Windows\System32\spp\store_test\" mode 134, 34
 title  KMS38 Activation %masver%
 
-echo:
-echo Initializing...
 
 ::  Check PowerShell
 
 %psc% $ExecutionContext.SessionState.LanguageMode %nul2% | find /i "Full" %nul1% || (
 %eline%
 %psc% $ExecutionContext.SessionState.LanguageMode
-echo:
-echo PowerShell is not working. Aborting...
-echo If you have applied restrictions on Powershell then undo those changes.
-echo:
-echo Check this page for help. %mas%troubleshoot
 goto dk_done
 )
 
@@ -3142,10 +2832,7 @@ call :dk_ckeckwmic
 
 sc start sppsvc %nul%
 if %errorlevel% NEQ 1056 if %errorlevel% NEQ 0 (
-echo:
-echo Error code: %errorlevel%
 call :dk_color %Red% "Failed to start [sppsvc] service, rest of the process may take a long time..."
-echo:
 )
 
 ::========================================================================================================================================
@@ -3155,13 +2842,9 @@ echo:
 call :dk_checkperm
 if defined _perm (
 cls
-echo ___________________________________________________________________________________________
-echo:
 call :dk_color2 %_White% "     " %Green% "Checking: %winos% is Permanently Activated."
 call :dk_color2 %_White% "     " %Gray% "Activation is not required."
-echo ___________________________________________________________________________________________
 if %_unattended%==1 goto dk_done
-echo:
 choice /C:10 /N /M ">    [1] Activate [0] %_exitmsg% : "
 if errorlevel 2 exit /b
 )
@@ -3181,17 +2864,8 @@ if exist "%SystemRoot%\Servicing\Packages\Microsoft-Windows-Server*EvalCorEditio
 if defined _eval (
 reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v EditionID %nul2% | find /i "Eval" %nul1% && (
 %eline%
-echo [%winos% ^| %winbuild%]
 if defined _evalserv (
-echo Server Evaluation cannot be activated. Convert it to full Server OS.
-echo:
-echo In MAS, goto Extras and use 'Change Edition' option.
 ) else (
-echo Evaluation Editions cannot be activated. 
-echo You need to install full version of %winos%
-echo:
-echo Download it from here,
-echo %mas%genuine-installation-media.html
 )
 goto dk_done
 )
@@ -3207,10 +2881,6 @@ if exist "%SystemRoot%\Servicing\Packages\Microsoft-Windows-Server*CorEdition~*.
 if defined a_cor (
 if not exist "!_work!\clipup.exe" (
 %eline%
-echo clipup.exe doesn't exist in Server Cor/Acor [No GUI] version.
-echo It's required for KMS38 Activation.
-echo Check below page on how to activate it.
-echo %mas%kms38.html
 goto dk_done
 )
 )
@@ -3221,7 +2891,6 @@ call :dk_checksku
 
 if not defined osSKU (
 %eline%
-echo SKU value was not detected properly. Aborting...
 goto dk_done
 )
 
@@ -3230,10 +2899,8 @@ goto dk_done
 set error=
 
 cls
-echo:
 for /f "skip=2 tokens=2*" %%a in ('reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" /v PROCESSOR_ARCHITECTURE') do set arch=%%b
 for /f "tokens=6-7 delims=[]. " %%i in ('ver') do if "%%j"=="" (set fullbuild=%%i) else (set fullbuild=%%i.%%j)
-echo Checking OS Info                        [%winos% ^| %fullbuild% ^| %arch%]
 
 ::========================================================================================================================================
 
@@ -3247,12 +2914,10 @@ if %_WSH% EQU 0 (
 reg add "HKLM\Software\Microsoft\Windows Script Host\Settings" /v Enabled /t REG_DWORD /d 1 /f %nul%
 reg add "HKCU\Software\Microsoft\Windows Script Host\Settings" /v Enabled /t REG_DWORD /d 1 /f %nul%
 if not "%arch%"=="x86" reg add "HKLM\Software\Microsoft\Windows Script Host\Settings" /v Enabled /t REG_DWORD /d 1 /f /reg:32 %nul%
-echo Enabling Windows Script Host            [Successful]
 )
 
 ::========================================================================================================================================
 
-echo Initiating Diagnostic Tests...
 
 set "_serv=ClipSVC sppsvc KeyIso Winmgmt"
 
@@ -3300,15 +2965,9 @@ call :dk_color %Red% "Checking Alternate Edition For KMS38    [%altedition% Acti
 
 if not defined key if not defined _gvlk (
 %eline%
-echo [%winos% ^| %winbuild% ^| SKU:%osSKU%]
 if not defined skufound (
-echo Unable to find this product in the supported product list.
 ) else (
-echo Required License files not installed.
 )
-echo Make sure you are using updated version of the script.
-echo %mas%
-echo:
 goto dk_done
 )
 
@@ -3316,17 +2975,13 @@ goto dk_done
 
 ::  Install key
 
-echo:
 if defined changekey (
 call :dk_color %Blue% "[%altedition%] Edition product key will be used to enable KMS38 activation."
-echo:
 )
 
 set _partial=
 if not defined key (
 if %_wmic% EQU 1 for /f "tokens=2 delims==" %%# in ('wmic path SoftwareLicensingProduct where "ApplicationID='55c92734-d682-4d71-983e-d6ec3f16059f' and PartialProductKey<>null" Get PartialProductKey /value %nul6%') do set "_partial=%%#"
-if %_wmic% EQU 0 for /f "tokens=2 delims==" %%# in ('%psc% "(([WMISEARCHER]'SELECT PartialProductKey FROM SoftwareLicensingProduct WHERE ApplicationID=''55c92734-d682-4d71-983e-d6ec3f16059f'' AND PartialProductKey IS NOT NULL').Get()).PartialProductKey | %% {echo ('PartialProductKey='+$_)}" %nul6%') do set "_partial=%%#"
-call echo Checking Installed Product Key          [Partial Key - %%_partial%%] [Volume:GVLK]
 )
 
 set error_code=
@@ -3340,7 +2995,6 @@ if !error_code! NEQ 0 set "error_code=[0x!=ExitCode!]"
 
 if !error_code! EQU 0 (
 call :dk_refresh
-echo Installing KMS Client Setup Key         [%key%] [Successful]
 ) else (
 call :dk_color %Red% "Installing KMS Client Setup Key         [%key%] [Failed] !error_code!"
 if not defined error (
@@ -3357,7 +3011,6 @@ set error=1
 
 set app=
 if %_wmic% EQU 1 for /f "tokens=2 delims==" %%a in ('"wmic path SoftwareLicensingProduct where (ApplicationID='55c92734-d682-4d71-983e-d6ec3f16059f' and Description like '%%KMSCLIENT%%' and PartialProductKey is not NULL) get ID /VALUE" %nul6%') do call set "app=%%a"
-if %_wmic% EQU 0 for /f "tokens=2 delims==" %%a in ('%psc% "(([WMISEARCHER]'SELECT ID FROM SoftwareLicensingProduct WHERE ApplicationID=''55c92734-d682-4d71-983e-d6ec3f16059f'' AND Description like ''%%KMSCLIENT%%'' AND PartialProductKey IS NOT NULL').Get()).ID | %% {echo ('ID='+$_)}" %nul6%') do call set "app=%%a"
 
 if not defined app (
 call :dk_color %Red% "Checking Installed GVLK Activation ID   [Not Found] Aborting..."
@@ -3370,7 +3023,6 @@ goto :dk_done
 ::  Set specific KMS host to Local Host
 ::  By doing this, global KMS IP can not replace KMS38 activation but can be used with Office and other Windows Editions
 
-echo:
 %nul% reg delete "HKLM\%specific_kms%" /f
 %nul% reg delete "HKU\S-1-5-20\%specific_kms%" /f
 
@@ -3384,7 +3036,6 @@ set k_error=
 %nul% reg add "HKLM\%specific_kms%\%app%" /f /v KeyManagementServicePort /t REG_SZ /d "1688" || set k_error=1
 
 if not defined k_error (
-echo Adding Specific KMS Host                [LocalHost 127.0.0.2] [Successful]
 ) else (
 call :dk_color %Red% "Adding Specific KMS Host                [LocalHost 127.0.0.2] [Failed]"
 )
@@ -3399,9 +3050,7 @@ pushd "!_work!\"
 copy /y /b "ClipUp.exe" "!_clipup!" %nul%
 popd
 
-echo:
 if exist "!_clipup!" (
-echo Copying clipup.exe File to              [%systemroot%\System32\] [Successful]
 ) else (
 call :dk_color %Red% "Copying clipup.exe File to              [%systemroot%\System32\] [Failed] Aborting..."
 goto :k_final
@@ -3442,7 +3091,6 @@ call :dk_color %Red% "Generating GenuineTicket.xml            [Failed, aborting 
 if exist "%tdir%\Genuine*" del /f /q "%tdir%\Genuine*" %nul%
 goto :k_final
 ) else (
-echo Generating GenuineTicket.xml            [Successful]
 )
 
 set "_xmlexist=if exist "%tdir%\GenuineTicket.xml""
@@ -3452,7 +3100,6 @@ set "_xmlexist=if exist "%tdir%\GenuineTicket.xml""
 %psc% Stop-Service sppsvc %nul%
 
 sc query sppsvc | find /i "STOPPED" %nul% && (
-echo Stopping sppsvc Service                 [Successful]
 ) || (
 call :dk_color %Gray% "Stopping sppsvc Service                 [Failed]"
 )
@@ -3503,9 +3150,6 @@ if exist "%tdir%\Genuine*" del /f /q "%tdir%\Genuine*" %nul%
 
 call :dk_product
 
-echo:
-echo Activating...
-echo:
 
 call :k_checkexp
 if defined _k38 (
@@ -3519,13 +3163,11 @@ if %_wmic% EQU 1 wmic path SoftwareLicensingProduct where ID='%app%' call ReArms
 if %_wmic% EQU 0 %psc% "$null=([WMI]'SoftwareLicensingProduct=''%app%''').ReArmsku()" %nul%
 
 if %errorlevel%==0 (
-echo Applying SKU-ID Rearm                   [Successful]
 ) else (
 call :dk_color %Red% "Applying SKU-ID Rearm                   [Failed]"
 )
 call :dk_refresh
 
-echo:
 call :k_checkexp
 if defined _k38 (
 call :k_actinfo
@@ -3542,14 +3184,12 @@ call :dk_color2 %Blue% "Check this page for help" %_Yellow% " %mas%troubleshoot"
 
 ::  Remove the added Specific KMS Host (Local Host) if activation is not completed
 
-echo:
 if not defined _k38 (
 %nul% reg delete "HKLM\%specific_kms%" /f
 %nul% reg delete "HKU\S-1-5-20\%specific_kms%" /f
 %nul% reg query "HKLM\%specific_kms%" && (
 call :dk_color %Red% "Removing The Added Specific KMS Host    [Failed]"
 ) || (
-echo Removing The Added Specific KMS Host    [Successful]
 )
 )
 
@@ -3559,7 +3199,6 @@ if defined _k38 (
 %psc% "$f=[io.file]::ReadAllText('!_batp!') -split ':regdel\:.*';& ([ScriptBlock]::Create($f[1])) -protect;"
 %nul% reg delete "HKLM\%specific_kms%" /f
 %nul% reg query "HKLM\%specific_kms%" && (
-echo Protect KMS38 From KMS                  [Successful] [Locked A Registry Key]
 ) || (
 call :dk_color %Red% "Protect KMS38 From KMS                  [Failed To Lock A Registry Key]"
 )
@@ -3573,7 +3212,6 @@ if defined a_cor (
 if exist "%_clipup%" (
 call :dk_color %Red% "Deleting copied clipup.exe file         [Failed]"
 ) else (
-echo Deleting copied clipup.exe file         [Successful]
 )
 )
 
@@ -3599,11 +3237,9 @@ title  Remove KMS38 Protection %masver%
 %nul% reg delete "HKLM\%specific_kms%" /f
 )
 
-echo:
 %nul% reg query "HKLM\%specific_kms%" && (
 call :dk_color %Red% "Removing Specific KMS Host              [Failed]"
 ) || (
-echo Removing Specific KMS Host              [Successful]
 )
 
 goto :dk_done
@@ -3655,7 +3291,6 @@ exit /b
 
 set gpr=0
 if %_wmic% EQU 1 for /f "tokens=2 delims==" %%# in ('"wmic path SoftwareLicensingProduct where (ApplicationID='55c92734-d682-4d71-983e-d6ec3f16059f' and Description like '%%KMSCLIENT%%' and PartialProductKey is not NULL) get GracePeriodRemaining /VALUE" %nul6%') do set "gpr=%%#"
-if %_wmic% EQU 0 for /f "tokens=2 delims==" %%# in ('%psc% "(([WMISEARCHER]'SELECT GracePeriodRemaining FROM SoftwareLicensingProduct WHERE ApplicationID=''55c92734-d682-4d71-983e-d6ec3f16059f'' AND Description like ''%%KMSCLIENT%%'' AND PartialProductKey IS NOT NULL').Get()).GracePeriodRemaining | %% {echo ('GracePeriodRemaining='+$_)}" %nul6%') do set "gpr=%%#"
 if %gpr% GTR 259200 (set _k38=1) else (set _k38=)
 exit /b
 
@@ -3664,7 +3299,6 @@ exit /b
 :dk_channel
 
 if %_wmic% EQU 1 for /f "tokens=2 delims==" %%# in ('wmic path SoftwareLicensingProduct where "ApplicationID='55c92734-d682-4d71-983e-d6ec3f16059f' and PartialProductKey<>null" Get ProductKeyChannel /value %nul6%') do set "_channel=%%#"
-if %_wmic% EQU 0 for /f "tokens=2 delims==" %%# in ('%psc% "(([WMISEARCHER]'SELECT ProductKeyChannel FROM SoftwareLicensingProduct WHERE ApplicationID=''55c92734-d682-4d71-983e-d6ec3f16059f'' AND PartialProductKey IS NOT NULL').Get()).ProductKeyChannel | %% {echo ('ProductKeyChannel='+$_)}" %nul6%') do set "_channel=%%#"
 exit /b
 
 ::========================================================================================================================================
@@ -3781,7 +3415,6 @@ c2e946d1-cfa2-4523-8c87-30bc696ee584_NQ%f%8HH-FTD%f%TM-6V%f%GY7-TQ3D%f%V-XF%f%BV
 ) do (
 for /f "tokens=1-5 delims=_" %%A in ("%%#") do if %osSKU%==%%C (
 set skufound=1
-if %1==getkey if not defined key echo "!applist!" | find /i "%%A" %nul1% && set key=%%B
 )
 )
 exit /b
@@ -3814,8 +3447,6 @@ for %%# in (
 139_ProfessionalCountrySpecific-Zn_01eb852c-424d-4060-94b8-c10d799d7364_2de67392-b7a7-462a-b1ca-108dd189f588_W26%f%9N-WFG%f%WX-YV%f%C9B-4J6C%f%9-T8%f%3GX_Professional
 ) do (
 for /f "tokens=1-6 delims=_" %%A in ("%%#") do if %osSKU%==%%A (
-echo "!applist!" | find /i "%%C" %nul1% && (
-echo "!applist!" | find /i "%%D" %nul1% && (
 set altkey=%%E
 set altedition=%%F
 ) || (
@@ -3831,7 +3462,6 @@ exit /b
 
 :KMSActivation
 @setlocal DisableDelayedExpansion
-@echo off
 
 cls
 color 07
@@ -3860,7 +3490,6 @@ set _unattendedact=
 set _args=%*
 if defined _args set _args=%_args:"=%
 if defined _args (
-echo "%_args%" | find /i "/KMS" >nul && set _unattended=1
 
 for %%A in (%_args%) do (
 if /i "%%A"=="-el"  (set _elev=1
@@ -3891,8 +3520,6 @@ if %winbuild% GEQ 10586 reg query "HKCU\Console" /v ForceV2 2>nul | find /i "0x0
 call :_colorprep
 set "_buf={$W=$Host.UI.RawUI.WindowSize;$B=$Host.UI.RawUI.BufferSize;$W.Height=31;$B.Height=300;$Host.UI.RawUI.WindowSize=$W;$Host.UI.RawUI.BufferSize=$B;}"
 
-set "nceline=echo. &echo ==== ERROR ==== &echo."
-set "eline=echo. &call :_color %Red% "==== ERROR ====" &echo."
 if %_Debug% EQU 1 set _unattended=1
 
 ::========================================================================================================================================
@@ -3926,16 +3553,11 @@ if /i not "%arch%"=="x86" set notx86=1
 
 for %%# in (wmic.exe) do @if "%%~$PATH:#"=="" (
 %nceline%
-echo Unable to find wmic.exe in the system.
-if %winbuild% GEQ 22621 echo Make sure WMIC is enabled in optional features.
 goto Done
 )
 
 wmic path Win32_ComputerSystem get CreationClassName /value 2>nul | find /i "ComputerSystem" 1>nul || (
 %nceline%
-echo WMI is not responding in the system.
-echo:
-echo In MAS, Goto Troubleshoot and run Fix WMI option.
 goto Done
 )
 
@@ -3996,24 +3618,9 @@ set _gui=1
 title  %_title%
 mode con: cols=76 lines=30
 
-echo.
-echo.
-echo.
-echo.
-echo.       ______________________________________________________________
-echo.
-echo.              [1] Activate - Windows
-echo.              [2] Activate - Office
-echo.              [3] Activate - All
-echo.
 if defined _tskinstalled call :_color2 %_White% "              [4] Install Auto-Renewal      " %_Green% "[Installed]"
 if defined _oldtsk       call :_color2 %_White% "              [4] Install Auto-Renewal      " %_Red% "[Old Installed]"
-if not defined _tskinstalled if not defined _oldtsk echo.              [4] Install Auto-Renewal
-echo.              [5] Uninstall
-echo.              _______________________________________________  
-echo.
 if %_Debug%==0 (
-echo.              [6] Enable Debug Mode         [No]
 ) else (
 call :_color2 %_White% "              [6] Enable Debug Mode         " %_Red% "[Yes]"
 )
@@ -4021,20 +3628,13 @@ if %vNextOverride% EQU 1 (
 if %sub_next% EQU 1 (
 call :_color2 %_White% "              [7] Override Office vNext     " %_Red% "[Yes]"
 ) else (
-echo               [7] Override Office vNext     [Yes]
 )
 ) else (
 if %sub_next% EQU 1 (
 call :_color2 %_White% "              [7] Override Office vNext     " %_Yellow% "[No]"
 ) else (
-echo               [7] Override Office vNext     [No]
 )
 )
-echo.              _______________________________________________       
-echo.
-echo.              [0] %_exitmsg%
-echo.       ______________________________________________________________
-echo.
 call :_color2 %_White% "           " %_Green% "Enter a menu option in the Keyboard [1,2,3,4,5,6,7,0]"
 choice /C:12345670 /N
 set _el=%errorlevel%
@@ -4055,8 +3655,6 @@ goto _KMS_Menu
 
 if defined _unattended exit /b
 
-echo.
-echo Press any key to exit...
 pause >nul
 exit /b
 
@@ -4189,20 +3787,11 @@ if %_Debug% EQU 0 (
   set "_Nul3="
   set "_log=!_dsk!\%~n0"
   if %Silent% EQU 0 (
-  echo.
-  echo Running in Debug Mode...
-  if not defined _args (echo The window will be closed when finished) else (echo please wait...)
-  echo.
-  echo Writing debug log to:
-  echo "!_log!_Debug.log"
   )
-  @echo on
   @prompt $G
   @call :Begin >"!_log!_tmp.log" 2>&1 &cmd /u /c type "!_log!_tmp.log">"!_log!_Debug.log"&del "!_log!_tmp.log"
 )
-@echo off
 if defined _gui if %_Debug%==1 (
-echo.
 call :_color %_Yellow% "Press any key to go back..."
 pause >nul
 exit /b
@@ -4216,10 +3805,7 @@ exit /b
 set act_failed=0
 set /a act_attempt=0
 
-echo.
-echo Initializing...
 
-:: Check Internet connection. Works even if ICMP echo is disabled.
 
 call :setserv
 for %%a in (%srvlist%) do (
@@ -4233,17 +3819,13 @@ if [%errorlevel%]==[0] goto IntConnected
 
 cls
 if %_Debug%==1 (
-echo Error: Internet is not connected.
 exit /b
 )
 
 if defined _unattended (
-echo.
 call :_color %_Red% "Internet is not connected, continuing the process anyway."
 ) else (
 %eline%
-echo Internet is not connected.
-echo:
 call :_color %_Yellow% "Press any key to go back..."
 pause >nul
 exit /b
@@ -4318,7 +3900,6 @@ SET "Pattern=Microsoft-Windows-*Edition~31bf3856ad364e35"
 SET "EditionPKG=FFFFFFFF"
 FOR /F "TOKENS=8 DELIMS=\" %%A IN ('REG QUERY "%RegKey%" /f "%Pattern%" /k %_Nul6% ^| FIND /I "CurrentVersion"') DO (
   REG QUERY "%RegKey%\%%A" /v "CurrentState" %_Nul2% | FIND /I "0x70" %_Nul1% && (
-    FOR /F "TOKENS=3 DELIMS=-~" %%B IN ('ECHO %%A') DO SET "EditionPKG=%%B"
   )
 )
 IF /I "%EditionPKG:~-7%"=="Edition" (
@@ -4375,7 +3956,6 @@ if %_O14MSI% EQU 1 set "_C14R="
 set S_OK=1
 call :RunSPP
 if %ActOffice% NEQ 0 call :RunOSPP
-if %ActOffice% EQU 0 (echo.&echo Office activation is OFF...)
 
 if exist "!_temp!\crv*.txt" del /f /q "!_temp!\crv*.txt"
 if exist "!_temp!\*chk.txt" del /f /q "!_temp!\*chk.txt"
@@ -4404,13 +3984,9 @@ set "_qr=%_zz1% %spp% %_zz2% %_zz5%Description like '%%KMSCLIENT%%' %_zz6% %_zz3
 %_qr% %_Nul2% | findstr /i Windows %_Nul1% && (set WinVL=1)
 if %WinVL% EQU 0 (
 if %ActWindows% EQU 0 (
-  echo.&echo Windows activation is OFF...
   ) else (
   if %SSppHook% EQU 0 (
-    echo.&echo %_winos% %nKMS%
-    if defined _eval echo %nEval%
     ) else (
-    echo.&echo Failed checking KMS Activation ID^(s^) for Windows. &call :CheckWS
     exit /b
     )
   )
@@ -4449,7 +4025,6 @@ set "_qr=%_zz7% %spp% %_zz2% %_zz5%ApplicationID='%_wApp%' and Description like 
 if %W1nd0ws% EQU 1 if %ActWindows% NEQ 0 for /f "tokens=2 delims==" %%G in ('%_qr%') do (set app=%%G&call :sppchkwin)
 :: set "_qr=%_zz7% %spp% %_zz2% %_zz5%ApplicationID='%_wApp%' and Description like '%%KMSCLIENT%%' %addon% %_zz6% %_zz3% ID %_zz8%"
 :: if %ESU_EDT% EQU 1 if %ActWindows% NEQ 0 for /f "tokens=2 delims==" %%G in ('%_qr%') do (set app=%%G&call :esuchk)
-if %W1nd0ws% EQU 1 if %ActWindows% EQU 0 (echo.&echo Windows activation is OFF...)
 set "_qr=%_zz7% %spp% %_zz2% %_zz5%ApplicationID='%_oApp%' and Description like '%%KMSCLIENT%%' %_zz6% %_zz3% ID %_zz8%"
 if %Off1ce% EQU 1 if %ActOffice% NEQ 0 for /f "tokens=2 delims==" %%G in ('%_qr%') do (set app=%%G&call :sppchkoff 1)
 reg delete "HKLM\%SPPk%" /f /v DisableDnsPublishing %_Null%
@@ -4465,10 +4040,8 @@ if not %xOS%==x86 dir /b "%ProgramW6432%\WindowsApps\Microsoft.Office.Desktop*" 
 rem nothing installed
 if %loc_off21% EQU 0 if %loc_off19% EQU 0 if %loc_off16% EQU 0 if %loc_off15% EQU 0 (
 if %winbuild% GEQ 9200 (
-  if %OffUWP% EQU 0 (echo.&echo No Installed Office 2013-2021 Product Detected...) else (echo.&echo %_mOuwp%)
   exit /b
   )
-if %winbuild% LSS 9200 (if %loc_off14% EQU 0 (echo.&echo No Installed Office %aword% Product Detected...&exit /b))
 )
 if %vNextOverride% EQU 1 if %AutoR2V% EQU 1 (
 set sub_o365=0
@@ -4640,11 +4213,7 @@ if %run_off19% EQU 1 if %AutoR2V% EQU 1 if %RanR2V% EQU 0 goto :C2RR2V
 if %run_off16% EQU 1 if %AutoR2V% EQU 1 if %RanR2V% EQU 0 goto :C2RR2V
 if %run_off15% EQU 1 if %AutoR2V% EQU 1 if %RanR2V% EQU 0 goto :C2RR2V
 rem all supported Volume + message for unsupported
-if %loc_off16% EQU 0 if %ret_off16% EQU 1 if %_O16MSI% EQU 0 if %OffUWP% EQU 1 (echo.&echo %_mOuwp%)
 if %vol_offgl% EQU 1 (
-if %ret_off16% EQU 1 if %_O16MSI% EQU 1 (echo.&echo %_mO16m%)
-if %ret_off15% EQU 1 if %_O15MSI% EQU 1 (echo.&echo %_mO15m%)
-if %winbuild% LSS 9200 if %loc_off14% EQU 1 if %vol_off14% EQU 0 (if defined _C14R (echo.&echo %_mO14c%) else if %_O14MSI% EQU 1 (if %ret_off14% EQU 1 echo.&echo %_mO14m%))
 exit /b
 )
 set Off1ce=0
@@ -4653,19 +4222,14 @@ if %AutoR2V% EQU 1 if %RanR2V% EQU 0 goto :C2RR2V
 :ReturnSPP
 rem Retail MSI/C2R or failed C2R-R2V
 if %loc_off21% EQU 1 if %vol_off21% EQU 0 (
-if %aC2R21% EQU 1 (echo.&echo %_mO21a%) else (echo.&echo %_mO21c%)
 )
 if %loc_off19% EQU 1 if %vol_off19% EQU 0 (
-if %aC2R19% EQU 1 (echo.&echo %_mO19a%) else (echo.&echo %_mO19c%)
 )
 if %loc_off16% EQU 1 if %vol_off16% EQU 0 (
-if defined _C16R (if %aC2R16% EQU 1 (echo.&echo %_mO16a%) else (if %sub_o365% EQU 0 echo.&echo %_mO16c%)) else if %_O16MSI% EQU 1 (if %ret_off16% EQU 1 echo.&echo %_mO16m%)
 )
 if %loc_off15% EQU 1 if %vol_off15% EQU 0 (
-if defined _C15R (if %aC2R15% EQU 1 (echo.&echo %_mO15a%) else (echo.&echo %_mO15c%)) else if %_O15MSI% EQU 1 (if %ret_off15% EQU 1 echo.&echo %_mO15m%)
 )
 if %winbuild% LSS 9200 if %loc_off14% EQU 1 if %vol_off14% EQU 0 (
-if defined _C14R (echo.&echo %_mO14c%) else if %_O14MSI% EQU 1 (if %ret_off14% EQU 1 echo.&echo %_mO14m%)
 )
 exit /b
 
@@ -4679,7 +4243,6 @@ find /i "Office 19" "!_temp!\sppchk.txt" %_Nul1% && (if %loc_off19% EQU 0 exit /
 find /i "Office 21" "!_temp!\sppchk.txt" %_Nul1% && (if %loc_off21% EQU 0 exit /b)
 if %1 EQU 1 (set _officespp=1) else (set _officespp=0)
 set "_qr=%_zz1% %spp% %_zz2% %_zz5%PartialProductKey is not NULL%_zz6% %_zz3% ID %_zz4%"
-%_qr% %_Nul2% | findstr /i "%app%" %_Nul1% && (echo.&call :activate&exit /b)
 set "_qr=%_zz7% %spp% %_zz2% %_zz5%ID='%app%'%_zz6% %_zz3% Name %_zz8%"
 for /f "tokens=3 delims==, " %%G in ('%_qr%') do set OffVer=%%G
 call :offchk%OffVer%
@@ -4690,9 +4253,7 @@ set _officespp=0
 set "_qr=%_zz1% %spp% %_zz2% %_zz5%ApplicationID='%_wApp%' and Description like '%%KMSCLIENT%%' and PartialProductKey is not NULL%_zz6% %_zz3% Name %_zz4%"
 if %winbuild% GEQ 14393 if %WinPerm% EQU 0 if %_gvlk% EQU 0 %_qr% %_Nul2% | findstr /i Windows %_Nul1% && (set _gvlk=1)
 set "_qr=%_zz1% %spp% %_zz2% %_zz5%ID='%app%'%_zz6% %_zz3% LicenseStatus %_zz4%"
-%_qr% %_Nul2% | findstr "1" %_Nul1% && (echo.&call :activate&exit /b)
 set "_qr=%_zz1% %spp% %_zz2% %_zz5%PartialProductKey is not NULL%_zz6% %_zz3% ID %_zz4%"
-%_qr% %_Nul2% | findstr /i "%app%" %_Nul1% && (echo.&call :activate&exit /b)
 if %winbuild% GEQ 14393 if %_gvlk% EQU 1 exit /b
 if %WinPerm% EQU 1 exit /b
 if %winbuild% LSS 10240 (call :winchk&exit /b)
@@ -4736,7 +4297,6 @@ exit /b
 if not defined tok (if %winbuild% GEQ 9200 (set "tok=4") else (set "tok=7"))
 set "_qr=%_zz1% %spp% %_zz2% %_zz5%LicenseStatus='1' and Description like '%%KMSCLIENT%%' %adoff% %_zz6% %_zz3% Name %_zz4%"
 %_qr% %_Nul2% | findstr /i "Windows" %_Nul3% && (exit /b)
-echo.
 set "_qr=%_zz1% %spp% %_zz2% %_zz5%LicenseStatus='1' and GracePeriodRemaining='0' %adoff% and PartialProductKey is not NULL%_zz6% %_zz3% Name %_zz4%"
 %_qr% %_Nul2% | findstr /i "Windows" %_Nul3% && (
 set WinPerm=1
@@ -4755,8 +4315,6 @@ cscript //nologo "!_temp!\slmgr.vbs" /xpr %_Nul2% | findstr /i "permanently" %_N
 )
 set "_qr=%_zz7% %spp% %_zz2% %_zz5%ApplicationID='%_wApp%' and LicenseStatus='1' %adoff% %_zz6% %_zz3% Name %_zz8%"
 if %WinPerm% EQU 1 (
-for /f "tokens=2 delims==" %%x in ('%_qr%') do echo Checking: %%x
-echo Product is Permanently Activated.
 exit /b
 )
 call :insKey
@@ -4766,7 +4324,6 @@ exit /b
 set _officespp=0
 set ESU_ADD=1
 set "_qr=%_zz1% %spp% %_zz2% %_zz5%ID='%app%'%_zz6% %_zz3% LicenseStatus %_zz4%"
-%_qr% %_Nul2% | findstr "1" %_Nul1% && (echo.&call :activate&exit /b)
 set "_qr=%_zz1% %spp% %_zz2% %_zz5%ID='77db037b-95c3-48d7-a3ab-a9c6d41093e0'%_zz6% %_zz3% LicenseStatus %_zz4%"
 if /i "%app%" EQU "3fcc2df2-f625-428d-909a-1f76efc849b6" (
 %_qr% %_Nul2% | findstr "1" %_Nul1% && (exit /b)
@@ -4796,7 +4353,6 @@ if /i "%app%" EQU "e7cce015-33d6-41c1-9831-022ba63fe1da" (
 %_qr% %_Nul2% | findstr "1" %_Nul1% && (exit /b)
 )
 set "_qr=%_zz1% %spp% %_zz2% %_zz5%PartialProductKey is not NULL%_zz6% %_zz3% ID %_zz4%"
-%_qr% %_Nul2% | findstr /i "%app%" %_Nul1% && (echo.&call :activate&exit /b)
 call :insKey
 exit /b
 
@@ -4810,14 +4366,11 @@ set aC2R19=0
 set aC2R16=0
 set aC2R15=0
 if %winbuild% LSS 9200 (set "aword=2010-2021") else (set "aword=2010")
-if %OsppHook% EQU 0 (echo.&echo No Installed Office %aword% Product Detected...&exit /b)
-if %winbuild% GEQ 9200 if %loc_off14% EQU 0 (echo.&echo No Installed Office %aword% Product Detected...&exit /b)
 set err_offsvc=0
 net start osppsvc /y %_Nul3% || (
 sc start osppsvc %_Nul3%
 if !errorlevel! EQU 1053 set err_offsvc=1
 )
-if %err_offsvc% EQU 1 (echo.&echo Error: osppsvc service is not running...&exit /b)
 if %winbuild% GEQ 9200 call :oppoff
 if %winbuild% LSS 9200 call :sppoff
 if %Off1ce% EQU 0 exit /b
@@ -4844,7 +4397,6 @@ exit /b
 )
 set ret_off14=0
 %_qr% %_Nul2% | findstr /i channel %_Nul1% && (set ret_off14=1)
-if defined _C14R (echo.&echo %_mO14c%) else if %_O14MSI% EQU 1 (if %ret_off14% EQU 1 echo.&echo %_mO14m%)
 exit /b
 
 :offchk
@@ -4858,18 +4410,12 @@ if /i not "%~3"=="" for /f "tokens=2 delims==" %%A in ('%_qr% %_Nul6%') do set /
 set "_qr=%_zz7% %spp% %_zz2% %_zz5%LicenseFamily='Office%~5'%_zz6% %_zz3% LicenseStatus %_zz8%"
 if /i not "%~5"=="" for /f "tokens=2 delims==" %%A in ('%_qr% %_Nul6%') do set /a ls3=%%A
 if "%ls3%"=="1" (
-echo Checking: %~6
-echo Product is Permanently Activated.
 exit /b
 )
 if "%ls2%"=="1" (
-echo Checking: %~4
-echo Product is Permanently Activated.
 exit /b
 )
 if "%ls%"=="1" (
-echo Checking: %~2
-echo Product is Permanently Activated.
 exit /b
 )
 call :insKey
@@ -5069,7 +4615,6 @@ set _O%1MSI=1
 )
 
 if %1 EQU 16 if defined _C16R (
-for /f "skip=2 tokens=2*" %%a in ('reg query %_C16R% /v ProductReleaseIds') do echo %%b> "!_temp!\c2rchk.txt"
 for %%a in (%LV16Ids%,ProjectProX,ProjectStdX,VisioProX,VisioStdX) do (
   findstr /I /C:"%%aVolume" "!_temp!\c2rchk.txt" %_Nul1% && set loc_off%1=1
   )
@@ -5105,21 +4650,16 @@ exit /b
 
 :insKey
 set S_OK=1
-echo.
 set "_key="
 set "_qr=%_zz7% %spp% %_zz2% %_zz5%ID='%app%'%_zz6% %_zz3% Name %_zz8%"
-if %ESU_ADD% EQU 0 for /f "tokens=2 delims==" %%x in ('%_qr%') do echo Installing Key: %%x
-if %ESU_ADD% EQU 1 for /f "tokens=2 delims==f" %%x in ('%_qr%') do echo Installing Key: %%x
 set ESU_ADD=0
 call :keys %app%
-if "%_key%"=="" (echo No associated KMS Client key found&exit /b)
 set "_qr=wmic path %sps% where Version='%slsv%' call InstallProductKey ProductKey="%_key%""
 if %WMI_VBS% NEQ 0 set "_qr=%_csp% %sps% "%_key%""
 %_qr% %_Nul3%
 set ERRORCODE=%ERRORLEVEL%
 if %ERRORCODE% NEQ 0 (
 cmd /c exit /b %ERRORCODE%
-echo Failed: 0x!=ExitCode!
 set S_OK=0
 exit /b
 )
@@ -5139,15 +4679,11 @@ set "_qr=%_zz7% %spp% %_zz2% %_zz5%ID='%app%'%_zz6% %_zz3% Name %_zz8%"
 if %W1nd0ws% EQU 0 if %_officespp% EQU 0 if %sps% EQU SoftwareLicensingService (
 reg add "HKLM\%SPPk%\%_wApp%\%app%" /f /v KeyManagementServiceName /t REG_SZ /d "127.0.0.2" %_Nul3%
 reg add "HKLM\%SPPk%\%_wApp%\%app%" /f /v KeyManagementServicePort /t REG_SZ /d "%KMS_Port%" %_Nul3%
-for /f "tokens=2 delims==" %%x in ('%_qr%') do echo Checking: %%x
-echo Product is KMS 2038 Activated.
 set _keepkms38=1
 exit /b
 )
 set "_qr=%_zz7% %spp% %_zz2% %_zz5%ID='%app%'%_zz6% %_zz3% Name %_zz8%"
 if %act_attempt% LSS 1 (
-if %ESU_ADD% EQU 0 for /f "tokens=2 delims==" %%x in ('%_qr%') do echo Activating: %%x
-if %ESU_ADD% EQU 1 for /f "tokens=2 delims==f" %%x in ('%_qr%') do echo Activating: %%x
 )
 
 set ESU_ADD=0
@@ -5156,20 +4692,12 @@ if %WMI_VBS% NEQ 0 set "_qr=%_csm% "%spp%.ID='%app%'" Activate"
 %_qr% %_Nul3%
 call set ERRORCODE=%ERRORLEVEL%
 if %act_attempt% LSS 1 if %ERRORCODE% EQU -1073418187 (
-echo Product Activation Failed: 0xC004F035
-if %OSType% EQU Win7 echo Windows 7 cannot be KMS-activated on this computer due to unqualified OEM BIOS.
-echo See Read Me for details.
 exit /b
 )
 if %act_attempt% LSS 1 if %ERRORCODE% EQU -1073417728 (
-echo Product Activation Failed: 0xC004F200
-echo Windows needs to rebuild the activation-related files.
-echo See KB2736303 for details.
 exit /b
 )
 if %act_attempt% LSS 1 if %ERRORCODE% EQU -1073422315 (
-echo Product Activation Failed: 0xC004E015
-echo Running slmgr.vbs /rilc to mitigate.
 cscript //Nologo //B %SysPath%\slmgr.vbs /rilc
 )
 set gpr=0
@@ -5177,8 +4705,6 @@ set gpr2=0
 set "_qr=%_zz7% %spp% %_zz2% %_zz5%ID='%app%'%_zz6% %_zz3% GracePeriodRemaining %_zz8%"
 for /f "tokens=2 delims==" %%x in ('%_qr%') do (set gpr=%%x&set /a "gpr2=(%%x+1440-1)/1440")
 if %act_attempt% LSS 1 if %ERRORCODE% EQU 0 if %gpr% EQU 0 (
-echo Product Activation succeeded, but Remaining Period failed to increase.
-if %OSType% EQU Win7 echo This could be related to the error described in KB4487266
 exit /b
 )
 set Act_OK=0
@@ -5189,7 +4715,6 @@ if %gpr% EQU 259200 set Act_OK=1
 
 if %ERRORCODE% EQU 0 if %Act_OK% EQU 1 (
 call :_color %_Green% "Product Activation Successful"
-echo Remaining Period: %gpr2% days ^(%gpr% minutes^)
 set /a act_attempt=0
 exit /b
 )
@@ -5217,7 +4742,6 @@ call :_color %_Red% "Product Activation Failed: 0x!=ExitCode!"
 ) else (
 call :_color %_Red% "Product Activation Failed"
 )
-echo Remaining Period: %gpr2% days ^(%gpr% minutes^)
 set S_OK=0
 set act_failed=1
 set /a act_attempt=0
@@ -5240,9 +4764,6 @@ goto :eof
 set WMIe=0
 call :CheckWS
 if %WMIe% EQU 1 (
-echo.
-echo %_err%
-echo Failed running WMI query check.
 )
 goto :eof
 
@@ -5253,9 +4774,7 @@ set "_qrs=%_zz1% SoftwareLicensingService %_zz3% Version %_zz4%"
 %_qrs% %_Nul2% | findstr /r "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" %_Nul1% || (
   set WMIe=1
   %_qrw% %_Nul2% | find /i "ComputerSystem" %_Nul1% && (
-    echo Error: SPP is not responding
     ) || (
-    echo Error: WMI ^& SPP are not responding
   )
 )
 goto :eof
@@ -5275,7 +4794,6 @@ set error1=%errorlevel%
 sc query OfficeSvc %_Nul3%
 set error2=%errorlevel%
 if %error1% EQU 1060 if %error2% EQU 1060 (
-echo Error: Office C2R service is not detected
 goto :%_fC2R%
 )
 set _Office16=0
@@ -5293,7 +4811,6 @@ for /f "skip=2 tokens=2*" %%a in ('"reg query HKLM\SOFTWARE\WOW6432Node\Microsof
   set _Office15=1
 )
 if %_Office16% EQU 0 if %_Office15% EQU 0 (
-echo Error: Office C2R InstallPath is not detected
 goto :%_fC2R%
 )
 
@@ -5325,13 +4842,10 @@ set "_LicensesPath=%_InstallRoot%\Licenses16"
 set "_Integrator=%_InstallRoot%\integration\integrator.exe"
 for /f "skip=2 tokens=2*" %%a in ('"reg query %_PRIDs% /v ActiveConfiguration" %_Nul6%') do set "_PRIDs=%_PRIDs%\%%b"
 if "%_ProductIds%"=="" (
-if %_Office15% EQU 0 (echo Error: Office C2R ProductIDs are not detected&goto :%_fC2R%) else (goto :Reg15istry)
 )
 if not exist "%_LicensesPath%\ProPlus*.xrm-ms" (
-if %_Office15% EQU 0 (echo Error: Office C2R Licenses files are not detected&goto :%_fC2R%) else (goto :Reg15istry)
 )
 if not exist "%_Integrator%" (
-if %_Office15% EQU 0 (echo Error: Office C2R Licenses Integrator is not detected&goto :%_fC2R%) else (goto :Reg15istry)
 )
 if exist "%_LicensesPath%\Word2019VL_KMS_Client_AE*.xrm-ms" (set "_tag=2019"&set "_ons= 2019")
 if exist "%_LicensesPath%\Word2021VL_KMS_Client_AE*.xrm-ms" (set _LTSC=1)
@@ -5382,13 +4896,10 @@ if exist "%ProgramFiles%\Microsoft Office\Office15\OSPP.VBS" (
   set "_OSPP15VBS=%ProgramFiles(x86)%\Microsoft Office\Office15\OSPP.VBS"
 )
 if "%_Product15Ids%"=="" (
-if %_Office16% EQU 0 (echo Error: Office 2013 C2R ProductIDs are not detected&goto :%_fC2R%) else (goto :CheckC2R)
 )
 if not exist "%_Licenses15Path%\ProPlus*.xrm-ms" (
-if %_Office16% EQU 0 (echo Error: Office 2013 C2R Licenses files are not detected&goto :%_fC2R%) else (goto :CheckC2R)
 )
 if %winbuild% LSS 9200 if not exist "%_OSPP15VBS%" (
-if %_Office16% EQU 0 (echo Error: Office 2013 C2R Licensing tool OSPP.vbs is not detected&goto :%_fC2R%) else (goto :CheckC2R)
 )
 
 :CheckC2R
@@ -5416,7 +4927,6 @@ set "_wmi="
 set "_qr=%_zz7% %_sps% %_zz3% Version %_zz8%"
 for /f "tokens=2 delims==" %%# in ('%_qr%') do set _wmi=%%#
 if "%_wmi%"=="" (
-echo Error: %_sps% WMI version is not detected
 call :CheckWS
 goto :%_fC2R%
 )
@@ -5460,7 +4970,6 @@ set _Suites=Mondo,O365ProPlus,O365Business,O365SmallBusPrem,O365HomePrem,O365Edu
 set _PrjSKU=ProjectPro,ProjectStd,ProjectPro2019,ProjectStd2019,ProjectPro2021,ProjectStd2021
 set _VisSKU=VisioPro,VisioStd,VisioPro2019,VisioStd2019,VisioPro2021,VisioStd2021
 
-echo %_ProductIds%>"!_temp!\crvProductIds.txt"
 for %%a in (%_RetIds%,ProPlus) do (
 set _%%a=0
 )
@@ -5528,26 +5037,18 @@ find /i "Office16MondoVL_KMS_Client" "!_temp!\crvVolume.txt" %_Nul1% && (
 )
 if %sub_o365% EQU 1 (
   for %%a in (%_Suites%) do set _%%a=0
-echo.
-echo Microsoft Office is activated with a vNext license.
 )
 if %sub_proj% EQU 1 (
   for %%a in (%_PrjSKU%) do set _%%a=0
-echo.
-echo Microsoft Project is activated with a vNext license.
 )
 if %sub_vsio% EQU 1 (
   for %%a in (%_VisSKU%) do set _%%a=0
-echo.
-echo Microsoft Visio is activated with a vNext license.
 )
 
 for %%a in (%_RetIds%,ProPlus) do if !_%%a! EQU 1 (
 set _C16Msg=1
 )
 if %_C16Msg% EQU 1 (
-echo.
-echo Converting Office C2R Retail-to-Volume:
 )
 if %_C16Msg% EQU 0 (if %_Office15% EQU 1 (goto :R15V) else (goto :GVLKC2R))
 
@@ -5560,164 +5061,134 @@ if !_Mondo! EQU 1 (
 call :InsLic Mondo
 )
 if !_O365ProPlus! EQU 1 (
-echo O365ProPlus 2016 Suite ^<-^> Mondo 2016 Licenses
 call :InsLic O365ProPlus DRNV7-VGMM2-B3G9T-4BF84-VMFTK
 if !_Mondo! EQU 0 call :InsLic Mondo
 )
 if !_O365Business! EQU 1 if !_O365ProPlus! EQU 0 (
 set _O365ProPlus=1
-echo O365Business 2016 Suite ^<-^> Mondo 2016 Licenses
 call :InsLic O365Business NCHRJ-3VPGW-X73DM-6B36K-3RQ6B
 if !_Mondo! EQU 0 call :InsLic Mondo
 )
 if !_O365SmallBusPrem! EQU 1 if !_O365Business! EQU 0 if !_O365ProPlus! EQU 0 (
 set _O365ProPlus=1
-echo O365SmallBusPrem 2016 Suite ^<-^> Mondo 2016 Licenses
 call :InsLic O365SmallBusPrem 3FBRX-NFP7C-6JWVK-F2YGK-H499R
 if !_Mondo! EQU 0 call :InsLic Mondo
 )
 if !_O365HomePrem! EQU 1 if !_O365SmallBusPrem! EQU 0 if !_O365Business! EQU 0 if !_O365ProPlus! EQU 0 (
 set _O365ProPlus=1
-echo O365HomePrem 2016 Suite ^<-^> Mondo 2016 Licenses
 call :InsLic O365HomePrem 9FNY8-PWWTY-8RY4F-GJMTV-KHGM9
 if !_Mondo! EQU 0 call :InsLic Mondo
 )
 if !_O365EduCloud! EQU 1 if !_O365HomePrem! EQU 0 if !_O365SmallBusPrem! EQU 0 if !_O365Business! EQU 0 if !_O365ProPlus! EQU 0 (
 set _O365ProPlus=1
-echo O365EduCloud 2016 Suite ^<-^> Mondo 2016 Licenses
 call :InsLic O365EduCloud 8843N-BCXXD-Q84H8-R4Q37-T3CPT
 if !_Mondo! EQU 0 call :InsLic Mondo
 )
 if !_O365ProPlus! EQU 1 set _O16O365=1
 if !_Mondo! EQU 1 if !_O365ProPlus! EQU 0 (
-echo Mondo 2016 Suite
 call :InsLic O365ProPlus DRNV7-VGMM2-B3G9T-4BF84-VMFTK
 if %_Office15% EQU 1 (goto :R15V) else (goto :GVLKC2R)
 )
 if !_ProPlus2021! EQU 1 if !_O365ProPlus! EQU 0 (
-echo ProPlus 2021 Suite
 call :InsLic ProPlus2021
 )
 if !_ProPlus2019! EQU 1 if !_O365ProPlus! EQU 0 if !_ProPlus2021! EQU 0 (
-echo ProPlus 2019 Suite -^> ProPlus%_ons% Licenses
 call :InsLic ProPlus%_tag%
 )
 if !_ProPlus! EQU 1 if !_O365ProPlus! EQU 0 if !_ProPlus2021! EQU 0 if !_ProPlus2019! EQU 0 (
-echo ProPlus 2016 Suite -^> ProPlus%_ons% Licenses
 call :InsLic ProPlus%_tag%
 )
 if !_Professional2021! EQU 1 if !_O365ProPlus! EQU 0 if !_ProPlus2021! EQU 0 if !_ProPlus2019! EQU 0 if !_ProPlus! EQU 0 (
-echo Professional 2021 Suite -^> ProPlus 2021 Licenses
 call :InsLic ProPlus2021
 )
 if !_Professional2019! EQU 1 if !_O365ProPlus! EQU 0 if !_ProPlus2021! EQU 0 if !_ProPlus2019! EQU 0 if !_ProPlus! EQU 0 if !_Professional2021! EQU 0 (
-echo Professional 2019 Suite -^> ProPlus%_ons% Licenses
 call :InsLic ProPlus%_tag%
 )
 if !_Professional! EQU 1 if !_O365ProPlus! EQU 0 if !_ProPlus2021! EQU 0 if !_ProPlus2019! EQU 0 if !_ProPlus! EQU 0 if !_Professional2021! EQU 0 if !_Professional2019! EQU 0 (
-echo Professional 2016 Suite -^> ProPlus%_ons% Licenses
 call :InsLic ProPlus%_tag%
 )
 if !_Standard2021! EQU 1 if !_O365ProPlus! EQU 0 if !_ProPlus2021! EQU 0 if !_ProPlus2019! EQU 0 if !_ProPlus! EQU 0 if !_Professional2021! EQU 0 if !_Professional2019! EQU 0 if !_Professional! EQU 0 (
-echo Standard 2021 Suite
 call :InsLic Standard2021
 )
 if !_Standard2019! EQU 1 if !_O365ProPlus! EQU 0 if !_ProPlus2021! EQU 0 if !_ProPlus2019! EQU 0 if !_ProPlus! EQU 0 if !_Professional2021! EQU 0 if !_Professional2019! EQU 0 if !_Professional! EQU 0 if !_Standard2021! EQU 0 (
-echo Standard 2019 Suite -^> Standard%_ons% Licenses
 call :InsLic Standard%_tag%
 )
 if !_Standard! EQU 1 if !_O365ProPlus! EQU 0 if !_ProPlus2021! EQU 0 if !_ProPlus2019! EQU 0 if !_ProPlus! EQU 0 if !_Professional2021! EQU 0 if !_Professional2019! EQU 0 if !_Professional! EQU 0 if !_Standard2021! EQU 0 if !_Standard2019! EQU 0 (
-echo Standard 2016 Suite -^> Standard%_ons% Licenses
 call :InsLic Standard%_tag%
 )
 for %%a in (ProjectPro,VisioPro,ProjectStd,VisioStd) do if !_%%a2021! EQU 1 (
-  echo %%a 2021 SKU
   call :InsLic %%a2021
 )
 for %%a in (ProjectPro,VisioPro,ProjectStd,VisioStd) do if !_%%a2019! EQU 1 (
 if !_%%a2021! EQU 0 (
-  echo %%a 2019 SKU -^> %%a%_ons% Licenses
   call :InsLic %%a%_tag%
   )
 )
 for %%a in (ProjectPro,VisioPro,ProjectStd,VisioStd) do if !_%%a! EQU 1 (
 if !_%%a2021! EQU 0 if !_%%a2019! EQU 0 (
-  echo %%a 2016 SKU -^> %%a%_ons% Licenses
   call :InsLic %%a%_tag%
   )
 )
 for %%a in (HomeBusiness,HomeStudent) do if !_%%a2021! EQU 1 (
 if !_O365ProPlus! EQU 0 if !_ProPlus2021! EQU 0 if !_ProPlus2019! EQU 0 if !_ProPlus! EQU 0 if !_Professional2021! EQU 0 if !_Professional2019! EQU 0 if !_Professional! EQU 0 if !_Standard2021! EQU 0 if !_Standard2019! EQU 0 if !_Standard! EQU 0 (
   set _Standard2021=1
-  echo %%a 2021 Suite -^> Standard 2021 Licenses
   call :InsLic Standard2021
   )
 )
 for %%a in (HomeBusiness,HomeStudent) do if !_%%a2019! EQU 1 (
 if !_O365ProPlus! EQU 0 if !_ProPlus2021! EQU 0 if !_ProPlus2019! EQU 0 if !_ProPlus! EQU 0 if !_Professional2021! EQU 0 if !_Professional2019! EQU 0 if !_Professional! EQU 0 if !_Standard2021! EQU 0 if !_Standard2019! EQU 0 if !_Standard! EQU 0 if !_%%a2021! EQU 0 (
   set _Standard2019=1
-  echo %%a 2019 Suite -^> Standard%_ons% Licenses
   call :InsLic Standard%_tag%
   )
 )
 for %%a in (HomeBusiness,HomeStudent) do if !_%%a! EQU 1 (
 if !_O365ProPlus! EQU 0 if !_ProPlus2021! EQU 0 if !_ProPlus2019! EQU 0 if !_ProPlus! EQU 0 if !_Professional2021! EQU 0 if !_Professional2019! EQU 0 if !_Professional! EQU 0 if !_Standard2021! EQU 0 if !_Standard2019! EQU 0 if !_Standard! EQU 0 if !_%%a2021! EQU 0 if !_%%a2019! EQU 0 (
   set _Standard=1
-  echo %%a 2016 Suite -^> Standard%_ons% Licenses
   call :InsLic Standard%_tag%
   )
 )
 for %%a in (%_A21Ids%,OneNote) do if !_%%a! EQU 1 (
 if !_O365ProPlus! EQU 0 if !_ProPlus2021! EQU 0 if !_ProPlus2019! EQU 0 if !_ProPlus! EQU 0 if !_Professional2021! EQU 0 if !_Professional2019! EQU 0 if !_Professional! EQU 0 if !_Standard2021! EQU 0 if !_Standard2019! EQU 0 if !_Standard! EQU 0 (
-  echo %%a App
   call :InsLic %%a
   )
 )
 for %%a in (%_A16Ids%) do if !_%%a2019! EQU 1 (
 if !_O365ProPlus! EQU 0 if !_ProPlus2021! EQU 0 if !_ProPlus2019! EQU 0 if !_ProPlus! EQU 0 if !_Professional2021! EQU 0 if !_Professional2019! EQU 0 if !_Professional! EQU 0 if !_Standard2021! EQU 0 if !_Standard2019! EQU 0 if !_Standard! EQU 0 if !_%%a2021! EQU 0 (
-  echo %%a 2019 App -^> %%a%_ons% Licenses
   call :InsLic %%a%_tag%
   )
 )
 for %%a in (%_A16Ids%) do if !_%%a! EQU 1 (
 if !_O365ProPlus! EQU 0 if !_ProPlus2021! EQU 0 if !_ProPlus2019! EQU 0 if !_ProPlus! EQU 0 if !_Professional2021! EQU 0 if !_Professional2019! EQU 0 if !_Professional! EQU 0 if !_Standard2021! EQU 0 if !_Standard2019! EQU 0 if !_Standard! EQU 0 if !_%%a2021! EQU 0 if !_%%a2019! EQU 0 (
-  echo %%a 2016 App -^> %%a%_ons% Licenses
   call :InsLic %%a%_tag%
   )
 )
 for %%a in (Access) do if !_%%a2021! EQU 1 (
 if !_O365ProPlus! EQU 0 if !_ProPlus2021! EQU 0 if !_ProPlus2019! EQU 0 if !_ProPlus! EQU 0 if !_Professional2021! EQU 0 if !_Professional2019! EQU 0 if !_Professional! EQU 0 (
-  echo %%a 2021 App
   call :InsLic %%a2021
   )
 )
 for %%a in (Access) do if !_%%a2019! EQU 1 (
 if !_O365ProPlus! EQU 0 if !_ProPlus2021! EQU 0 if !_ProPlus2019! EQU 0 if !_ProPlus! EQU 0 if !_Professional2021! EQU 0 if !_Professional2019! EQU 0 if !_Professional! EQU 0 if !_%%a2021! EQU 0 (
-  echo %%a 2019 App -^> %%a%_ons% Licenses
   call :InsLic %%a%_tag%
   )
 )
 for %%a in (Access) do if !_%%a! EQU 1 (
 if !_O365ProPlus! EQU 0 if !_ProPlus2021! EQU 0 if !_ProPlus2019! EQU 0 if !_ProPlus! EQU 0 if !_Professional2021! EQU 0 if !_Professional2019! EQU 0 if !_Professional! EQU 0 if !_%%a2021! EQU 0 if !_%%a2019! EQU 0 (
-  echo %%a 2016 App -^> %%a%_ons% Licenses
   call :InsLic %%a%_tag%
   )
 )
 for %%a in (SkypeforBusiness) do if !_%%a2021! EQU 1 (
 if !_O365ProPlus! EQU 0 if !_ProPlus2021! EQU 0 if !_ProPlus2019! EQU 0 if !_ProPlus! EQU 0 (
-  echo %%a 2021 App
   call :InsLic %%a2021
   )
 )
 for %%a in (SkypeforBusiness) do if !_%%a2019! EQU 1 (
 if !_O365ProPlus! EQU 0 if !_ProPlus2021! EQU 0 if !_ProPlus2019! EQU 0 if !_ProPlus! EQU 0 if !_%%a2021! EQU 0 (
-  echo %%a 2019 App -^> %%a%_ons% Licenses
   call :InsLic %%a%_tag%
   )
 )
 for %%a in (SkypeforBusiness) do if !_%%a! EQU 1 (
 if !_O365ProPlus! EQU 0 if !_ProPlus2021! EQU 0 if !_ProPlus2019! EQU 0 if !_ProPlus! EQU 0 if !_%%a2021! EQU 0 if !_%%a2019! EQU 0 (
-  echo %%a 2016 App -^> %%a%_ons% Licenses
   call :InsLic %%a%_tag%
   )
 )
@@ -5729,7 +5200,6 @@ set _A15Ids=Excel,Groove,InfoPath,OneNote,Outlook,PowerPoint,Publisher,Word
 set _R15Ids=SPD,Mondo,%_O15Ids%,%_A15Ids%,Professional,HomeBusiness,HomeStudent,O365ProPlus,O365Business,O365SmallBusPrem,O365HomePrem
 set _V15Ids=Mondo,%_O15Ids%,%_A15Ids%
 
-echo %_Product15Ids%>"!_temp!\crvProduct15s.txt"
 for %%a in (%_R15Ids%,ProPlus) do (
 set _%%a=0
 )
@@ -5776,8 +5246,6 @@ for %%a in (%_R15Ids%,ProPlus) do if !_%%a! EQU 1 (
 set _C15Msg=1
 )
 if %_C15Msg% EQU 1 if %_C16Msg% EQU 0 (
-echo.
-echo Converting Office C2R Retail-to-Volume:
 )
 if %_C15Msg% EQU 0 goto :GVLKC2R
 
@@ -5790,76 +5258,62 @@ if !_Mondo! EQU 1 (
 call :Ins15Lic Mondo
 )
 if !_O365ProPlus! EQU 1 if !_O16O365! EQU 0 (
-echo O365ProPlus 2013 Suite ^<-^> Mondo 2013 Licenses
 call :Ins15Lic O365ProPlus DRNV7-VGMM2-B3G9T-4BF84-VMFTK
 if !_Mondo! EQU 0 call :Ins15Lic Mondo
 )
 if !_O365SmallBusPrem! EQU 1 if !_O365ProPlus! EQU 0 if !_O16O365! EQU 0 (
 set _O365ProPlus=1
-echo O365SmallBusPrem 2013 Suite ^<-^> Mondo 2013 Licenses
 call :Ins15Lic O365SmallBusPrem 3FBRX-NFP7C-6JWVK-F2YGK-H499R
 if !_Mondo! EQU 0 call :Ins15Lic Mondo
 )
 if !_O365HomePrem! EQU 1 if !_O365SmallBusPrem! EQU 0 if !_O365ProPlus! EQU 0 if !_O16O365! EQU 0 (
 set _O365ProPlus=1
-echo O365HomePrem 2013 Suite ^<-^> Mondo 2013 Licenses
 call :Ins15Lic O365HomePrem 9FNY8-PWWTY-8RY4F-GJMTV-KHGM9
 if !_Mondo! EQU 0 call :Ins15Lic Mondo
 )
 if !_O365Business! EQU 1 if !_O365HomePrem! EQU 0 if !_O365SmallBusPrem! EQU 0 if !_O365ProPlus! EQU 0 if !_O16O365! EQU 0 (
 set _O365ProPlus=1
-echo O365Business 2013 Suite ^<-^> Mondo 2013 Licenses
 call :Ins15Lic O365Business MCPBN-CPY7X-3PK9R-P6GTT-H8P8Y
 if !_Mondo! EQU 0 call :Ins15Lic Mondo
 )
 if !_Mondo! EQU 1 if !_O365ProPlus! EQU 0 if !_O16O365! EQU 0 (
-echo Mondo 2013 Suite
 call :Ins15Lic O365ProPlus DRNV7-VGMM2-B3G9T-4BF84-VMFTK
 goto :GVLKC2R
 )
 if !_SPD! EQU 1 if !_Mondo! EQU 0 if !_O365ProPlus! EQU 0 (
-echo SharePoint Designer 2013 App -^> Mondo 2013 Licenses
 call :Ins15Lic Mondo
 goto :GVLKC2R
 )
 if !_ProPlus! EQU 1 if !_O365ProPlus! EQU 0 (
-echo ProPlus 2013 Suite
 call :Ins15Lic ProPlus
 )
 if !_Professional! EQU 1 if !_O365ProPlus! EQU 0 if !_ProPlus! EQU 0 (
-echo Professional 2013 Suite -^> ProPlus 2013 Licenses
 call :Ins15Lic ProPlus
 )
 if !_Standard! EQU 1 if !_O365ProPlus! EQU 0 if !_ProPlus! EQU 0 if !_Professional! EQU 0 (
-echo Standard 2013 Suite
 call :Ins15Lic Standard
 )
 for %%a in (ProjectPro,VisioPro,ProjectStd,VisioStd) do if !_%%a! EQU 1 (
-echo %%a 2013 SKU
 call :Ins15Lic %%a
 )
 for %%a in (HomeBusiness,HomeStudent) do if !_%%a! EQU 1 (
 if !_O365ProPlus! EQU 0 if !_ProPlus! EQU 0 if !_Professional! EQU 0 if !_Standard! EQU 0 (
   set _Standard=1
-  echo %%a 2013 Suite -^> Standard 2013 Licenses
   call :Ins15Lic Standard
   )
 )
 for %%a in (%_A15Ids%) do if !_%%a! EQU 1 (
 if !_O365ProPlus! EQU 0 if !_ProPlus! EQU 0 if !_Professional! EQU 0 if !_Standard! EQU 0 (
-  echo %%a 2013 App
   call :Ins15Lic %%a
   )
 )
 for %%a in (Access) do if !_%%a! EQU 1 (
 if !_O365ProPlus! EQU 0 if !_ProPlus! EQU 0 if !_Professional! EQU 0 (
-  echo %%a 2013 App
   call :Ins15Lic %%a
   )
 )
 for %%a in (Lync) do if !_%%a! EQU 1 (
 if !_O365ProPlus! EQU 0 if !_ProPlus! EQU 0 (
-  echo SkypeforBusiness 2015 App
   call :Ins15Lic %%a
   )
 )
@@ -6766,30 +6220,22 @@ exit /b
 :TheEnd
 
 if %act_failed% EQU 1 (
-echo ____________________________________________________________________
-echo.
 call :_errorinfo
 )
 
 if not defined _tskinstalled if not defined _oldtsk (
-echo.
 if %winbuild% GEQ 9200 (
 call :leavenonexistentkms %nul%
-echo Keeping the non-existent IP address 10.0.0.10 as KMS Server.
 ) else (
 call :Clear-KMS-Cache
 )
 )
 
 if not [%Act_OK%]==[1] (
-echo.
-echo In case of any issues, check https://mass%-%grave.dev/troubleshoot
 )
 
 if defined _unattended exit /b
 
-echo ____________________________________________________________________
-echo.
 call :_color %_Yellow% "Press any key to go back..."
 pause >nul
 exit /b
@@ -6811,8 +6257,6 @@ exit /b
 )
 
 if [%ERRORCODE%]==[-1073418124] (
-echo Checking Port 1688 connection, it may take a while...
-echo.
 
 set /a count=0
 set _portcon=
@@ -6823,23 +6267,10 @@ set /a count+=1
 
 if not defined _portcon (
 call :_color %Red% "Port 1688 is blocked in your Internet connection."
-echo.
-echo Reason:   Probably restricted Internet [Office/College] is connected,
-echo           or Firewall is blocking the connection.
-echo.
-echo Solution: Either use another Internet connection or use offline KMS
-echo           https://github.com/abbodi1406/KMS_VL_ALL_AIO
 ) else (
-echo Port 1688 connection test is passed.
-echo.
-echo Make sure system files are not blocked by your firewall.
-echo If the issue persists, try offline KMS
-echo https://github.com/abbodi1406/KMS_VL_ALL_AIO
 )
-echo.
 )
 
-echo KMS server is not an issue in this case.
 exit /b
 
 ::========================================================================================================================================
@@ -6869,7 +6300,6 @@ if defined !server%rand%! goto :getserv
 set KMS_IP=!server%rand%!
 set !server%rand%!=1
 
-::  Get IPv4 address of KMS server to use for the activation, works even if ICMP echo is disabled.
 ::  Microsoft and Antivirus's may flag the issue if public KMS server host name is directly used for the activation.
 
 set /a server_num+=1
@@ -6918,10 +6348,7 @@ if %winbuild% GEQ 9600 (
 
 %nul% reg query "HKLM\%SPPk%\%_wApp%" && (
 set error_=9
-echo Failed to completely clear KMS Cache.
-reg query "HKLM\%SPPk%\%_wApp%" /s 2>nul | findstr /i "127.0.0.2" >nul && echo KMS38 activation is locked.
 ) || (
-echo Cleared KMS Cache successfully.
 )
 exit /b
 
@@ -6972,36 +6399,22 @@ set "_C16R="
 for /f "skip=2 tokens=2*" %%a in ('"reg query HKLM\SOFTWARE\Microsoft\Office\ClickToRun /v InstallPath" 2^>nul') do if exist "%%b\root\Licenses16\ProPlus*.xrm-ms" set "_C16R=1"
 for /f "skip=2 tokens=2*" %%a in ('"reg query HKLM\SOFTWARE\Microsoft\Office\ClickToRun /v InstallPath /reg:32" 2^>nul') do if exist "%%b\root\Licenses16\ProPlus*.xrm-ms" set "_C16R=1"
 if %winbuild% GEQ 9200 if defined _C16R (
-echo.
-echo ## Notice ##
-echo.
-echo To make sure Office programs do not show a non-genuine banner,
-echo please run the activation option once, and don't uninstall afterward.
-echo __________________________________________________________________________________________
 )
 
 set error_=
-echo.
 call :Clear-KMS-Cache
 call :clearstuff
 
 if defined error_ (
 if [%error_%]==[1] (
-echo __________________________________________________________________________________________
 %eline%
-echo Try Again / Restart the System
-echo __________________________________________________________________________________________
 )
 ) else (
-echo __________________________________________________________________________________________
-echo.
 call :_color %Green% "Online KMS Complete Uninstall was done successfully."
-echo __________________________________________________________________________________________
 )
 
 if defined _unattended timeout /t 2 & exit /b
 
-echo.
 call :_color %_Yellow% "Press any key to go back..."
 pause >nul
 exit /b
@@ -7009,52 +6422,42 @@ exit /b
 :clearstuff
 
 reg query "%key%" /f Path /s | find /i "\Activation-Renewal" >nul && (
-echo Deleting [Task] Activation-Renewal
 schtasks /delete /tn Activation-Renewal /f %nul%
 )
 
 reg query "%key%" /f Path /s | find /i "\Activation-Run_Once" >nul && (
-echo Deleting [Task] Activation-Run_Once
 schtasks /delete /tn Activation-Run_Once /f %nul%
 )
 
 reg query "%key%" /f Path /s | find /i "\Online_KMS_Activation_Script-Renewal" >nul && (
-echo Deleting [Task] Online_KMS_Activation_Script-Renewal
 schtasks /delete /tn Online_KMS_Activation_Script-Renewal /f %nul%
 )
 
 reg query "%key%" /f Path /s | find /i "\Online_KMS_Activation_Script-Run_Once" >nul && (
-echo Deleting [Task] Online_KMS_Activation_Script-Run_Once
 schtasks /delete /tn Online_KMS_Activation_Script-Run_Once /f %nul%
 )
 
 If exist "%windir%\Online_KMS_Activation_Script\" (
-echo Deleting [Folder] %windir%\Online_KMS_Activation_Script\
 rmdir /s /q "%windir%\Online_KMS_Activation_Script\" %nul%
 )
 
 if exist "%ProgramData%\Online_KMS_Activation.cmd" (
-echo Deleting [File] %ProgramData%\Online_KMS_Activation.cmd
 del /f /q "%ProgramData%\Online_KMS_Activation.cmd" %nul%
 )
 
 If exist "%ProgramData%\Online_KMS_Activation\" (
-echo Deleting [Folder] %ProgramData%\Online_KMS_Activation\
 rmdir /s /q "%ProgramData%\Online_KMS_Activation\" %nul%
 )
 
 If exist "%ProgramData%\Activation-Renewal\" (
-echo Deleting [Folder] %ProgramData%\Activation-Renewal\
 rmdir /s /q "%ProgramData%\Activation-Renewal\" %nul%
 )
 
 If exist "%ProgramFiles%\Activation-Renewal\" (
-echo Deleting [Folder] %ProgramFiles%\Activation-Renewal\
 rmdir /s /q "%ProgramFiles%\Activation-Renewal\" %nul%
 )
 
 reg query "HKCR\DesktopBackground\shell\Activate Windows - Office" %nul% && (
-echo Deleting [Registry] HKCR\DesktopBackground\shell\Activate Windows - Office
 Reg delete "HKCR\DesktopBackground\shell\Activate Windows - Office" /f %nul%
 )
 
@@ -7085,8 +6488,6 @@ call :clearstuff %nul%
 
 if defined error_ (
 %eline%
-echo Failed to completely clear KMS related folders/tasks.
-echo Run the Uninstall option and then try again.
 goto :RenDone
 )
 
@@ -7128,34 +6529,15 @@ rmdir /s /q "%_dest%\" %nul%
 )
 
 %eline%
-echo Run the Uninstall option and then try again.
 goto :RenDone
 )
 
-echo __________________________________________________________________________________________
-echo.
-echo Files created:
-echo %_dest%\Activation_task.cmd
-echo %_dest%\Info.txt
-echo.
-(if defined ActTask (echo Scheduled Tasks created:) else (echo Scheduled Task created:))
-echo \Activation-Renewal [Weekly]
-if defined ActTask (echo \Activation-Run_Once)
-echo __________________________________________________________________________________________
-echo.
-echo Info:
-echo Activation will be renewed every week if the Internet connection is found.
-echo It'll only renew installed KMS licenses. It won't convert any license to KMS.
-echo __________________________________________________________________________________________
-echo.
 if defined ActTask (
 call :_color %Green% "Renewal and Activation Tasks were successfully created."
 ) else (
 call :_color %Green% "Renewal Task was successfully created."
 )
-echo.
 call :_color %Gray% "Make sure you have run the Activation option at least once."
-echo __________________________________________________________________________________________
 )
 
 ::========================================================================================================================================
@@ -7164,7 +6546,6 @@ echo ___________________________________________________________________________
 
 if defined _unattended exit /b
 
-echo.
 call :_color %_Yellow% "Press any key to go back..."
 pause >nul
 exit /b
@@ -7174,25 +6555,6 @@ exit /b
 :createInfo.txt
 
 (
-echo   The use of this script is to renew your Windows/Office KMS license using online KMS.
-echo:
-echo   If renewal/activation Scheduled tasks were created then following would exist,
-echo:
-echo   - Scheduled tasks
-echo     Activation-Renewal    [Renewal / Weekly]
-echo     Activation-Run_Once   [Activation Task - deletes itself once activated]
-echo     The scheduled tasks runs only if the system is connected to the Internet.
-echo:
-echo   - Files
-echo     C:\Program Files\Activation-Renewal\Activation_task.cmd
-echo     C:\Program Files\Activation-Renewal\Info.txt
-echo     C:\Program Files\Activation-Renewal\Logs.txt
-echo ______________________________________________________________________________________________
-echo:
-echo   Online KMS Activation Script is a part of 'Microsoft_Activation_Scripts' [MAS] project.
-echo:   
-echo   Homepage: mass grave[.]dev
-echo      Email: windowsaddict@protonmail.com
 )>"%_dest%\Info.txt"
 exit /b
 
@@ -7331,7 +6693,6 @@ exit /b
 ::========================================================================================================================================
 
 :_extracttask:
-@echo off
 
 ::   Renew K-M-S activation with Online servers via scheduled task
 
@@ -7346,12 +6707,6 @@ exit /b
 
 
 if not "%~1"=="Task" (
-echo.
-echo ====== Error ======
-echo.
-echo This file is supposed to be run only by the scheduled task.
-echo.
-echo Press any key to exit
 pause >nul
 exit /b
 )
@@ -7392,8 +6747,6 @@ if exist "%ProgramFiles%\Activation-Renewal\" call :_taskstart>>"%ProgramFiles%\
 
 :_taskstart
 
-echo.
-echo %date%, %time%
 
 set /a loop=1
 set /a max_loop=4
@@ -7402,7 +6755,6 @@ call :_tasksetserv
 
 :_intrepeat
 
-::  Check Internet connection. Works even if ICMP echo is disabled.
 
 for %%a in (%srvlist%) do (
 for /f "delims=[] tokens=2" %%# in ('ping -n 1 %%a') do (
@@ -7418,9 +6770,6 @@ set _tserror=1
 goto _taskend
 )
 
-echo.
-echo Error: Internet is not connected
-echo Waiting 30 seconds
 
 timeout /t 30 >nul
 set /a loop=%loop%+1
@@ -7479,7 +6828,6 @@ if %winbuild% GEQ 9600 (
 set applist=
 net start sppsvc /y %nul%
 if %_wmic% EQU 1 set "chkapp=for /f "tokens=2 delims==" %%a in ('"wmic path %slp% where (ApplicationID='%_wApp%') get ID /VALUE" 2^>nul')"
-if %_wmic% EQU 0 set "chkapp=for /f "tokens=2 delims==" %%a in ('%psc% "(([WMISEARCHER]'SELECT ID FROM %slp% WHERE ApplicationID=''%_wApp%''').Get()).ID ^| %% {echo ('ID='+$_)}" 2^>nul')"
 %chkapp% do (if defined applist (call set "applist=!applist! %%a") else (call set "applist=%%a"))
 
 if not defined applist (
@@ -7487,9 +6835,6 @@ set _tserror=1
 if %_wmic% EQU 1 wmic path Win32_ComputerSystem get CreationClassName /value 2>nul | find /i "computersystem" 1>nul
 if %_wmic% EQU 0 %psc% "Get-CIMInstance -Class Win32_ComputerSystem | Select-Object -Property CreationClassName" 2>nul | find /i "computersystem" 1>nul
 if !errorlevel! NEQ 0 (set e_wmispp=WMI, SPP) else (set e_wmispp=SPP)
-echo.
-echo Error: Not Respoding- !e_wmispp!
-echo.
 )
 
 ::========================================================================================================================================
@@ -7502,14 +6847,8 @@ call :_taskgetids osppid %ospp% office
 
 ::========================================================================================================================================
 
-echo.
-echo Renewing KMS activation for all installed Volume products
 
 if not defined sppwid if not defined sppoid if not defined osppid (
-echo.
-echo No installed Volume Windows / Office product found
-echo.
-echo Renewing KMS server
 call :_taskgetserv
 call :_taskregserv
 goto :_skipact
@@ -7541,7 +6880,6 @@ if %_kms38% EQU 1 (
 
 ::========================================================================================================================================
 
-echo.
 if defined sppwid (
 set _path=%slp%
 set _actid=%sppwid%
@@ -7549,13 +6887,11 @@ call :_actprod
 call :_act act_win
 call :_actinfo act_win
 ) else (
-echo Checking: Volume version of Windows is not installed
 )
 
 if defined sppoid (
 set _path=%slp%
 for %%# in (%sppoid%) do (
-echo.
 set _actid=%%#
 call :_actprod
 call :_act
@@ -7566,7 +6902,6 @@ call :_actinfo
 if defined osppid (
 set _path=%ospp%
 for %%# in (%osppid%) do (
-echo.
 set _actid=%%#
 call :_actprod
 call :_act
@@ -7575,8 +6910,6 @@ call :_actinfo
 )
 
 if not defined sppoid if not defined osppid (
-echo.
-echo Checking: Volume version of Office is not installed
 )
 
 :_skipact
@@ -7584,8 +6917,6 @@ echo Checking: Volume version of Office is not installed
 ::========================================================================================================================================
 
 if defined run_once (
-echo.
-echo Deleting Scheduled Task Activation-Run_Once
 schtasks /delete /tn Activation-Run_Once /f %nul%
 )
 
@@ -7593,9 +6924,6 @@ schtasks /delete /tn Activation-Run_Once /f %nul%
 
 :_taskend
 
-echo.
-echo Exiting
-echo ______________________________________________________________________
 
 if defined _tserror (exit /b 123456789) else (exit /b 0)
 
@@ -7644,8 +6972,6 @@ exit /b
 
 :_actprod
 
-if %_wmic% EQU 1 for /f "tokens=2 delims==" %%x in ('"wmic path !_path! where ID='!_actid!' get Name /VALUE" 2^>nul') do call echo Activating: %%x
-if %_wmic% EQU 0 for /f "tokens=2 delims==" %%x in ('%psc% "(([WMISEARCHER]'SELECT Name FROM !_path! WHERE ID=''!_actid!''').Get()).Name | %% {echo ('Name='+$_)}" 2^>nul') do call echo Activating: %%x
 exit /b
 
 ::========================================================================================================================================
@@ -7653,26 +6979,19 @@ exit /b
 :_actinfo
 
 if [%1]==[act_win] if %_kms38% EQU 1 (
-echo Windows is activated with KMS38
 exit /b
 )
 
 if %errorcode% EQU 12345 (
-echo Product Activation Failed
-echo Unable to test KMS servers due to restricted or no Internet
 set _tserror=1
 exit /b
 )
 
 if %errorcode% EQU -1073418187 (
-echo Product Activation Failed: 0xC004F035
-if [%1]==[act_win] if %winbuild% LSS 9200 echo Windows 7 cannot be KMS-activated on this computer due to unqualified OEM BIOS
 exit /b
 )
 
 if %errorcode% EQU -1073417728 (
-echo Product Activation Failed: 0xC004F200
-echo Windows needs to rebuild the activation-related files.
 set _tserror=1
 exit /b
 )
@@ -7683,8 +7002,6 @@ call :_taskgetgrace
 set /a "gpr2=(%gpr%+1440-1)/1440"
 
 if %errorcode% EQU 0 if %gpr% EQU 0 (
-echo Product Activation succeeded, but Remaining Period failed to increase.
-if [%1]==[act_win] if %winbuild% LSS 9200 echo This could be related to the error described in KB4487266
 set _tserror=1
 exit /b
 )
@@ -7696,18 +7013,13 @@ if %gpr% GTR 259200 if [%1]==[act_win] call :_taskchkEnterpriseG _actpass
 if %gpr% EQU 259200 set _actpass=0
 
 if %errorcode% EQU 0 if %_actpass% EQU 0 (
-echo Product Activation Successful
-echo Remaining Period: %gpr2% days ^(%gpr% minutes^)
 exit /b
 )
 
 cmd /c exit /b %errorcode%
 if %errorcode% NEQ 0 (
-echo Product Activation Failed: 0x!=ExitCode!
 ) else (
-echo Product Activation Failed
 )
-echo Remaining Period: %gpr2% days ^(%gpr% minutes^)
 set _tserror=1
 exit /b
 
@@ -7717,7 +7029,6 @@ exit /b
 
 set %1=
 if %_wmic% EQU 1 set "chkapp=for /f "tokens=2 delims==" %%a in ('"wmic path %2 where (Name like '%%%3%%' and Description like '%%KMSCLIENT%%' and PartialProductKey is not NULL) get ID /VALUE" 2^>nul')"
-if %_wmic% EQU 0 set "chkapp=for /f "tokens=2 delims==" %%a in ('%psc% "(([WMISEARCHER]'SELECT ID FROM %2 WHERE Name like ''%%%3%%'' and Description like ''%%KMSCLIENT%%'' and PartialProductKey is not NULL').Get()).ID ^| %% {echo ('ID='+$_)}" 2^>nul')"
 %chkapp% do (if defined %1 (call set "%1=!%1! %%a") else (call set "%1=%%a"))
 exit /b
 
@@ -7725,7 +7036,6 @@ exit /b
 
 set gpr=0
 if %_wmic% EQU 1 for /f "tokens=2 delims==" %%# in ('"wmic path !_path! where ID='!_actid!' get GracePeriodRemaining /VALUE" 2^>nul') do call set "gpr=%%#"
-if %_wmic% EQU 0 for /f "tokens=2 delims==" %%# in ('%psc% "(([WMISEARCHER]'SELECT GracePeriodRemaining FROM !_path! where ID=''!_actid!''').Get()).GracePeriodRemaining | %% {echo ('GracePeriodRemaining='+$_)}" 2^>nul') do call set "gpr=%%#"
 exit /b
 
 :_taskchkEnterpriseG
@@ -7776,7 +7086,6 @@ if defined !server%rand%! goto :_taskgetserv
 set KMS_IP=!server%rand%!
 set !server%rand%!=1
 
-::  Get IPv4 address of KMS server to use for the activation, works even if ICMP echo is disabled.
 ::  Microsoft and Antivirus's may flag the issue if public KMS server host name is directly used for the activation.
 
 set /a server_num+=1
@@ -7795,16 +7104,13 @@ goto :_taskgetserv
 :_color
 
 if %_NCS% EQU 1 (
-if defined _unattended (echo %~2) else (echo %esc%[%~1%~2%esc%[0m)
 ) else (
-if defined _unattended (echo %~2) else (call :batcol %~1 "%~2")
 )
 exit /b
 
 :_color2
 
 if %_NCS% EQU 1 (
-echo %esc%[%~1%~2%esc%[%~3%~4%esc%[0m
 ) else (
 call :batcol %~1 "%~2" %~3 "%~4"
 )
@@ -7836,19 +7142,15 @@ set "s=!%~2!"
 set "t=!%~4!"
 for /f delims^=^ eol^= %%i in ("!s!") do (
   if "!" equ "" setlocal DisableDelayedExpansion
-    >`.txt (echo %%i\..\')
     findstr /a:%~1 /f:`.txt "."
     <nul set /p "=%_BS%%_BS%%_BS%%_BS%%_BS%%_BS%%_BS%"
 )
-if "%~4"=="" echo(&exit /b
 setlocal EnableDelayedExpansion
 for /f delims^=^ eol^= %%i in ("!t!") do (
   if "!" equ "" setlocal DisableDelayedExpansion
-    >`.txt (echo %%i\..\')
     findstr /a:%~3 /f:`.txt "."
     <nul set /p "=%_BS%%_BS%%_BS%%_BS%%_BS%%_BS%%_BS%"
 )
-echo(
 exit /b
 
 ::=======================================
@@ -7856,7 +7158,6 @@ exit /b
 :_colorprep
 
 if %_NCS% EQU 1 (
-for /F %%a in ('echo prompt $E ^| cmd') do set "esc=%%a"
 
 set     "Red="41;97m""
 set    "Gray="100;97m""
@@ -7935,7 +7236,6 @@ UninstallLicenses("sppc.dll")
 
 :_Check_Status_vbs
 @setlocal DisableDelayedExpansion
-@echo off
 @cls
 mode con cols=100 lines=32
 powershell "&{$W=$Host.UI.RawUI.WindowSize;$B=$Host.UI.RawUI.BufferSize;$W.Height=31;$B.Height=300;$Host.UI.RawUI.WindowSize=$W;$Host.UI.RawUI.BufferSize=$B;}"
@@ -7979,27 +7279,15 @@ if exist "%ProgramFiles%\Microsoft Office\Office15\ospp.vbs" (
   set _sO15vbs=1
 )
 setlocal EnableDelayedExpansion
-echo %line2%
-echo ***                   Windows Status                     ***
-echo %line2%
 pushd "!_utemp!"
 copy /y %SystemRoot%\System32\slmgr.vbs . >nul 2>&1
 net start sppsvc /y >nul 2>&1
-cscript //nologo slmgr.vbs /dli || (echo Error executing slmgr.vbs&del /f /q slmgr.vbs&popd&goto :casVend)
 cscript //nologo slmgr.vbs /xpr
 del /f /q slmgr.vbs >nul 2>&1
 popd
-echo %line3%
 
 if defined ohook (
-echo.
-echo.
-echo %line2%
-echo ***            Office Ohook Activation Status            ***
-echo %line2%
-echo.
 powershell "write-host -back 'Black' -fore 'Yellow' 'Ohook for permanent Office activation is installed.'; write-host -back 'Black' -fore 'Yellow' 'You can ignore below Office activation status.'"
-echo.
 )
 
 :casVo16
@@ -8007,14 +7295,9 @@ set office=
 for /f "skip=2 tokens=2*" %%a in ('"reg query HKLM\SOFTWARE\Microsoft\Office\16.0\Common\InstallRoot /v Path" 2^>nul') do (set "office=%%b")
 if exist "!office!\ospp.vbs" (
 set _sO16vbs=1
-echo.
-echo %line2%
 if %_sO15vbs% EQU 0 (
-echo ***              Office 2016 %_bit%-bit Status               ***
 ) else (
-echo ***               Office 2013/2016 Status                ***
 )
-echo %line2%
 cscript //nologo "!office!\ospp.vbs" /dstatus
 )
 if %_wow%==0 goto :casVo13
@@ -8022,14 +7305,9 @@ set office=
 for /f "skip=2 tokens=2*" %%a in ('"reg query HKLM\SOFTWARE\Wow6432Node\Microsoft\Office\16.0\Common\InstallRoot /v Path" 2^>nul') do (set "office=%%b")
 if exist "!office!\ospp.vbs" (
 set _sO16vbs=1
-echo.
-echo %line2%
 if %_sO15vbs% EQU 0 (
-echo ***              Office 2016 32-bit Status               ***
 ) else (
-echo ***               Office 2013/2016 Status                ***
 )
-echo %line2%
 cscript //nologo "!office!\ospp.vbs" /dstatus
 )
 
@@ -8038,20 +7316,12 @@ if %_sO16vbs% EQU 1 goto :casVo10
 set office=
 for /f "skip=2 tokens=2*" %%a in ('"reg query HKLM\SOFTWARE\Microsoft\Office\15.0\Common\InstallRoot /v Path" 2^>nul') do (set "office=%%b")
 if exist "!office!\ospp.vbs" (
-echo.
-echo %line2%
-echo ***              Office 2013 %_bit%-bit Status               ***
-echo %line2%
 cscript //nologo "!office!\ospp.vbs" /dstatus
 )
 if %_wow%==0 goto :casVo10
 set office=
 for /f "skip=2 tokens=2*" %%a in ('"reg query HKLM\SOFTWARE\Wow6432Node\Microsoft\Office\15.0\Common\InstallRoot /v Path" 2^>nul') do (set "office=%%b")
 if exist "!office!\ospp.vbs" (
-echo.
-echo %line2%
-echo ***              Office 2013 32-bit Status               ***
-echo %line2%
 cscript //nologo "!office!\ospp.vbs" /dstatus
 )
 
@@ -8059,20 +7329,12 @@ cscript //nologo "!office!\ospp.vbs" /dstatus
 set office=
 for /f "skip=2 tokens=2*" %%a in ('"reg query HKLM\SOFTWARE\Microsoft\Office\14.0\Common\InstallRoot /v Path" 2^>nul') do (set "office=%%b")
 if exist "!office!\ospp.vbs" (
-echo.
-echo %line2%
-echo ***              Office 2010 %_bit%-bit Status               ***
-echo %line2%
 cscript //nologo "!office!\ospp.vbs" /dstatus
 )
 if %_wow%==0 goto :casVc16
 set office=
 for /f "skip=2 tokens=2*" %%a in ('"reg query HKLM\SOFTWARE\Wow6432Node\Microsoft\Office\14.0\Common\InstallRoot /v Path" 2^>nul') do (set "office=%%b")
 if exist "!office!\ospp.vbs" (
-echo.
-echo %line2%
-echo ***              Office 2010 32-bit Status               ***
-echo %line2%
 cscript //nologo "!office!\ospp.vbs" /dstatus
 )
 
@@ -8084,14 +7346,9 @@ set office=
 for /f "skip=2 tokens=2*" %%a in ('"reg query HKLM\SOFTWARE\Microsoft\Office\ClickToRun /v InstallPath" 2^>nul') do (set "office=%%b\Office16")
 if exist "!office!\ospp.vbs" (
 set _sO16vbs=1
-echo.
-echo %line2%
 if %_sO15vbs% EQU 0 (
-echo ***              Office 2016-2021 C2R Status             ***
 ) else (
-echo ***                Office 2013-2021 Status               ***
 )
-echo %line2%
 cscript //nologo "!office!\ospp.vbs" /dstatus
 )
 if %_wow%==0 goto :casVc13
@@ -8099,14 +7356,9 @@ set office=
 for /f "skip=2 tokens=2*" %%a in ('"reg query HKLM\SOFTWARE\WOW6432Node\Microsoft\Office\ClickToRun /v InstallPath" 2^>nul') do (set "office=%%b\Office16")
 if exist "!office!\ospp.vbs" (
 set _sO16vbs=1
-echo.
-echo %line2%
 if %_sO15vbs% EQU 0 (
-echo ***              Office 2016-2021 C2R Status             ***
 ) else (
-echo ***                Office 2013-2021 Status               ***
 )
-echo %line2%
 cscript //nologo "!office!\ospp.vbs" /dstatus
 )
 
@@ -8124,10 +7376,6 @@ if exist "%ProgramFiles%\Microsoft Office\Office15\ospp.vbs" (
   set "office=%ProgramFiles(x86)%\Microsoft Office\Office15"
 )
 if exist "!office!\ospp.vbs" (
-echo.
-echo %line2%
-echo ***                Office 2013 C2R Status                ***
-echo %line2%
 cscript //nologo "!office!\ospp.vbs" /dstatus
 )
 
@@ -8143,15 +7391,10 @@ if exist "%ProgramFiles%\Microsoft Office\Office14\ospp.vbs" (
   set "office=%ProgramFiles(x86)%\Microsoft Office\Office14"
 )
 if exist "!office!\ospp.vbs" (
-echo.
-echo %line2%
-echo ***                Office 2010 C2R Status                ***
-echo %line2%
 cscript //nologo "!office!\ospp.vbs" /dstatus
 )
 
 :casVend
-echo.
 call :_color %_Yellow% "Press any key to go back..."
 pause >nul
 exit /b
@@ -8161,7 +7404,6 @@ exit /b
 :_Check_Status_wmi
 
 @setlocal DisableDelayedExpansion
-@echo off
 mode con cols=100 lines=32
 powershell "&{$W=$Host.UI.RawUI.WindowSize;$B=$Host.UI.RawUI.BufferSize;$W.Height=31;$B.Height=300;$Host.UI.RawUI.WindowSize=$W;$Host.UI.RawUI.BufferSize=$B;}"
 color 07
@@ -8223,12 +7465,6 @@ wmic path Win32_ComputerSystem get CreationClassName /value 2>nul | find /i "Com
 )
 
 if %_cwmi% EQU 0 (
-echo:
-echo Error: WMI is not responding in the system.
-echo:
-echo In MAS, Goto Troubleshoot and run Fix WMI option.
-echo:
-echo Press any key to go back...
 pause >nul
 exit /b
 )
@@ -8276,12 +7512,7 @@ call :casWpkey %ospp% %o14App% osppsvc ospp14
 if %winbuild% LSS 9200 call :casWpkey %ospp% %o15App% osppsvc ospp15
 )
 
-echo %line2%
-echo ***                   Windows Status                     ***
-echo %line2%
 if not defined cW1nd0ws (
-echo.
-echo Error: product key not found.
 goto :casWcon
 )
 set winID=1
@@ -8290,19 +7521,10 @@ for /f "tokens=2 delims==" %%# in ('%_qr%') do (
   set "chkID=%%#"
   call :casWdet "%wspp%" "%wsps%" "%spp_get%"
   call :casWout
-  echo %line3%
-  echo.
 )
 
 if defined ohook (
-echo.
-echo.
-echo %line2%
-echo ***            Office Ohook Activation Status            ***
-echo %line2%
-echo.
 powershell "write-host -back 'Black' -fore 'Yellow' 'Ohook for permanent Office activation is installed.'; write-host -back 'Black' -fore 'Yellow' 'You can ignore below Office activation status.'"
-echo.
 )
 
 :casWcon
@@ -8312,16 +7534,11 @@ if not defined c0ff1ce15 (
 if defined osppsvc goto :casWospp
 goto :casWend
 )
-echo %line2%
-echo ***                   Office Status                      ***
-echo %line2%
 set "_qr=%_zz7% %wspp% %_zz2% %_zz5%ApplicationID='%o15App%' and PartialProductKey is not null%_zz6% %_zz3% ID %_zz8%"
 for /f "tokens=2 delims==" %%# in ('%_qr%') do (
   set "chkID=%%#"
   call :casWdet "%wspp%" "%wsps%" "%spp_get%"
   call :casWout
-  echo %line3%
-  echo.
 )
 set verbose=0
 if defined osppsvc goto :casWospp
@@ -8329,25 +7546,18 @@ goto :casWend
 
 :casWospp
 if %verbose% EQU 1 (
-echo %line2%
-echo ***                   Office Status                      ***
-echo %line2%
 )
 set "_qr=%_zz7% %ospp% %_zz2% %_zz5%ApplicationID='%o15App%' and PartialProductKey is not null%_zz6% %_zz3% ID %_zz8%"
 if defined ospp15 for /f "tokens=2 delims==" %%# in ('%_qr%') do (
   set "chkID=%%#"
   call :casWdet "%ospp%" "%osps%" "%ospp_get%"
   call :casWout
-  echo %line3%
-  echo.
 )
 set "_qr=%_zz7% %ospp% %_zz2% %_zz5%ApplicationID='%o14App%' and PartialProductKey is not null%_zz6% %_zz3% ID %_zz8%"
 if defined ospp14 for /f "tokens=2 delims==" %%# in ('%_qr%') do (
   set "chkID=%%#"
   call :casWdet "%ospp%" "%osps%" "%ospp_get%"
   call :casWout
-  echo %line3%
-  echo.
 )
 goto :casWend
 
@@ -8369,9 +7579,6 @@ if %WMI_VBS% NEQ 0 set "_qr=%_csg% %~1 "ID='%chkID%'" "%~3""
 for /f "tokens=* delims=" %%# in ('%_qr%') do set "%%#"
 
 set /a _gpr=(GracePeriodRemaining+1440-1)/1440
-echo %Description%| findstr /i VOLUME_KMSCLIENT 1>nul && (set cKmsClient=1&set _mTag=Volume)
-echo %Description%| findstr /i TIMEBASED_ 1>nul && (set cTblClient=1&set _mTag=Timebased)
-echo %Description%| findstr /i VIRTUAL_MACHINE_ACTIVATION 1>nul && (set cAvmClient=1&set _mTag=Automatic VM)
 cmd /c exit /b %LicenseStatusReason%
 set "LicenseReason=%=ExitCode%"
 set "LicenseMsg=Time remaining: %GracePeriodRemaining% minute(s) (%_gpr% day(s))"
@@ -8459,52 +7666,20 @@ if "%DiscoveredKeyManagementServiceMachineIpAddress%"=="" set "DiscoveredKeyMana
 exit /b
 
 :casWout
-echo.
-echo Name: %Name%
-echo Description: %Description%
-echo Activation ID: %ID%
-echo Extended PID: %ProductKeyID%
-if defined ProductKeyChannel echo Product Key Channel: %ProductKeyChannel%
-echo Partial Product Key: %PartialProductKey%
-echo License Status: %License%
-if defined LicenseMsg echo %LicenseMsg%
-if not %LicenseStatus%==0 if not %EvaluationEndDate:~0,8%==16010101 echo Evaluation End Date: %EvaluationEndDate:~0,4%-%EvaluationEndDate:~4,2%-%EvaluationEndDate:~6,2% %EvaluationEndDate:~8,2%:%EvaluationEndDate:~10,2% UTC
 if not defined cKmsClient (
-if defined ExpireMsg echo.&echo.    %ExpireMsg%
 exit /b
 )
-if defined VLActivationTypeEnabled echo Configured Activation Type: %VLActivationType%
-echo.
 if not %LicenseStatus%==1 (
-echo Please activate the product in order to update KMS client information values.
 exit /b
 )
-echo Most recent activation information:
-echo Key Management Service client information
-echo.    Client Machine ID (CMID): %ClientMachineID%
-echo.    %KmsDns%
-echo.    %KmsReg%
-if defined DiscoveredKeyManagementServiceMachineIpAddress echo.    KMS machine IP address: %DiscoveredKeyManagementServiceMachineIpAddress%
-echo.    KMS machine extended PID: %KeyManagementServiceProductKeyID%
-echo.    Activation interval: %VLActivationInterval% minutes
-echo.    Renewal interval: %VLRenewalInterval% minutes
-echo.    K.M.S. host caching: %KeyManagementServiceHostCaching%
-if defined KeyManagementServiceLookupDomain echo.    KMS SRV record lookup domain: %KeyManagementServiceLookupDomain%
-if defined ExpireMsg echo.&echo.    %ExpireMsg%
 exit /b
 
 :casWend
 if %_Identity% EQU 1 if %_prsh% EQU 1 (
-echo %line2%
-echo ***                  Office vNext Status                 ***
-echo %line2%
 setlocal EnableDelayedExpansion
 %_psc% "$f=[IO.File]::ReadAllText('!_batp!') -split ':vNextDiag\:.*';iex ($f[1])"
 title Check Activation Status [wmi]
-echo %line3%
-echo.
 )
-echo.
 call :_color %_Yellow% "Press any key to go back..."
 pause >nul
 exit /b
@@ -8691,7 +7866,6 @@ PrintLicensesInformation -Mode "Device"
 
 :troubleshoot
 @setlocal DisableDelayedExpansion
-@echo off
 
 ::========================================================================================================================================
 
@@ -8725,8 +7899,6 @@ if %winbuild% GEQ 10586 reg query "HKCU\Console" /v ForceV2 %nul2% | find /i "0x
 
 call :_colorprep
 
-set "nceline=echo: &echo ==== ERROR ==== &echo:"
-set "eline=echo: &call :_color %Red% "==== ERROR ====" &echo:"
 set "line=_________________________________________________________________________________________________"
 if %~z0 GEQ 200000 (set "_exitmsg=Go back") else (set "_exitmsg=Exit")
 
@@ -8752,7 +7924,6 @@ if not defined desktop for /f "delims=" %%a in ('%psc% "& {write-host $([Environ
 
 if not defined desktop (
 %eline%
-echo Desktop location was not detected, aborting...
 goto at_done
 )
 
@@ -8767,26 +7938,7 @@ color 07
 title  Troubleshoot %masver%
 mode con cols=77 lines=30
 
-echo:
-echo:
-echo:
-echo:
-echo:       _______________________________________________________________
-echo:                                                   
 call :_color2 %_White% "             [1] " %_Green% "Help"
-echo:             ___________________________________________________
-echo:                                                                      
-echo:             [2] Dism RestoreHealth
-echo:             [3] SFC Scannow
-echo:                                                                      
-echo:             [4] Fix WMI
-echo:             [5] Fix Licensing
-echo:             [6] Fix WPA Registry
-echo:             ___________________________________________________
-echo:
-echo:             [0] %_exitmsg%
-echo:       _______________________________________________________________
-echo:          
 call :_color2 %_White% "            " %_Green% "Enter a menu option in the Keyboard :"
 choice /C:1234560 /N
 set _erl=%errorlevel%
@@ -8810,8 +7962,6 @@ title  Dism /English /Online /Cleanup-Image /RestoreHealth
 
 if %winbuild% LSS 9200 (
 %eline%
-echo Unsupported OS version Detected.
-echo This command is supported only for Windows 8/8.1/10/11 and their Server equivalent.
 goto :at_back
 )
 
@@ -8820,26 +7970,13 @@ for %%a in (l.root-servers.net resolver1.opendns.com download.windowsupdate.com 
 for /f "delims=[] tokens=2" %%# in ('ping -n 1 %%a') do (if not [%%#]==[] set _int=1)
 )
 
-echo:
 if defined _int (
-echo      Checking Internet Connection  [Connected]
 ) else (
 call :_color2 %_White% "     " %Red% "Checking Internet Connection  [Not connected]"
 )
 
-echo %line%
-echo:
-echo      Dism uses Windows Update to provide the files required to fix corruption.
-echo      This will take 5-15 minutes or more..
-echo %line%
-echo:
-echo      Notes:
-echo:
 call :_color2 %_White% "     - " %Gray% "Make sure the Internet is connected."
 call :_color2 %_White% "     - " %Gray% "Make sure the Windows update is properly working."
-echo:
-echo %line%
-echo:
 choice /C:09 /N /M ">    [9] Continue [0] Go back : "
 if %errorlevel%==1 goto at_menu
 
@@ -8849,9 +7986,6 @@ mode 110, 30
 
 set _time=
 for /f %%a in ('%psc% "Get-Date -format HH_mm_ss"') do set _time=%%a
-echo:
-echo Applying the command,
-echo dism /english /online /cleanup-image /restorehealth
 dism /english /online /cleanup-image /restorehealth
 
 %psc% Stop-Service TrustedInstaller -force %nul%
@@ -8869,7 +8003,6 @@ if not exist "!desktop!\AT_Logs\RHealth_DISM_%_time%.cab" (
 copy /y /b "%SystemRoot%\logs\DISM\dism.log" "!desktop!\AT_Logs\RHealth_DISM_%_time%.log" %nul%
 )
 
-echo:
 call :_color %Gray% "CBS and DISM logs are copied to the AT_Logs folder on the dekstop."
 goto :at_back
 
@@ -8881,18 +8014,6 @@ cls
 mode 98, 30
 title  sfc /scannow
 
-echo:
-echo %line%
-echo:    
-echo      System File Checker will repair missing or corrupted system files.
-echo      This will take 10-15 minutes or more..
-echo:
-echo      If SFC could not fix something, then run the command again to see if it may be able 
-echo      to the next time. Sometimes it may take running the sfc /scannow command 3 times
-echo      restarting the PC after each time to completely fix everything that it's able to.
-echo:   
-echo %line%
-echo:
 choice /C:09 /N /M ">    [9] Continue [0] Go back : "
 if %errorlevel%==1 goto at_menu
 
@@ -8901,9 +8022,6 @@ cls
 
 set _time=
 for /f %%a in ('%psc% "Get-Date -format HH_mm_ss"') do set _time=%%a
-echo:
-echo Applying the command,
-echo sfc /scannow
 sfc /scannow
 
 %psc% Stop-Service TrustedInstaller -force %nul%
@@ -8916,7 +8034,6 @@ if not exist "!desktop!\AT_Logs\SFC_CBS_%_time%.cab" (
 copy /y /b "%SystemRoot%\logs\cbs\cbs.log" "!desktop!\AT_Logs\SFC_CBS_%_time%.log" %nul%
 )
 
-echo:
 call :_color %Gray% "CBS log is copied to the AT_Logs folder on the dekstop."
 goto :at_back
 
@@ -8929,25 +8046,7 @@ mode con cols=125 lines=32
 %psc% "&{$W=$Host.UI.RawUI.WindowSize;$B=$Host.UI.RawUI.BufferSize;$W.Height=31;$B.Height=200;$Host.UI.RawUI.WindowSize=$W;$Host.UI.RawUI.BufferSize=$B;}"
 title  Fix Licensing ^(ClipSVC ^+ Office vNext ^+ SPP ^+ OSPP^)
 
-echo:
-echo %line%
-echo:   
-echo      Notes:
-echo:
-echo       - It helps in troubleshooting activation issues.
-echo:
-echo       - This option will,
-echo            - Deactivate Windows and Office, you may need to reactivate
-echo              If Windows is activated with motherboard / OEM / Digital license then don't worry
-echo:
-echo            - Clear ClipSVC, Office vNext, SPP and OSPP licenses
-echo            - Fix SPP permissions of tokens folder and registries
-echo            - Trigger the repair option for Office.
-echo:
 call :_color2 %_White% "      - " %Red% "Apply it only when it is necessary."
-echo:
-echo %line%
-echo:
 choice /C:09 /N /M ">    [9] Continue [0] Go back : "
 if %errorlevel%==1 goto at_menu
 
@@ -8958,41 +8057,27 @@ if %errorlevel%==1 goto at_menu
 cls
 :cleanlicensing
 
-echo:
-echo %line%
-echo:
 call :_color %Blue% "Rebuilding ClipSVC Licences"
-echo:
 
 if %winbuild% LSS 10240 (
-echo ClipSVC Licence rebuilding is supported only on Win 10/11 and Server equivalent.
-echo Skipping...
 goto :cleanvnext
 )
 
 %psc% "(([WMISEARCHER]'SELECT Name FROM SoftwareLicensingProduct WHERE LicenseStatus=1 AND GracePeriodRemaining=0 AND PartialProductKey IS NOT NULL').Get()).Name" %nul2% | findstr /i "Windows" %nul1% && (
-echo Windows is permanently activated.
-echo Skipping rebuilding ClipSVC licences...
 goto :cleanvnext
 )
 
-echo Stopping ClipSVC service...
 %psc% Stop-Service ClipSVC -force %nul%
 timeout /t 2 %nul%
 
-echo:
-echo Applying the command to Clean ClipSVC Licences...
-echo rundll32 clipc.dll,ClipCleanUpState
 
 rundll32 clipc.dll,ClipCleanUpState
 
 if %winbuild% LEQ 10240 (
-echo [Successful]
 ) else (
 if exist "%ProgramData%\Microsoft\Windows\ClipSVC\tokens.dat" (
 call :_color %Red% "[Failed]"
 ) else (
-echo [Successful]
 )
 )
 
@@ -9005,57 +8090,40 @@ set "_ident=HKU\S-1-5-19\SOFTWARE\Microsoft\IdentityCRL"
 reg query "%RegKey%" %nul% && %nul% call :regownstart
 reg delete "%RegKey%" /f %nul% 
 
-echo:
-echo Deleting a Volatile ^& Protected Registry Key...
-echo [%RegKey%]
 reg query "%RegKey%" %nul% && (
 call :_color %Red% "[Failed]"
-echo Restart the system, that will delete this registry key automatically.
 ) || (
-echo [Successful]
 )
 
 ::   Clear HWID token related registry to fix activation incase if there is any corruption
 
-echo:
-echo Deleting a IdentityCRL Registry Key...
-echo [%_ident%]
 reg delete "%_ident%" /f %nul%
 reg query "%_ident%" %nul% && (
 call :_color %Red% "[Failed]"
 ) || (
-echo [Successful]
 )
 
 %psc% Stop-Service ClipSVC -force %nul%
 
 ::  Rebuild ClipSVC folder to fix permission issues
 
-echo:
 if %winbuild% GTR 10240 (
-echo Deleting Folder %ProgramData%\Microsoft\Windows\ClipSVC\
 rmdir /s /q "C:\ProgramData\Microsoft\Windows\ClipSvc" %nul%
 
 if exist "%ProgramData%\Microsoft\Windows\ClipSVC\" (
 call :_color %Red% "[Failed]"
 ) else (
-echo [Successful]
 )
 
-echo:
-echo Rebuilding Folder %ProgramData%\Microsoft\Windows\ClipSVC\
 %psc% Start-Service ClipSVC %nul%
 timeout /t 3 %nul%
 if not exist "%ProgramData%\Microsoft\Windows\ClipSVC\" timeout /t 5 %nul%
 if not exist "%ProgramData%\Microsoft\Windows\ClipSVC\" (
 call :_color %Red% "[Failed]"
 ) else (
-echo [Successful]
 )
 )
 
-echo:
-echo Restarting [wlidsvc LicenseManager] services...
 for %%# in (wlidsvc LicenseManager) do (%psc% Restart-Service %%# %nul%)
 
 ::========================================================================================================================================
@@ -9065,11 +8133,7 @@ for %%# in (wlidsvc LicenseManager) do (%psc% Restart-Service %%# %nul%)
 
 :cleanvnext
 
-echo:
-echo %line%
-echo:
 call :_color %Blue% "Clearing Office vNext License"
-echo:
 
 setlocal DisableDelayedExpansion
 set "_Local=%LocalAppData%"
@@ -9081,27 +8145,20 @@ attrib -R "!_Local!\Microsoft\Office\Licenses" %nul%
 if exist "!ProgramData!\Microsoft\Office\Licenses\" (
 rd /s /q "!ProgramData!\Microsoft\Office\Licenses\" %nul%
 if exist "!ProgramData!\Microsoft\Office\Licenses\" (
-echo Failed To Delete - !ProgramData!\Microsoft\Office\Licenses\
 ) else (
-echo Deleted Folder - !ProgramData!\Microsoft\Office\Licenses\
 )
 ) else (
-echo Not Found - !ProgramData!\Microsoft\Office\Licenses\
 )
 
 if exist "!_Local!\Microsoft\Office\Licenses\" (
 rd /s /q "!_Local!\Microsoft\Office\Licenses\" %nul%
 if exist "!_Local!\Microsoft\Office\Licenses\" (
-echo Failed To Delete - !_Local!\Microsoft\Office\Licenses\
 ) else (
-echo Deleted Folder - !_Local!\Microsoft\Office\Licenses\
 )
 ) else (
-echo Not Found - !_Local!\Microsoft\Office\Licenses\
 )
 
 
-echo:
 for /f "tokens=* delims=" %%a in ('%psc% "Get-ChildItem -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList' | ForEach-Object { Split-Path -Path $_.PSPath -Leaf }" %nul6%') do (if defined _sid (set "_sid=!_sid! HKU\%%a") else (set "_sid=HKU\%%a"))
 
 set regfound=
@@ -9114,40 +8171,29 @@ for %%A in (
 reg query %%A %nul% && (
 set regfound=1
 reg delete %%A /f %nul% && (
-echo Deleted Registry - %%A
 ) || (
-echo Failed to Delete - %%A
 )
 )
 )
 )
-if not defined regfound echo Not Found - Office vNext Registry Keys
 
 ::========================================================================================================================================
 
 ::  Rebuild SPP Tokens
 
-echo:
-echo %line%
-echo:
 call :_color %Blue% "Rebuilding SPP Licensing Tokens"
-echo:
 
 call :scandat check
 
 if not defined token (
 call :_color %Red% "tokens.dat file not found."
 ) else (
-echo tokens.dat file: [%token%]
 )
 
-echo:
 set wpainfo=
 for /f "delims=" %%a in ('%psc% "$f=[io.file]::ReadAllText('!_batp!') -split ':wpatest\:.*';iex ($f[1]);" %nul6%') do (set wpainfo=%%a)
-echo "%wpainfo%" | find /i "Error Found" %nul% && (
 call :_color %Red% "WPA Registry Error: %wpainfo%"
 ) || (
-echo WPA Registry Count: %wpainfo%
 )
 
 set tokenstore=
@@ -9157,8 +8203,6 @@ for /f "skip=2 tokens=2*" %%a in ('reg query "HKLM\SOFTWARE\Microsoft\Windows NT
 
 if %winbuild% GEQ 10240 (
 
-echo:
-echo Checking SPP permission related issues...
 call :checkperms
 
 if defined permerror (
@@ -9186,59 +8230,41 @@ call :checkperms
 if defined permerror (
 call :_color %Red% "[Failed To Fix]"
 ) else (
-echo [Successfully Fixed]
 )
 ) else (
-echo [No Error Found]
 )
 )
 
-echo:
-echo Stopping sppsvc service...
 %psc% Stop-Service sppsvc -force %nul%
 
-echo:
 call :scandat delete
 call :scandat check
 
 if defined token (
-echo:
 call :_color %Red% "Failed to delete .dat files."
-echo:
 )
 
-echo:
-echo Reinstalling System Licenses [slmgr /rilc]...
 cscript //nologo %windir%\system32\slmgr.vbs /rilc %nul%
 if %errorlevel% NEQ 0 cscript //nologo %windir%\system32\slmgr.vbs /rilc %nul%
 if %errorlevel% EQU 0 (
-echo [Successful]
 ) else (
 call :_color %Red% "[Failed]"
 )
 
 call :scandat check
 
-echo:
 if not defined token (
 call :_color %Red% "Failed to rebuilt tokens.dat file."
 ) else (
-echo tokens.dat file was rebuilt successfully.
 )
 
 ::========================================================================================================================================
 
 ::  Rebuild OSPP Tokens
 
-echo:
-echo %line%
-echo:
 call :_color %Blue% "Rebuilding OSPP Licensing Tokens"
-echo:
 
 sc qc osppsvc %nul% || (
-echo OSPP based Office is not installed
-echo Skipping rebuilding OSPP tokens...
 goto :repairoffice
 )
 
@@ -9247,25 +8273,17 @@ call :scandatospp check
 if not defined token (
 call :_color %Red% "tokens.dat file not found."
 ) else (
-echo tokens.dat file: [%token%]
 )
 
-echo:
-echo Stopping osppsvc service...
 %psc% Stop-Service osppsvc -force %nul%
 
-echo:
 call :scandatospp delete
 call :scandatospp check
 
 if defined token (
-echo:
 call :_color %Red% "Failed to delete .dat files."
-echo:
 )
 
-echo:
-echo Starting osppsvc service to generate tokens.dat
 %psc% Start-Service osppsvc %nul%
 call :scandatospp check
 if not defined token (
@@ -9276,30 +8294,20 @@ timeout /t 3 %nul%
 
 call :scandatospp check
 
-echo:
 if not defined token (
 call :_color %Red% "Failed to rebuilt tokens.dat file."
 ) else (
-echo tokens.dat file was rebuilt successfully.
 )
 
 ::========================================================================================================================================
 
 :repairoffice
 
-echo:
-echo %line%
-echo:
 call :_color %Blue% "Repairing Office Licenses"
-echo:
 
 for /f "skip=2 tokens=2*" %%a in ('reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" /v PROCESSOR_ARCHITECTURE') do set arch=%%b
 
 if /i "%arch%"=="ARM64" (
-echo:
-echo ARM64 Windows Found.
-echo You need to use repair option in Windows settings for Office.
-echo:
 start ms-settings:appsfeatures
 goto :repairend
 )
@@ -9338,8 +8346,6 @@ if %winbuild% GEQ 10240 (
 )
 
 set /a counter=0
-echo Checking installed Office versions...
-echo:
 
 for %%# in (
 "%msi14_68%"
@@ -9359,38 +8365,23 @@ for %%# in (
 if not "%%#"=="""" (
 set insoff=%%#
 set insoff=!insoff:"=!
-echo [!insoff!]
 set /a counter+=1
 )
 )
 
 if %counter% GTR 1 (
 %eline%
-echo Multiple office versions found.
-echo It's recommended to install only one version of office.
-echo ________________________________________________________________
-echo:
 )
 
 if %counter% EQU 0 (
-echo:
-echo Installed Office is not found.
 goto :repairend
-echo:
 ) else (
-echo:
 call :_color %_Yellow% "A Window will popup, in that Window you need to select [Quick] Repair Option..."
 call :_color %_Yellow% "Press any key to continue..."
-echo:
 pause %nul1%
 )
 
 if defined uwp16 (
-echo:
-echo Note: Skipping repair for Office 16.0 UWP. 
-echo       You need to use reset option in Windows settings for it.
-echo ________________________________________________________________
-echo:
 start ms-settings:appsfeatures
 )
 
@@ -9399,31 +8390,12 @@ if defined c2r14_68 set c2r14=1
 if defined c2r14_86 set c2r14=1
 
 if defined c2r14 (
-echo:
-echo Note: Skipping repair for Office 14.0 C2R 
-echo       You need to use Repair option in Windows settings for it.
-echo ________________________________________________________________
-echo:
 start appwiz.cpl
 )
 
-if defined msi14_68 if exist "%msi14repair68%" echo Running - "%msi14repair68%"                    & "%msi14repair68%"
-if defined msi14_86 if exist "%msi14repair86%" echo Running - "%msi14repair86%"                    & "%msi14repair86%"
-if defined msi15_68 if exist "%msi15repair68%" echo Running - "%msi15repair68%"                    & "%msi15repair68%"
-if defined msi15_86 if exist "%msi15repair86%" echo Running - "%msi15repair86%"                    & "%msi15repair86%"
-if defined msi16_68 if exist "%msi16repair68%" echo Running - "%msi16repair68%"                    & "%msi16repair68%"
-if defined msi16_86 if exist "%msi16repair86%" echo Running - "%msi16repair86%"                    & "%msi16repair86%"
-if defined c2r15_68 if exist "%c2r15repair68%" echo Running - "%c2r15repair68%" REPAIRUI RERUNMODE & "%c2r15repair68%" REPAIRUI RERUNMODE
-if defined c2r15_86 if exist "%c2r15repair86%" echo Running - "%c2r15repair86%" REPAIRUI RERUNMODE & "%c2r15repair86%" REPAIRUI RERUNMODE
-if defined c2r16_68 if exist "%c2r16repair68%" echo Running - "%c2r16repair68%" scenario=Repair    & "%c2r16repair68%" scenario=Repair
-if defined c2r16_86 if exist "%c2r16repair86%" echo Running - "%c2r16repair86%" scenario=Repair    & "%c2r16repair86%" scenario=Repair
 
 :repairend
 
-echo:
-echo %line%
-echo:
-echo:
 call :_color %Green% "Finished"
 goto :at_back
 
@@ -9439,18 +8411,14 @@ title  Fix WMI
 
 if exist "%SystemRoot%\Servicing\Packages\Microsoft-Windows-Server*Edition~*.mum" (
 %eline%
-echo WMI rebuild is not recommended on Windows Server. Aborting...
 goto :at_back
 )
 
 for %%# in (wmic.exe) do @if "%%~$PATH:#"=="" (
 %eline%
-echo wmic.exe file is not found in the system. Aborting...
 goto :at_back
 )
 
-echo:
-echo Checking WMI
 call :checkwmi
 
 ::  Apply basic fix first and check
@@ -9462,8 +8430,6 @@ call :checkwmi
 )
 
 if not defined error (
-echo [Working]
-echo No need to apply this option. Aborting...
 goto :at_back
 )
 
@@ -9475,81 +8441,55 @@ if %errorlevel% EQU 1060 set _corrupt=1
 sc query Winmgmt %nul% || set _corrupt=1
 for %%G in (DependOnService Description DisplayName ErrorControl ImagePath ObjectName Start Type) do if not defined _corrupt (reg query HKLM\SYSTEM\CurrentControlSet\Services\Winmgmt /v %%G %nul% || set _corrupt=1)
 
-echo:
 if defined _corrupt (
 %eline%
-echo Winmgmt service is corrupted. Aborting...
 goto :at_back
 )
 
-echo Disabling Winmgmt service
 sc config Winmgmt start= disabled %nul%
 if %errorlevel% EQU 0 (
-echo [Successful]
 ) else (
 call :_color %Red% "[Failed] Aborting..."
 sc config Winmgmt start= auto %nul%
 goto :at_back
 )
 
-echo:
-echo Stopping Winmgmt service
 %psc% Stop-Service Winmgmt -force %nul%
 %psc% Stop-Service Winmgmt -force %nul%
 %psc% Stop-Service Winmgmt -force %nul%
 sc query Winmgmt | find /i "STOPPED" %nul% && (
-echo [Successful]
 ) || (
 call :_color %Red% "[Failed]"
-echo:
 call :_color %Blue% "Its recommended to select [Restart] option and then apply Fix WMI option again."
-echo %line%
-echo:
 choice /C:21 /N /M "> [1] Restart  [2] Revert Back Changes :"
 if !errorlevel!==1 (sc config Winmgmt start= auto %nul%&goto :at_back)
-echo:
-echo Restarting...
 shutdown -t 5 -r
 exit
 )
 
-echo:
-echo Deleting WMI repository
 rmdir /s /q "%windir%\System32\wbem\repository\" %nul%
 if exist "%windir%\System32\wbem\repository\" (
 call :_color %Red% "[Failed]"
 ) else (
-echo [Successful]
 )
 
-echo:
-echo Enabling Winmgmt service
 sc config Winmgmt start= auto %nul%
 if %errorlevel% EQU 0 (
-echo [Successful]
 ) else (
 call :_color %Red% "[Failed]"
 )
 
 call :checkwmi
 if not defined error (
-echo:
-echo Checking WMI
 call :_color %Green% "[Working]"
 goto :at_back
 )
 
-echo:
-echo Registering .dll's and Compiling .mof's, .mfl's
 call :registerobj %nul%
 
-echo:
-echo Checking WMI
 call :checkwmi
 if defined error (
 call :_color %Red% "[Not Responding]"
-echo:
-echo Run [Dism RestoreHealth] and [SFC Scannow] options and make sure there are no errors.
 ) else (
 call :_color %Green% "[Working]"
 )
@@ -9588,7 +8528,6 @@ if %errorlevel% NEQ 0 (set error=1& exit /b)
 
 cscript //nologo %windir%\system32\slmgr.vbs /dlv %nul%
 cmd /c exit /b %errorlevel%
-echo "0x%=ExitCode%" | findstr /i "0x800410 0x800440" %nul1%
 if %errorlevel% EQU 0 set error=1
 exit /b
 
@@ -9596,9 +8535,6 @@ exit /b
 
 :at_back
 
-echo:
-echo %line%
-echo:
 call :_color %_Yellow% "Press any key to go back..."
 pause %nul1%
 goto :at_menu
@@ -9607,8 +8543,6 @@ goto :at_menu
 
 :at_done
 
-echo:
-echo Press any key to %_exitmsg%...
 pause %nul1%
 exit /b
 
@@ -9620,25 +8554,7 @@ exit /b
 
 set "ddf="%SystemRoot%\Temp\ddf""
 %nul% del /q /f %ddf%
-echo/.New Cabinet>%ddf%
-echo/.set Cabinet=ON>>%ddf%
-echo/.set CabinetFileCountThreshold=0;>>%ddf%
-echo/.set Compress=ON>>%ddf%
-echo/.set CompressionType=LZX>>%ddf%
-echo/.set CompressionLevel=7;>>%ddf%
-echo/.set CompressionMemory=21;>>%ddf%
-echo/.set FolderFileCountThreshold=0;>>%ddf%
-echo/.set FolderSizeThreshold=0;>>%ddf%
-echo/.set GenerateInf=OFF>>%ddf%
-echo/.set InfFileName=nul>>%ddf%
-echo/.set MaxCabinetSize=0;>>%ddf%
-echo/.set MaxDiskFileCount=0;>>%ddf%
-echo/.set MaxDiskSize=0;>>%ddf%
-echo/.set MaxErrors=1;>>%ddf%
-echo/.set RptFileName=nul>>%ddf%
-echo/.set UniqueFiles=ON>>%ddf%
 for /f "tokens=* delims=" %%D in ('dir /a:-D/b/s "%SystemRoot%\logs\%1"') do (
- echo/"%%~fD"  /inf=no;>>%ddf%
 )
 makecab /F %ddf% /D DiskDirectory1="" /D CabinetNameTemplate="!desktop!\AT_Logs\%2_%_time%.cab"
 del /q /f %ddf%
@@ -9748,7 +8664,6 @@ $key.SetAccessControl($acl)
 
 :change_edition
 @setlocal DisableDelayedExpansion
-@echo off
 
 ::  To stage current edition while changing edition with CBS Upgrade Method, change 0 to 1 in below line
 set _stg=0
@@ -9784,7 +8699,6 @@ if %winbuild% LSS 10586 set _NCS=0
 if %winbuild% GEQ 10586 reg query "HKCU\Console" /v ForceV2 %nul2% | find /i "0x0" %nul1% && (set _NCS=0)
 
 if %_NCS% EQU 1 (
-for /F %%a in ('echo prompt $E ^| cmd') do set "esc=%%a"
 set     "Red="41;97m""
 set    "Gray="100;97m""
 set   "Green="42;97m""
@@ -9802,9 +8716,6 @@ set  "_Green="Black" "Green""
 set "_Yellow="Black" "Yellow""
 )
 
-set "nceline=echo: &echo ==== ERROR ==== &echo:"
-set "eline=echo: &call :dk_color %Red% "==== ERROR ====" &echo:"
-set "line=echo ___________________________________________________________________________________________"
 if %~z0 GEQ 200000 (set "_exitmsg=Go back") else (set "_exitmsg=Exit")
 
 ::========================================================================================================================================
@@ -9828,9 +8739,6 @@ setlocal EnableDelayedExpansion
 cls
 mode 98, 30
 
-echo:
-echo Initializing...
-echo:
 call :dk_product
 call :dk_ckeckwmic
 
@@ -9838,10 +8746,7 @@ call :dk_ckeckwmic
 
 sc start sppsvc %nul%
 if %errorlevel% NEQ 1056 if %errorlevel% NEQ 0 (
-echo:
-echo Error code: %errorlevel%
 call :dk_color %Red% "Failed to start [sppsvc] service, rest of the process may take a long time..."
-echo:
 )
 
 ::========================================================================================================================================
@@ -9857,9 +8762,6 @@ call :dk_refresh
 call :dk_actids
 if not defined applist (
 %eline%
-echo Activation IDs not found. Aborting...
-echo:
-echo Check this page for help. %mas%troubleshoot
 goto ced_done
 )
 )
@@ -9870,7 +8772,6 @@ call :dk_checksku
 
 if not defined osSKU (
 %eline%
-echo SKU value was not detected properly. Aborting...
 goto ced_done
 )
 
@@ -9905,10 +8806,6 @@ if not defined osedition (
 %eline%
 DISM /English /Online /Get-CurrentEdition %nul%
 cmd /c exit /b !errorlevel!
-echo DISM command failed [Error Code - 0x!=ExitCode!]
-echo OS Edition was not detected properly. Aborting...
-echo:
-echo Check this page for help. %mas%troubleshoot
 goto ced_done
 )
 
@@ -9922,11 +8819,6 @@ for /f "skip=2 tokens=2*" %%a in ('reg query "HKLM\SOFTWARE\Microsoft\Windows NT
 %psc% $ExecutionContext.SessionState.LanguageMode %nul2% | find /i "Full" %nul1% || (
 %eline%
 %psc% $ExecutionContext.SessionState.LanguageMode
-echo:
-echo PowerShell is not working. Aborting...
-echo If you have applied restrictions on Powershell then undo those changes.
-echo:
-echo Check this page for help. %mas%troubleshoot
 goto ced_done
 )
 
@@ -9955,28 +8847,21 @@ set "_dtarget= %_dtarget% !_wtarget! "
 
 for %%# in (202 203) do if %osSKU%==%%# (
 %eline%
-echo [%winos% ^| SKU:%osSKU% ^| %winbuild%]
-echo It's not recommended to change this installed edition to any other.
-echo Aborting...
 goto ced_done
 )
 
 for %%# in ( %_dtarget% %_ptarget% ) do if /i not "%%#"=="%osedition%" (
-echo "!_target!" | find /i " %%# " %nul1% || set "_target= !_target! %%# "
 )
 
 if defined _target (
 for %%# in (%_target%) do (
-echo %%# | findstr /i "CountrySpecific CloudEdition ServerRdsh" %nul% || (set "_ntarget=!_ntarget! %%#")
 )
 )
 
 if not defined _ntarget (
 %line%
-echo:
 if defined dismnotworking call :dk_color %Red% "DISM.exe is not responding."
 call :dk_color %Gray% "Target Edition not found."
-echo Current Edition [%osedition% ^| %winbuild%] can not be changed to any other Edition.
 %line%
 goto ced_done
 )
@@ -9993,25 +8878,19 @@ set verified=0
 set targetedition=
 
 %line%
-echo:
 call :dk_color %Gray% "You can change the Edition [%osedition%] [%winbuild%] to one of the following."
 if defined dismnotworking (
 call :dk_color %_Yellow% "Note - DISM.exe is not responding."
 if /i "%osedition:~0,4%"=="Core" call :dk_color %_Yellow% "     - You will see more edition options to choose once its changed to Pro."
 )
 %line%
-echo:
 
 for %%A in (%_ntarget%) do (
 set /a counter+=1
-echo [!counter!]  %%A
 set targetedition!counter!=%%A
 )
 
 %line%
-echo:
-echo [0]  %_exitmsg%
-echo:
 call :dk_color %_Green% "Enter option number in keyboard, and press "Enter":"
 set /p inpt=
 if "%inpt%"=="" goto cedmenu2
@@ -10047,10 +8926,6 @@ if not defined key call :changeeditiondata
 
 if not defined key (
 %eline%
-echo [%targetedition% ^| %winbuild%]
-echo Unable to get product key from pkeyhelper.dll
-echo:
-echo Check this page for help. %mas%troubleshoot
 goto ced_done
 )
 
@@ -10063,28 +8938,17 @@ if %_dismapi%==1 (
 mode con cols=105 lines=40
 %psc% "$f=[io.file]::ReadAllText('!_batp!') -split ':checkrebootflag\:.*';iex ($f[1]);" | find /i "True" %nul% && (
 %eline%
-echo Pending Reboot flags found.
-echo:
-echo Restart the system and try again.
 goto ced_done
 )
 )
 
 cls
 %line%
-echo:
 if defined dismnotworking call :dk_color %_Yellow% "DISM.exe is not responding."
-echo Changing the Current Edition [%osedition%] %winbuild% to [%targetedition%]
-echo:
 
 if %_dismapi%==1 (
 call :dk_color %Green% "Notes-"
-echo:
-echo  - Save your work before continue, system will auto restart.
-echo:
-echo  - You will need to activate with HWID option once the edition is changed.
 %line%
-echo:
 choice /C:21 /N /M "[1] Continue [2] %_exitmsg% : "
 if !errorlevel!==1 exit /b
 )
@@ -10092,8 +8956,6 @@ if !errorlevel!==1 exit /b
 ::========================================================================================================================================
 
 if %_dismapi%==0 (
-echo Installing %_chan% Key [%key%]
-echo:
 if %_wmic% EQU 1 wmic path SoftwareLicensingService where __CLASS='SoftwareLicensingService' call InstallProductKey ProductKey="%key%" %nul%
 if %_wmic% EQU 0 %psc% "(([WMISEARCHER]'SELECT Version FROM SoftwareLicensingService').Get()).InstallProductKey('%key%')" %nul%
 if not !errorlevel!==0 cscript //nologo %windir%\system32\slmgr.vbs /ipk %key% %nul%
@@ -10105,21 +8967,15 @@ if !error_code! NEQ 0 set "error_code=[0x!=ExitCode!]"
 if !error_code! EQU 0 (
 call :dk_refresh
 call :dk_color %Green% "[Successful]"
-echo:
 call :dk_color %Gray% "Reboot is required to properly change the Edition."
 ) else (
 call :dk_color %Red% "[Unsuccessful] [Error Code: 0x!=ExitCode!]"
-echo Check this page for help. %mas%troubleshoot
 )
 )
 
 if %_dismapi%==1 (
-echo:
-echo Applying the DISM API method with %_chan% Key %key%. Please wait...
-echo:
 %psc% "$f=[io.file]::ReadAllText('!_batp!') -split ':dismapi\:.*';& ([ScriptBlock]::Create($f[1])) %targetedition% %key%;"
 timeout /t 3 %nul1%
-echo:
 call :dk_color2 %Blue% "Check this page for help" %_Yellow% " %mas%change_edition_issues"
 )
 %line%
@@ -10136,30 +8992,18 @@ mode con cols=105 lines=32
 
 REM %psc% "$f=[io.file]::ReadAllText('!_batp!') -split ':checkrebootflag\:.*';iex ($f[1]);" | find /i "True" %nul% && (
 REM %eline%
-REM echo Pending reboot flags found.
-REM echo:
-REM echo Restart the system and try again.
 REM goto ced_done
 REM )
 
-echo:
 if defined dismnotworking call :dk_color %_Yellow% "Note - DISM.exe is not responding."
-echo Changing the Current Edition [%osedition%] %winbuild% to [%targetedition%]
-echo:
 call :dk_color %Blue% "Important - Save your work before continue, system will auto reboot."
-echo:
 choice /C:01 /N /M "[1] Continue [0] %_exitmsg% : "
 if %errorlevel%==1 exit /b
 
-echo:
-echo Initializing...
-echo:
 
 if %_stg%==0 (set stage=) else (set stage=-StageCurrent)
 %psc% "$f=[io.file]::ReadAllText('!_batp!') -split ':cbsxml\:.*';& ([ScriptBlock]::Create($f[1])) -SetEdition %targetedition% %stage%;"
-echo:
 call :dk_color %Blue% "Incase of errors, you must restart your system before trying again."
-echo Check this page for help. %mas%troubleshoot
 %line%
 
 goto ced_done
@@ -10183,10 +9027,6 @@ if not defined key call :changeeditiondata
 
 if not defined key (
 %eline%
-echo [%targetedition% ^| %winbuild%]
-echo Unable to get product key from pkeyhelper.dll
-echo:
-echo Check this page for help. %mas%troubleshoot
 goto ced_done
 )
 
@@ -10194,29 +9034,19 @@ goto ced_done
 
 %psc% "$f=[io.file]::ReadAllText('!_batp!') -split ':checkrebootflag\:.*';iex ($f[1]);" | find /i "True" %nul% && (
 %eline%
-echo Pending reboot flags found.
-echo:
-echo Restart the system and try again.
 goto ced_done
 )
 
 cls
-echo:
 if defined dismnotworking call :dk_color %_Yellow% "Note - DISM.exe is not responding."
-echo Changing the Current Edition [%osedition%] %winbuild% to [%targetedition%]
-echo:
-echo Applying the command with %_chan% Key
-echo DISM /online /Set-Edition:%targetedition% /ProductKey:%key% /AcceptEula
 DISM /online /Set-Edition:%targetedition% /ProductKey:%key% /AcceptEula
 
 call :dk_color %Blue% "You must restart the system at this stage."
-echo Help: %mas%troubleshoot
 
 ::========================================================================================================================================
 
 :ced_done
 
-echo:
 call :dk_color %_Yellow% "Press any key to %_exitmsg%..."
 pause %nul1%
 exit /b
@@ -10228,7 +9058,6 @@ exit /b
 :ced_edilist
 
 if %_wmic% EQU 1 set "chkedi=for /f "tokens=2 delims==" %%a in ('"wmic path SoftwareLicensingProduct where (ApplicationID='55c92734-d682-4d71-983e-d6ec3f16059f') get LicenseFamily /VALUE" %nul6%')"
-if %_wmic% EQU 0 set "chkedi=for /f "tokens=2 delims==" %%a in ('%psc% "(([WMISEARCHER]'SELECT LicenseFamily FROM SoftwareLicensingProduct WHERE ApplicationID=''55c92734-d682-4d71-983e-d6ec3f16059f''').Get()).LicenseFamily ^| %% {echo ('LicenseFamily='+$_)}" %nul6%')"
 %chkedi% do (
 call if exist %Systemdrive%\Windows\System32\spp\tokens\skus\%%a (
 call set "_wtarget= !_wtarget! %%a "
@@ -10612,7 +9441,6 @@ set 4th=%%D
 if not defined 4th (
 set "key=%%A" & set "_chan=%%B"
 ) else (
-echo "%branch%" | find /i "%%D" %nul1% && (set "key=%%A" & set "_chan=%%B")
 )
 )
 )
@@ -10622,9 +9450,7 @@ exit /b
 :+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 :MASend
-echo:
 if defined _MASunattended timeout /t 2 & exit /b
-echo Press any key to exit...
 pause >nul
 exit /b
 
