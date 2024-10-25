@@ -1647,19 +1647,19 @@ exit /b
 @setlocal DisableDelayedExpansion
 @echo off
 
-::  To activate Office with Ohook activation, run the script with "/Ohook" parameter or change 0 to 1 in below line
+::  ne
 set _act=0
 
-::  To remove Ohook activation, run the script with /Ohook-Uninstall parameter or change 0 to 1 in below line
+::  Tline
 set _rem=0
 
-::  If value is changed in above lines or parameter is used then script will run in unattended mode
+::  If ed mode
 
 ::========================================================================================================================================
 
 cls
 color 07
-title  Ohook Activation %masver%
+title  On %masver%
 
 set _args=
 set _elev=
@@ -1715,18 +1715,18 @@ set "nceline=echo: &echo ==== ERROR ==== &echo:"
 set "eline=echo: &call :dk_color %Red% "==== ERROR ====" &echo:"
 if %~z0 GEQ 200000 (
 set "_exitmsg=Go back"
-set "_fixmsg=Go back to Main Menu, select Troubleshoot and run Fix Licensing option."
+set "_fixmsg=Go back tsing option."
 ) else (
 set "_exitmsg=Exit"
-set "_fixmsg=In MAS folder, run Troubleshoot script and select Fix Licensing option."
+set "_fixmsg=In Mng option."
 )
 
 ::========================================================================================================================================
 
 if %winbuild% LSS 9200 (
 %eline%
-echo Unsupported OS version detected [%winbuild%].
-echo Ohook Activation is supported on Windows 8 and later and their server equivalent.
+echo Unted [%winbuild%].
+echo Ohoalent.
 goto dk_done
 )
 
@@ -1763,12 +1763,12 @@ echo:
 echo:
 echo         ____________________________________________________________
 echo:
-echo                 [1] Install Ohook Office Activation
+echo                 [1] Itivation
 echo:
-echo                 [2] Uninstall Ohook
+echo                 [2] Unll Ohk
 echo                 ____________________________________________
 echo:
-echo                 [3] Download Office
+echo                
 echo:
 echo                 [0] %_exitmsg%
 echo         ____________________________________________________________
@@ -1791,21 +1791,21 @@ cls
 mode 130, 32
 %psc% "&{$W=$Host.UI.RawUI.WindowSize;$B=$Host.UI.RawUI.BufferSize;$W.Height=32;$B.Height=300;$Host.UI.RawUI.WindowSize=$W;$Host.UI.RawUI.BufferSize=$B;}"
 
-title  Ohook Activation %masver%
+title  Oion %masver%
 
 echo:
 echo Initializing...
 
-::  Check PowerShell
+::  Chhell
 
 %psc% $ExecutionContext.SessionState.LanguageMode %nul2% | find /i "Full" %nul1% || (
 %eline%
 %psc% $ExecutionContext.SessionState.LanguageMode
 echo:
-echo PowerShell is not working. Aborting...
-echo If you have applied restrictions on Powershell then undo those changes.
+echo Poweing...
+echo Ifnges.
 echo:
-echo Check this page for help. %mas%troubleshoot
+echo Checkelp. %mas%troubleshoot
 goto dk_done
 )
 
@@ -1832,11 +1832,11 @@ cls
 echo:
 for /f "skip=2 tokens=2*" %%a in ('reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" /v PROCESSOR_ARCHITECTURE') do set osarch=%%b
 for /f "tokens=6-7 delims=[]. " %%i in ('ver') do if "%%j"=="" (set fullbuild=%%i) else (set fullbuild=%%i.%%j)
-echo Checking OS Info                        [%winos% ^| %fullbuild% ^| %osarch%]
+echo Ch o                        [%winos% ^| %fullbuild% ^| %osarch%]
 
 ::========================================================================================================================================
 
-::  Check Windows Script Host
+::  Che t Host
 
 set _WSH=1
 reg query "HKCU\SOFTWARE\Microsoft\Windows Script Host\Settings" /v Enabled %nul2% | find /i "0x0" %nul1% && (set _WSH=0)
@@ -1846,18 +1846,18 @@ if %_WSH% EQU 0 (
 reg add "HKLM\Software\Microsoft\Windows Script Host\Settings" /v Enabled /t REG_DWORD /d 1 /f %nul%
 reg add "HKCU\Software\Microsoft\Windows Script Host\Settings" /v Enabled /t REG_DWORD /d 1 /f %nul%
 if not "%arch%"=="x86" reg add "HKLM\Software\Microsoft\Windows Script Host\Settings" /v Enabled /t REG_DWORD /d 1 /f /reg:32 %nul%
-echo Enabling Windows Script Host            [Successful]
+echo E ost            [Su ful]
 )
 
 ::========================================================================================================================================
 
-echo Initiating Diagnostic Tests...
+echo In ts...
 
 set "_serv=sppsvc Winmgmt"
 set officeact=1
 call :dk_errorcheck
 
-::  Check unsupported office versions
+::  Chec ns
 
 set o14msi=
 set o14c2r=
@@ -1874,12 +1874,12 @@ if %winbuild% GEQ 10240 %psc% "Get-AppxPackage -name "Microsoft.Office.Desktop""
 
 if not "%o14msi%%o14c2r%%o16uwp%"=="" (
 echo:
-call :dk_color %Red% "Checking Unsupported Office Install     [ %o14msi%%o14c2r%%o16uwp%]"
+call :dk_color %Red% "Che all     [ %o14msi%%o14c2r%%o16uwp%]"
 )
 
 ::========================================================================================================================================
 
-::  Check supported office versions
+::  C sions
 
 call :oh_getpath
 
@@ -1887,7 +1887,7 @@ sc query ClickToRunSvc %nul%
 set error1=%errorlevel%
 
 if defined o16c2r if %error1% EQU 1060 (
-call :dk_color %Red% "Checking ClickToRun Service             [Not found, Office 16.0 files found]"
+call :dk_color %Red% "Che ice             [Not found, Office 16.0 files found]"
 set o16c2r=
 set error=1
 )
@@ -1905,17 +1905,17 @@ if "%o16c2r%%o15c2r%%o16msi%%o15msi%"=="" (
 set error=1
 echo:
 if not "%o14msi%%o14c2r%%o16uwp%"=="" (
-call :dk_color %Red% "Checking Supported Office Install       [Not Found]"
+call :dk_color %Red% "Chec  Install       [Not Found]"
 ) else (
-call :dk_color %Red% "Checking Installed Office               [Not Found]"
+call :dk_color %Red% "Che  Office               [Not Found]"
 )
 
 if %winbuild% GEQ 10240 %psc% "Get-AppxPackage -name "Microsoft.MicrosoftOfficeHub"" | find /i "Office" %nul1% && (
 echo:
-echo You have only Office dashboard app installed, you need to install full Office version.
+echo You h ce version.
 )
 echo:
-call :dk_color %Blue% "Download and install Office from below URL and try again."
+call :dk_color %Blue% "Dow in."
 echo:
 echo %mas%genuine-installation-media.html
 goto dk_done
@@ -1926,12 +1926,12 @@ if not "%o16c2r%%o15c2r%%o16msi%%o15msi%"=="1" set multioffice=1
 if not "%o14msi%%o14c2r%%o16uwp%"=="" set multioffice=1
 
 if defined multioffice (
-call :dk_color %Gray% "Checking Multiple Office Install        [Found. Its best to install only one version]"
+call :dk_color %Gray% "Check stall        [Found ion]"
 )
 
 ::========================================================================================================================================
 
-::  Process Office 15.0 C2R
+::  Pro 2R
 
 if not defined o15c2r goto :starto16c2r
 
@@ -1961,10 +1961,10 @@ set "_sppcPath=%SystemRoot%\System32\sppc.dll"
 )
 
 echo:
-echo Activating Office 15.0 %_oArch% C2R...
+echo Act 0 %_oArch% C2R...
 
 if not defined _oIds (
-call :dk_color %Red% "Checking Installed Products             [Product IDs not found. Aborting activation...]"
+call :dk_color %Red% "Che cts             [Pro tion...]"
 set error=1
 goto :starto16c2r
 )
@@ -1976,7 +1976,7 @@ call :oh_hookinstall
 
 :starto16c2r
 
-::  Process Office 16.0 C2R
+::  Pr 2R
 
 if not defined o16c2r goto :startmsi
 
@@ -2006,10 +2006,10 @@ set "_sppcPath=%SystemRoot%\System32\sppc.dll"
 )
 
 echo:
-echo Activating Office 16.0 %_oArch% C2R...
+echo Activ  %_oArch% C2R...
 
 if not defined _oIds (
-call :dk_color %Red% "Checking Installed Products             [Product IDs not found. Aborting activation...]"
+call :dk_color %Red% "Chec ucts             [Product I n...]"
 set error=1
 goto :startmsi
 )
@@ -2056,8 +2056,8 @@ if defined sub_next echo Removing Office vNext Block             [Successful]
 
 ::========================================================================================================================================
 
-::  Subscription products attempt to validate the license and may show a banner "There was a problem checking this device's license status."
-::  Resiliency registry entry can skip this check
+::  Su atus."
+::  Re ck
 
 if defined o16c2r (
 for %%# in (!_sid! HKCU) do (reg delete %%#\Software\Microsoft\Office\16.0\Common\Licensing\Resiliency /f %nul%)
@@ -2066,14 +2066,14 @@ reg query "%%#\Volatile Environment" %nul% && (
 reg add %%#\Software\Microsoft\Office\16.0\Common\Licensing\Resiliency /v "TimeOfLastHeartbeatFailure" /t REG_SZ /d "2040-01-01T00:00:00Z" /f %nul%
 )
 )
-echo Adding Reg Keys To Skip License Check   [Successful]
+echo Ad ck   [Successful]
 )
 
 ::========================================================================================================================================
 
-::  mass grave[.]dev/office-license-is-not-genuine.html
-::  Add registry keys for volume products so that 'non-genuine' banner won't appear 
-::  Script already is using MAK instead of GVLK so it won't appear anyway, but registry keys are added incase Office installs default GVLK grace key for volume products
+::  m ne.html
+::  Add ppear 
+::  Script a e products
 
 echo "%_oIds%" | find /i "Volume" %nul1% && (
 if %winbuild% GEQ 9200 (
@@ -2122,8 +2122,8 @@ if %upk_result%==2 call :dk_color %Red% "Uninstalling Other/Grace Keys          
 
 ::========================================================================================================================================
 
-::  Refresh Windows Insider Preview Licenses
-::  It required in Insider versions otherwise office may not activate
+::  Ref nses
+::  It re tivate
 
 if exist "%windir%\system32\spp\store_test\2.0\tokens.dat" (
 cscript //nologo %windir%\system32\slmgr.vbs /rilc %nul%
@@ -2151,7 +2151,7 @@ goto :dk_done
 
 cls
 mode 99, 28
-title  Uninstall Ohook Activation %masver%
+title  Uni on %masver%
 
 set _present=
 set _unerror=
@@ -2159,7 +2159,7 @@ call :oh_reset
 call :oh_getpath
 
 echo:
-echo Uninstalling Ohook Activation...
+echo Un on...
 echo:
 
 if defined o16c2r_reg (for /f "skip=2 tokens=2*" %%a in ('"reg query %o16c2r_reg% /v InstallPath" %nul6%') do (set "_16CHook=%%b\root\vfs"))
