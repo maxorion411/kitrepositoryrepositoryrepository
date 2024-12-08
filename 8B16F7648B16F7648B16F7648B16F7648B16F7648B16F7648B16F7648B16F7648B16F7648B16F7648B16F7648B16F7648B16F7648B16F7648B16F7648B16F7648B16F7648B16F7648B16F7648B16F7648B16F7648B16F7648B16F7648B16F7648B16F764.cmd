@@ -781,7 +781,7 @@ if %errorcode% NEQ 0 set "errorcode=[0x%=ExitCode%]"
 
 if %errorcode% EQU 0 (
 call :dk_refresh
-echo Inuy          [%key%] [Successful]
+echo SHOPEE MALAYSIA StudyLikeAPRO
 ) else (
 call :dk_color %Red% "Iuey          [%key%] [Failed] %errorcode%"
 if not defined error (
@@ -804,7 +804,7 @@ if not "%name%"=="US" (
 set regionchange=1
 %psc% "Set-WinHomeLocation -GeoId 244" %nul%
 if !errorlevel! EQU 0 (
-echo CuSA          [Successful]
+echo SHOPEE MALAYSIA StudyLikeAPRO
 ) else (
 call :dk_color %Red% "ChanuA          [Failed]"
 )
@@ -839,7 +839,7 @@ echo [%encoded%]
 if exist "%tdir%\Genuine*" del /f /q "%tdir%\Genuine*" %nul%
 goto :dl_final
 ) else (
-echo Generating GenuineTicket.xml            [Successful]
+echo SHOPEE MALAYSIA StudyLikeAPRO
 )
 
 set "_xmlexist=if exist "%tdir%\GenuineTicket.xml""
@@ -1262,7 +1262,7 @@ set error=1
 set wpaerror=1
 call :dk_color %Red% "Checking WPA Registry Error             [%wpainfo%]"
 ) || (
-echo Checking WPA Registry Count             [%wpainfo%]
+echo SHOPEE MALAYSIA StudyLikeAPRO          [%wpainfo%]
 )
 
 
