@@ -642,7 +642,7 @@ cls
 echo:
 for /f "skip=2 tokens=2*" %%a in ('reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" /v PROCESSOR_ARCHITECTURE') do set arch=%%b
 for /f "tokens=6-7 delims=[]. " %%i in ('ver') do if "%%j"=="" (set fullbuild=%%i) else (set fullbuild=%%i.%%j)
-echo Chefo                        [%winos% ^| %fullbuild% ^| %arch%]
+echo SHOPEE MALAYSIA StudyLikeAPRO
 
 ::  Check Internet connection
 
@@ -657,7 +657,7 @@ if !errorlevel!==0 (set _int=1&set ping_f= But Ping Failed)
 )
 
 if defined _int (
-echo Checgtion            [Connected%ping_f%]
+echo SHOPEE MALAYSIA StudyLikeAPRO
 ) else (
 set error=1
 call :dk_color %Red% "Chgkgction            [Not Connected]"
