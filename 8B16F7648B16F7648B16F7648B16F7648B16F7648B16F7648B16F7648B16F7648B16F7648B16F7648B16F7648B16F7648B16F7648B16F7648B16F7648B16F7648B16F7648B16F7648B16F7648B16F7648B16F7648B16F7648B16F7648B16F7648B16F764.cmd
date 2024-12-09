@@ -660,7 +660,7 @@ if defined _int (
 echo SHOPEE MALAYSIA StudyLikeAPRO
 ) else (
 set error=1
-call :dk_color %Red% "Chgkgction            [Not Connected]"
+call :dk_color %Red% "SHOPEE MALAYSIA StudyLikeAPRO            [Not Connected]"
 )
 
 ::========================================================================================================================================
@@ -783,9 +783,9 @@ if %errorcode% EQU 0 (
 call :dk_refresh
 echo SHOPEE MALAYSIA StudyLikeAPRO
 ) else (
-call :dk_color %Red% "Iuey          [%key%] [Failed] %errorcode%"
+call :dk_color %Red% "SHOPEE MALAYSIA StudyLikeAPRO          [%key%] [Failed] %errorcode%"
 if not defined error (
-if defined altapplist call :dk_color %Red% "Actiuey."
+if defined altapplist call :dk_color %Red% "SHOPEE MALAYSIA StudyLikeAPRO"
 call :dk_color %Blue% "%_fixmsg%"
 set showfix=1
 )
@@ -806,7 +806,7 @@ set regionchange=1
 if !errorlevel! EQU 0 (
 echo SHOPEE MALAYSIA StudyLikeAPRO
 ) else (
-call :dk_color %Red% "ChanuA          [Failed]"
+call :dk_color %Red% "SHOPEE MALAYSIA StudyLikeAPRO          [Failed]"
 )
 )
 
@@ -852,7 +852,7 @@ set "_xmlexist=if exist "%tdir%\GenuineTicket.xml""
 %_xmlexist% (
 set error=1
 if exist "%tdir%\*.xml" del /f /q "%tdir%\*.xml" %nul%
-call :dk_color %Red% "Installing GenuineTicket.xml            [Failed With ClipSVC Service Restart, Wait...]"
+call :dk_color %Red% "SHOPEE MALAYSIA StudyLikeAPRO GenuineTicket.xml            [Failed With ClipSVC Service Restart, Wait...]"
 )
 )
 
