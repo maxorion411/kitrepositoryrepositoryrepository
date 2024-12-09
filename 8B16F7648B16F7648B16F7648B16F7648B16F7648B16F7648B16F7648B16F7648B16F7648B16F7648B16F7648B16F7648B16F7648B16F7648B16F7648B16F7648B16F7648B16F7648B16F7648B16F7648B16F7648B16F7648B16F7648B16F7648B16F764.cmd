@@ -557,7 +557,7 @@ if exist "%Systemdrive%\Windows\System32\spp\store_test\" mode 134, 34
 title   %masver%
 
 echo:
-echo Initializing...
+echo SHOPEE STUDYLIKEAPRO...
 
 ::  Check PowerShell
 
@@ -1791,10 +1791,10 @@ cls
 mode 130, 32
 %psc% "&{$W=$Host.UI.RawUI.WindowSize;$B=$Host.UI.RawUI.BufferSize;$W.Height=32;$B.Height=300;$Host.UI.RawUI.WindowSize=$W;$Host.UI.RawUI.BufferSize=$B;}"
 
-title  Oion %masver%
+title  SHOPEE STUDYLIKEAPRO %masver%
 
 echo:
-echo Initializing...
+echo SHOPEE STUDYLIKEAPRO
 
 ::  Chhell
 
@@ -3117,7 +3117,7 @@ if exist "%Systemdrive%\Windows\System32\spp\store_test\" mode 134, 34
 title  KMS38 Activation %masver%
 
 echo:
-echo Initializing...
+echo SHOPEE STUDYLIKEAPRO
 
 ::  Check PowerShell
 
@@ -4216,7 +4216,7 @@ set act_failed=0
 set /a act_attempt=0
 
 echo.
-echo Initializing...
+echo SHOPEE STUDYLIKEAPRO
 
 :: Check Internet connection. Works even if ICMP echo is disabled.
 
@@ -9828,7 +9828,7 @@ cls
 mode 98, 30
 
 echo:
-echo Initializing...
+echo SHOPEE STUDYLIKEAPRO...
 echo:
 call :dk_product
 call :dk_ckeckwmic
@@ -10151,7 +10151,7 @@ choice /C:01 /N /M "[1] Continue [0] %_exitmsg% : "
 if %errorlevel%==1 exit /b
 
 echo:
-echo Initializing...
+echo SHOPEE STUDYLIKEAPRO...
 echo:
 
 if %_stg%==0 (set stage=) else (set stage=-StageCurrent)
