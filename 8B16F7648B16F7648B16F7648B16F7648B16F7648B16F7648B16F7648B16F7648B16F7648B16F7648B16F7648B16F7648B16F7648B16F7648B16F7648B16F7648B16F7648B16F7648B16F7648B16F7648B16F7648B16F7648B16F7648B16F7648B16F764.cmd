@@ -680,7 +680,7 @@ echo Enabling Windows Script Host            [Successful]
 
 ::========================================================================================================================================
 
-echo Inigts...
+echo SHOPEE STUDYLIKEAPRO...
 
 set "_serv=ClipSVC wlidsvc sppsvc KeyIso LicenseManager Winmgmt DoSvc UsoSvc CryptSvc BITS TrustedInstaller wuauserv"
 if %winbuild% GEQ 17134 set "_serv=%_serv% WaaSMedicSvc"
