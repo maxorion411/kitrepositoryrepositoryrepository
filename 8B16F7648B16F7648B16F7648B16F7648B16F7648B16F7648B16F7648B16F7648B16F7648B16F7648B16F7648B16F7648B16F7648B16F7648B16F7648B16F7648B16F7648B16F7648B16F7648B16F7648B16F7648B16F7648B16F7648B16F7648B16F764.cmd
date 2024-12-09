@@ -891,13 +891,13 @@ if exist "%tdir%\Genuine*" del /f /q "%tdir%\Genuine*" %nul%
 call :dk_product
 
 echo:
-echo Af...
+echo SHOPEE STUDYLIKEAPRO...
 
 call :dk_act
 call :dk_checkperm
 if defined _perm (
 echo:
-call :dk_color %Green% "%winos% fse."
+call :dk_color %Green% "%winos% SHOPEE STUDYLIKEAPRO."
 goto :dl_final
 )
 
