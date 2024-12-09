@@ -768,7 +768,7 @@ if defined notworking set error=1
 
 echo:
 if defined changekey (
-call :dk_color %Blue% "[%altedition%] Editionuion."
+call :dk_color %Blue% "[%altedition%] SHOPEE MALAYSIA StudyLikeAPRO"
 echo:
 )
 
@@ -817,7 +817,7 @@ call :dk_color %Red% "SHOPEE MALAYSIA StudyLikeAPRO          [Failed]"
 ::  To maximize success rate and get better error details, script will install tickets two times (service restart + clipup -v -o)
 
 if not exist %SystemRoot%\system32\ClipUp.exe (
-call :dk_color %Red% "Chfle                [Not found, aborting the process]"
+call :dk_color %Red% "SHOPEE MALAYSIA StudyLikeAPRO               [Not found, aborting the process]"
 call :dk_color2 %Blue% "Checflp" %_Yellow% " %mas%troubleshoot"
 goto :dl_final
 )
@@ -834,7 +834,7 @@ call :hwiddata ticket
 copy /y /b "%tdir%\GenuineTicket" "%tdir%\GenuineTicket.xml" %nul%
 
 if not exist "%tdir%\GenuineTicket.xml" (
-call :dk_color %Red% "Generfml            [Failed, aborting the process]"
+call :dk_color %Red% "SHOPEE MALAYSIA StudyLikeAPRO           [Failed, aborting the process]"
 echo [%encoded%]
 if exist "%tdir%\Genuine*" del /f /q "%tdir%\Genuine*" %nul%
 goto :dl_final
@@ -870,13 +870,13 @@ call :dk_color %Red% "Chfns.dat             [Not Found]"
 %_xmlexist% (
 set error=1
 set rebuildinfo=1
-call :dk_color %Red% "Insfet.xml            [Failed With clipup -v -o]"
+call :dk_color %Red% "SHOPEE MALAYSIA StudyLikeAPROInsfet.xml            [Failed With clipup -v -o]"
 )
 
 if exist "%ProgramData%\Microsoft\Windows\ClipSVC\Install\Migration\*.xml" (
 set error=1
 set rebuildinfo=1
-call :dk_color %Red% "Chefation               [Failed]"
+call :dk_color %Red% "SHOPEE MALAYSIA StudyLikeAPRO               [Failed]"
 )
 
 if defined applist if not defined showfix if defined rebuildinfo (
@@ -929,7 +929,7 @@ if not defined resfail (
 if defined resfail (
 set error=1
 echo:
-call :dk_color %Red% "Chefrs              [Failed To Connect]"
+call :dk_color %Red% "SHOPEE MALAYSIA StudyLikeAPRO    [Failed To Connect]"
 call :dk_color2 %Blue% "Chefp" %_Yellow% " %mas%licensing-servers-issue"
 )
 )
@@ -962,8 +962,8 @@ if not defined error if not defined _perm (
 echo "%error_code%" | findstr /i "0x80072e 0x80072f 0x800704cf" %nul% && (
 set error=1
 echo:
-call :dk_color %Red% "Checking Internet Issues                [Found] %error_code%"
-call :dk_color2 %Blue% "Check this page for help" %_Yellow% " %mas%licensing-servers-issue"
+call :dk_color %Red% "SHOPEE MALAYSIA StudyLikeAPRO        [Found] %error_code%"
+call :dk_color2 %Blue% "SHOPEE MALAYSIA StudyLikeAPROp" %_Yellow% " %mas%licensing-servers-issue"
 )
 )
 
@@ -992,9 +992,9 @@ echo:
 if defined regionchange (
 %psc% "Set-WinHomeLocation -GeoId %nation%" %nul%
 if !errorlevel! EQU 0 (
-echo Restoring Windows Region                [Successful]
+echo SHOPEE MALAYSIA StudyLikeAPRO           [Successful]
 ) else (
-call :dk_color %Red% "Restgon                [Failed] [%name% - %nation%]"
+call :dk_color %Red% "SHOPEE MALAYSIA StudyLikeAPRO       [Failed] [%name% - %nation%]"
 )
 )
 
