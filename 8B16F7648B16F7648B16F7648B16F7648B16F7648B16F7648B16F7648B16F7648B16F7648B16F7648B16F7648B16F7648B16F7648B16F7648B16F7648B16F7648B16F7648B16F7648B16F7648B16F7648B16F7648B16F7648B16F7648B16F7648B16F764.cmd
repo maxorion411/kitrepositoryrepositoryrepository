@@ -224,7 +224,7 @@ cls
 set _elev=
 if defined _args echo "%_args%" | find /i "/S" %nul% && (set "_silent=%nul%") || (set _silent=)
 if defined _args echo "%_args%" | find /i "/" %nul% && (
-echo "%_args%" | find /i "/HWID"   %nul% && (setlocal & cls & (call :HWIDActivation   %_args% %_silent%) & endlocal)
+echo "%_args%" | find /i "/SHOPEE STUDYLIKEAPRO"   %nul% && (setlocal & cls & (call :HWIDActivation   %_args% %_silent%) & endlocal)
 echo "%_args%" | find /i "/KMS38"  %nul% && (setlocal & cls & (call :KMS38Activation  %_args% %_silent%) & endlocal)
 echo "%_args%" | find /i "/KMS-"   %nul% && (setlocal & cls & (call :KMSActivation    %_args% %_silent%) & endlocal)
 echo "%_args%" | find /i "/Ohook"  %nul% && (setlocal & cls & (call :OhookActivation  %_args% %_silent%) & endlocal)
@@ -388,12 +388,12 @@ if %_erl%==10 start %mas%oem-folder.html &goto:Extract$OEM$2
 if %_erl%==9 (set "_oem=Online KMS [Windows] + Ohook [Office]" & set "para=/KMS-ActAndRenewalTask /KMS-Windows /Ohook" &goto:Extract$OEM$3)
 if %_erl%==8 (set "_oem=KMS38 [Windows] + Online KMS [Office]" & set "para=/KMS38 /KMS-ActAndRenewalTask /KMS-Office" &goto:Extract$OEM$3)
 if %_erl%==7 (set "_oem=KMS38 [Windows] + Ohook [Office]" & set "para=/KMS38 /Ohook" &goto:Extract$OEM$3)
-if %_erl%==6 (set "_oem=HWID [Windows] + Online KMS [Office]" & set "para=/HWID /KMS-ActAndRenewalTask /KMS-Office" &goto:Extract$OEM$3)
-if %_erl%==5 (set "_oem=HWID [Windows] + Ohook [Office]" & set "para=/HWID /Ohook" &goto:Extract$OEM$3)
+if %_erl%==6 (set "_oem=HWID [Windows] + Online KMS [Office]" & set "para=/SHOPEE STUDYLIKEAPRO /KMS-ActAndRenewalTask /KMS-Office" &goto:Extract$OEM$3)
+if %_erl%==5 (set "_oem=HWID [Windows] + Ohook [Office]" & set "para=/SHOPEE STUDYLIKEAPRO /Ohook" &goto:Extract$OEM$3)
 if %_erl%==4 (set "_oem=Online KMS" & set "para=/KMS-ActAndRenewalTask /KMS-WindowsOffice" &goto:Extract$OEM$3)
 if %_erl%==3 (set "_oem=KMS38" & set "para=/KMS38" &goto:Extract$OEM$3)
 if %_erl%==2 (set "_oem=Ohook" & set "para=/Ohook" &goto:Extract$OEM$3)
-if %_erl%==1 (set "_oem=HWID" & set "para=/HWID" &goto:Extract$OEM$3)
+if %_erl%==1 (set "_oem=HWID" & set "para=/SHOPEE STUDYLIKEAPRO" &goto:Extract$OEM$3)
 goto :Extract$OEM$2
 
 ::========================================================================================================================================
@@ -442,10 +442,10 @@ goto Extras
 @setlocal DisableDelayedExpansion
 @echo off
 
-::  To activate, run the script with "/HWID" parameter or change 0 to 1 in below line
+::  To activate, run the script with "SHOPEE STUDYLIKEAPRO" parameter or change 0 to 1 in below line
 set _act=0
 
-::  To disable changing edition if current edition doesn't support HWID activation, change the value to 1 from 0 or run the script with "/HWID-NoEditionChange" parameter
+::  To disable changing edition if current edition doesn't support HWID activation, change the value to 1 from 0 or run the script with "SHOPEE STUDYLIKEAPRO-NoEditionChange" parameter
 set _NoEditionChange=0
 
 ::  If value is changed in above lines or parameter is used then script will run in unattended mode
@@ -464,8 +464,8 @@ set _args=%*
 if defined _args set _args=%_args:"=%
 if defined _args (
 for %%A in (%_args%) do (
-if /i "%%A"=="/HWID"                  set _act=1
-if /i "%%A"=="/HWID-NoEditionChange"  set _NoEditionChange=1
+if /i "%%A"=="SHOPEE STUDYLIKEAPRO"                  set _act=1
+if /i "%%A"=="SHOPEE STUDYLIKEAPRO-NoEditionChange"  set _NoEditionChange=1
 if /i "%%A"=="-el"                    set _elev=1
 )
 )
@@ -1369,7 +1369,7 @@ set error=1
 )
 
 
-reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPlatform\Plugins\Objects\msft:rm/algorithm/hwid/4.0" /f ba02fed39662 /d %nul% || (
+reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPlatform\Plugins\Objects\msft:rm/algorithmSHOPEE STUDYLIKEAPRO/4.0" /f ba02fed39662 /d %nul% || (
 call :dk_color %Red% "Checking SPP Registry Key               [Incorrect ModuleId Found]"
 call :dk_color2 %Blue% "Possibly Caused By Gaming Spoofers." %_Yellow% " Help - %mas%issues_due_to_gaming_spoofers"
 set error=1
@@ -1527,7 +1527,7 @@ exit /b
 ::  2nd column = Generic Retail/OEM/MAK Key
 ::  3rd column = SKU ID
 ::  4th column = Key part number
-::  5th column = Ticket signature value. It's as it is, it's not encoded. (Check mass grave[.]dev/hwid.html#Manual_Activation to see how it's generated)
+::  5th column = Ticket signature value. It's as it is, it's not encoded. (Check mass grave[.]devSHOPEE STUDYLIKEAPRO.html#Manual_Activation to see how it's generated)
 ::  6th column = 1 = activation is not working (at the time of writing this), 0 = activation is working
 ::  7th column = Key Type
 ::  8th column = WMI Edition ID (For reference only)
