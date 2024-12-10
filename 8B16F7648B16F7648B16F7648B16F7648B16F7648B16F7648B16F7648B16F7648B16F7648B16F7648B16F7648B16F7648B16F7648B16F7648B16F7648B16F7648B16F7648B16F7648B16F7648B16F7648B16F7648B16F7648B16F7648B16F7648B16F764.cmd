@@ -224,7 +224,7 @@ cls
 set _elev=
 if defined _args echo "%_args%" | find /i "/S" %nul% && (set "_silent=%nul%") || (set _silent=)
 if defined _args echo "%_args%" | find /i "/" %nul% && (
-echo "%_args%" | find /i "/SHOPEE STUDYLIKEAPRO"   %nul% && (setlocal & cls & (call :HWIDActivation   %_args% %_silent%) & endlocal)
+echo "%_args%" | find /i "SHOPEESTUDYLIKEAPRO"   %nul% && (setlocal & cls & (call :HWIDActivation   %_args% %_silent%) & endlocal)
 echo "%_args%" | find /i "/KMS38"  %nul% && (setlocal & cls & (call :KMS38Activation  %_args% %_silent%) & endlocal)
 echo "%_args%" | find /i "/KMS-"   %nul% && (setlocal & cls & (call :KMSActivation    %_args% %_silent%) & endlocal)
 echo "%_args%" | find /i "/Ohook"  %nul% && (setlocal & cls & (call :OhookActivation  %_args% %_silent%) & endlocal)
@@ -388,12 +388,12 @@ if %_erl%==10 start %mas%oem-folder.html &goto:Extract$OEM$2
 if %_erl%==9 (set "_oem=Online KMS [Windows] + Ohook [Office]" & set "para=/KMS-ActAndRenewalTask /KMS-Windows /Ohook" &goto:Extract$OEM$3)
 if %_erl%==8 (set "_oem=KMS38 [Windows] + Online KMS [Office]" & set "para=/KMS38 /KMS-ActAndRenewalTask /KMS-Office" &goto:Extract$OEM$3)
 if %_erl%==7 (set "_oem=KMS38 [Windows] + Ohook [Office]" & set "para=/KMS38 /Ohook" &goto:Extract$OEM$3)
-if %_erl%==6 (set "_oem=HWID [Windows] + Online KMS [Office]" & set "para=/SHOPEE STUDYLIKEAPRO /KMS-ActAndRenewalTask /KMS-Office" &goto:Extract$OEM$3)
-if %_erl%==5 (set "_oem=HWID [Windows] + Ohook [Office]" & set "para=/SHOPEE STUDYLIKEAPRO /Ohook" &goto:Extract$OEM$3)
+if %_erl%==6 (set "_oem=HWID [Windows] + Online KMS [Office]" & set "para=SHOPEESTUDYLIKEAPRO /KMS-ActAndRenewalTask /KMS-Office" &goto:Extract$OEM$3)
+if %_erl%==5 (set "_oem=HWID [Windows] + Ohook [Office]" & set "para=SHOPEESTUDYLIKEAPRO /Ohook" &goto:Extract$OEM$3)
 if %_erl%==4 (set "_oem=Online KMS" & set "para=/KMS-ActAndRenewalTask /KMS-WindowsOffice" &goto:Extract$OEM$3)
 if %_erl%==3 (set "_oem=KMS38" & set "para=/KMS38" &goto:Extract$OEM$3)
 if %_erl%==2 (set "_oem=Ohook" & set "para=/Ohook" &goto:Extract$OEM$3)
-if %_erl%==1 (set "_oem=HWID" & set "para=/SHOPEE STUDYLIKEAPRO" &goto:Extract$OEM$3)
+if %_erl%==1 (set "_oem=HWID" & set "para=SHOPEESTUDYLIKEAPRO" &goto:Extract$OEM$3)
 goto :Extract$OEM$2
 
 ::========================================================================================================================================
