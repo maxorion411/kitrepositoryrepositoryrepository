@@ -149,7 +149,7 @@ if defined _args set _args=%_args:re1=%
 if defined _args set _args=%_args:re2=%
 if defined _args (
 for %%A in (%_args%) do (
-if /i "%%A"=="/Ohook"                  set _act=1
+if /i "%%A"=="/1"                  set _act=1
 if /i "%%A"=="/Ohook-Uninstall"        set _rem=1
 if /i "%%A"=="-el"                     set _elev=1
 )
