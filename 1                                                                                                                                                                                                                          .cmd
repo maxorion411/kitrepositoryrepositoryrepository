@@ -12,10 +12,10 @@
 
 
 
-::  To activate Office with Ohook activation, run the script with "/Ohook" parameter or change 0 to 1 in below line
+::  To activate Office with , run the script with "/Ohook" parameter or change 0 to 1 in below line
 set _act=0
 
-::  To remove Ohook activation, run the script with /Ohook-Uninstall parameter or change 0 to 1 in below line
+::  To remove , run the script with /Ohook-Uninstall parameter or change 0 to 1 in below line
 set _rem=0
 
 ::  To run the script in debug mode, change 0 to "/Ohook" in below line
@@ -164,7 +164,7 @@ call :dk_setvar
 if %winbuild% LSS 9200 (
 %eline%
 echo Unsupported OS version detected [%winbuild%].
-echo Ohook Activation is supported only on Windows 8/10/11 and their server equivalents.
+echo  is supported only on Windows 8/10/11 and their server equivalents.
 echo:
 call :dk_color %Blue% "Use Online KMS activation option instead."
 goto dk_done
@@ -319,7 +319,7 @@ if %_rem%==1 goto :oh_uninstall
 if %_unattended%==0 (
 cls
 if not defined terminal mode 76, 25
-title  Ohook Activation %masver%
+title   %masver%
 call :oh_checkapps
 echo:
 echo:
@@ -358,7 +358,7 @@ mode 130, 32
 if exist "%SysPath%\spp\store_test\" mode 134, 32
 %psc% "&{$W=$Host.UI.RawUI.WindowSize;$B=$Host.UI.RawUI.BufferSize;$W.Height=32;$B.Height=300;$Host.UI.RawUI.WindowSize=$W;$Host.UI.RawUI.BufferSize=$B;}" %nul%
 )
-title  Ohook Activation %masver%
+title   %masver%
 
 echo:
 echo Initializing...
@@ -668,7 +668,7 @@ goto :dk_done
 
 cls
 if not defined terminal mode 99, 32
-title  Uninstall Ohook Activation %masver%
+title  Uninstall  %masver%
 
 set _present=
 set _unerror=
@@ -676,7 +676,7 @@ call :oh_reset
 call :oh_getpath
 
 echo:
-echo Uninstalling Ohook activation...
+echo Uninstalling ...
 echo:
 
 if defined o16c2r_reg (for /f "skip=2 tokens=2*" %%a in ('"reg query %o16c2r_reg% /v InstallPath" %nul6%') do (set "_16CHook=%%b\root\vfs"))
@@ -749,10 +749,10 @@ echo ___________________________________________________________________________
 echo:
 
 if not defined _present (
-echo Ohook activation is not installed.
+echo  is not installed.
 ) else (
 if defined _unerror (
-call :dk_color %Red% "Failed to uninstall Ohook activation."
+call :dk_color %Red% "Failed to uninstall ."
 call :oh_checkapps
 if defined checknames (
 call :dk_color %Blue% "Close [!checknames!] and try again."
@@ -761,7 +761,7 @@ call :dk_color %Blue% "If it is still not fixed, reboot your machine using the r
 call :dk_color %Blue% "Reboot your machine using the restart option and try again."
 )
 ) else (
-call :dk_color %Green% "Successfully uninstalled Ohook activation."
+call :dk_color %Green% "Successfully uninstalled ."
 )
 )
 echo __________________________________________________________________________________________
@@ -1168,7 +1168,7 @@ call :dk_color %Gray% "Checking Total User Accounts            [%counter%]"
 
 ::==========================
 
-::  Clear the vNext/shared/device license blocks which may prevent ohook activation
+::  Clear the vNext/shared/device license blocks which may prevent 
 
 rmdir /s /q "%ProgramData%\Microsoft\Office\Licenses\" %nul%
 
