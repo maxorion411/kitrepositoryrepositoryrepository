@@ -328,12 +328,12 @@ echo:
 if defined checknames (call :dk_color %_Yellow% "                Close [!checknames!] before proceeding...")
 echo         ____________________________________________________________
 echo:
-echo                 [1] Install Ohook Office Activation
+echo                 [1] Ins
 echo:
-echo                 [2] Uninstall Ohook
+echo                 [2] Unin
 echo                 ____________________________________________
 echo:
-echo                 [3] Download Office
+echo               
 echo:
 echo                 [0] %_exitmsg%
 echo         ____________________________________________________________
@@ -393,7 +393,7 @@ call :dk_showosinfo
 
 ::========================================================================================================================================
 
-echo Initiating Diagnostic Tests...
+echo ..
 
 set "_serv=sppsvc Winmgmt"
 
@@ -1409,7 +1409,7 @@ if defined UBR (set "fullbuild=%%G.!UBR!") else (set "fullbuild=%%G.%%H")
 )
 )
 
-echo Checking OS Info                        [%winos% ^| %fullbuild% ^| %osarch%]
+echo .                        [%winos% ^| %fullbuild% ^| %osarch%]
 exit /b
 
 ::  Refresh license status
@@ -1758,7 +1758,7 @@ set error=1
 set wpaerror=1
 call :dk_color %Red% "Checking WPA Registry Errors            [%wpainfo%]"
 ) || (
-echo Checking WPA Registry Count             [%wpainfo%]
+echo .            [%wpainfo%]
 )
 
 
