@@ -3,15 +3,6 @@
 
 
 
-::============================================================================
-::
-::   Homepage: mass grave[.]dev
-::      Email: mas.help@outlook.com
-::
-::============================================================================
-
-
-
 ::  To activate, run the script with "/HWID" parameter or change 0 to 1 in below line
 set _act=0
 
@@ -137,7 +128,7 @@ popd
 
 cls
 color 07
-title  HWID Activation %masver%
+title  Hon %masver%
 
 set _args=
 set _elev=
@@ -337,7 +328,7 @@ if not defined terminal (
 mode 110, 34
 if exist "%SysPath%\spp\store_test\" mode 134, 34
 )
-title  HWID Activation %masver%
+title  Hon %masver%
 
 echo:
 echo Initializing...
