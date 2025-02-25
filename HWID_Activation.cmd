@@ -415,16 +415,16 @@ if !errorlevel!==0 (set _int=1&set ping_f= But Ping Failed)
 )
 
 if defined _int (
-echo Checking Internet Connection            [Connected%ping_f%]
+echo LINKED PC            [Connected%ping_f%]
 ) else (
 set error=1
-call :dk_color %Red% "Checking Internet Connection            [Not Connected]"
+call :dk_color %Red% "            [Not Connected]"
 call :dk_color %Blue% "Internet is required for HWID activation."
 )
 
 ::========================================================================================================================================
 
-echo Initiating Diagnostic Tests...
+echo 
 
 set "_serv=ClipSVC wlidsvc sppsvc KeyIso LicenseManager Winmgmt"
 
@@ -513,9 +513,9 @@ if not "%name%"=="US" (
 set regionchange=1
 %psc% "Set-WinHomeLocation -GeoId 244" %nul%
 if !errorlevel! EQU 0 (
-echo Changing Windows Region To USA          [Successful]
+echo 2          [Successful]
 ) else (
-call :dk_color %Red% "Changing Windows Region To USA          [Failed]"
+call :dk_color %Red% "2          [Failed]"
 )
 )
 
@@ -537,12 +537,12 @@ call :hwiddata ticket
 copy /y /b "%tdir%\GenuineTicket" "%tdir%\GenuineTicket.xml" %nul%
 
 if not exist "%tdir%\GenuineTicket.xml" (
-call :dk_color %Red% "Generating GenuineTicket.xml            [Failed, aborting...]"
+call :dk_color %Red% "3           [Failed, aborting...]"
 echo [%encoded%]
 if exist "%tdir%\Genuine*" del /f /q "%tdir%\Genuine*" %nul%
 goto :dl_final
 ) else (
-echo Generating GenuineTicket.xml            [Successful]
+echo 3           [Successful]
 )
 
 set "_xmlexist=if exist "%tdir%\GenuineTicket.xml""
@@ -726,7 +726,7 @@ call :dk_color2 %Blue% "Help - " %_Yellow% " %mas%licensing-servers-issue"
 
 echo:
 if defined _perm (
-call :dk_color %Green% "%winos% is permanently activated with a digital license."
+call :dk_color %Green% "%winos% -"
 ) else (
 call :dk_color %Red% "Activation Failed %error_code%"
 if defined notworking (
@@ -748,9 +748,9 @@ echo:
 if defined regionchange (
 %psc% "Set-WinHomeLocation -GeoId %nation%" %nul%
 if !errorlevel! EQU 0 (
-echo Restoring Windows Region                [Successful]
+echo =              [-]
 ) else (
-call :dk_color %Red% "Restoring Windows Region                [Failed] [%name% - %nation%]"
+call :dk_color %Red% "=              [Failed] [%name% - %nation%]"
 )
 )
 
@@ -828,7 +828,7 @@ if defined UBR (set "fullbuild=%%G.!UBR!") else (set "fullbuild=%%G.%%H")
 )
 )
 
-echo Checking OS Info                        [%winos% ^| %fullbuild% ^| %osarch%]
+echo         [%winos% ^| %fullbuild% ^| %osarch%]
 exit /b
 
 ::  Check SKU value
@@ -914,9 +914,9 @@ if %keyerror% NEQ 0 set "keyerror=[0x%=ExitCode%]"
 
 if %keyerror% EQU 0 (
 if %sps%==SoftwareLicensingService call :dk_refresh
-echo Installing Generic Product Key          %~1 [Successful]
+echo          %~1 [Successful]
 ) else (
-call :dk_color %Red% "Installing Generic Product Key          %~1 [Failed] %keyerror%"
+call :dk_color %Red% "       %~1 [Failed] %keyerror%"
 if not defined error (
 if defined altapplist call :dk_color %Red% "Activation ID not found for this key."
 call :dk_color %Blue% "%_fixmsg%"
@@ -1286,7 +1286,7 @@ set error=1
 set wpaerror=1
 call :dk_color %Red% "Checking WPA Registry Errors            [%wpainfo%]"
 ) || (
-echo Checking WPA Registry Count             [%wpainfo%]
+echo            [%wpainfo%]
 )
 
 
