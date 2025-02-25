@@ -585,7 +585,7 @@ set "_sppcPath=%SystemRoot%\System32\sppc.dll"
 )
 
 echo:
-echo Activating Office...                    [C2R ^| %_version% %_AudienceData%^| %_oArch%]
+echo                [C2R ^| %_version% %_AudienceData%^| %_oArch%]
 
 if not defined _oIds (
 call :dk_color %Red% "Checking Installed Products             [Product IDs not found. Aborting activation...]"
@@ -645,9 +645,9 @@ call :oh_licrefresh
 
 echo:
 if not defined error (
-call :dk_color %Green% "Office is permanently activated."
+call :dk_color %Green% "1"
 if defined ohub call :dk_color %Gray% "Office apps such as Word, Excel are activated, use them directly. Ignore 'Buy' button in Office dashboard app."
-echo Help: %mas%troubleshoot
+echo 0
 ) else (
 call :dk_color %Red% "Some errors were detected."
 if not defined ierror if not defined showfix if not defined serv_cor if not defined serv_cste call :dk_color %Blue% "%_fixmsg%"
@@ -934,7 +934,7 @@ echo         ["%_hookPath%\sppcs.dll"]
 if defined exhook (
 echo Copying Custom %_hook% to            ["%_hookPath%\sppc.dll"] [Successful]
 ) else (
-echo Extracting Custom %_hook% to         ["%_hookPath%\sppc.dll"] [Successful]
+echo  %_hook% to         ["%_hookPath%\sppc.dll"] [Successful]
 )
 ) else (
 set error=1
