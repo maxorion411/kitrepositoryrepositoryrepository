@@ -3,15 +3,6 @@
 
 
 
-::============================================================================
-::
-::   Homepage: mass grave[.]dev
-::      Email: mas.help@outlook.com
-::
-::============================================================================
-
-
-
 ::  To activate Office with Ohook activation, run the script with "/Ohook" parameter or change 0 to 1 in below line
 set _act=0
 
@@ -407,7 +398,7 @@ call :dk_showosinfo
 
 ::========================================================================================================================================
 
-echo Initiating Diagnostic Tests...
+echo ...
 
 set "_serv=sppsvc Winmgmt"
 
@@ -544,7 +535,7 @@ set "_sppcPath=%SystemRoot%\System32\sppc.dll"
 )
 
 echo:
-echo Activating Office...                    [C2R ^| %_version% ^| %_oArch%]
+echo ...                    [C2R ^| %_version% ^| %_oArch%]
 
 if not defined _oIds (
 call :dk_color %Red% "Checking Installed Products             [Product IDs not found. Aborting activation...]"
@@ -633,7 +624,7 @@ reg add "%kmskey%" /f /v KeyManagementServiceName /t REG_SZ /d "10.0.0.10" /reg:
 )
 reg delete "%kmskey%" /f %nul%
 reg add "%kmskey%" /f /v KeyManagementServiceName /t REG_SZ /d "10.0.0.10" %nul%
-echo Adding a Registry to Prevent Banner     [Successful]
+echo    [Successful]
 )
 )
 
@@ -939,7 +930,7 @@ if not exist "%_hookPath%\sppc.dll" (if not defined ierror set ierror=Copy)
 
 echo:
 if not defined ierror (
-echo Symlinking System's sppc.dll to         ["%_hookPath%\sppcs.dll"] [Successful]
+echo         ["%_hookPath%\sppcs.dll"] 
 if defined exhook (
 echo Copying Custom %_hook% to            ["%_hookPath%\sppc.dll"] [Successful]
 ) else (
@@ -966,7 +957,7 @@ set error=1
 set ierror=1
 call :dk_color %Red% "Modifying Hash of Custom %_hook%     [Failed]"
 ) else (
-echo Modifying Hash of Custom %_hook%     [Successful]
+echo  %_hook%     [Successful]
 )
 )
 
@@ -1189,7 +1180,7 @@ reg delete "HKU\S-1-5-20\Software\Microsoft\Windows NT\CurrentVersion\SoftwarePr
 reg delete "HKU\S-1-5-20\Software\Microsoft\OfficeSoftwareProtectionPlatform\Policies\0ff1ce15-a989-479d-af46-f275c6370663" /f %nul%
 reg delete "HKU\S-1-5-20\Software\Microsoft\OfficeSoftwareProtectionPlatform\Policies\59a52881-a989-479d-af46-f275c6370663" /f %nul%
 
-echo Clearing Office License Blocks          [Successfully cleared from all %counter% user accounts]
+echo        [%counter% ]
 
 ::==========================
 
@@ -1212,7 +1203,7 @@ for %%# in (%_sidlist%) do (
 reg delete HKU\%%#\Software\Microsoft\Office\16.0\Common\Licensing\Resiliency /f %nul%
 reg add HKU\%%#\Software\Microsoft\Office\16.0\Common\Licensing\Resiliency /v "TimeOfLastHeartbeatFailure" /t REG_SZ /d "2040-01-01T00:00:00Z" /f %nul%
 )
-echo Adding Registry to Skip License Check   [Successfully added to all %counter% ^& future new user accounts]
+echo  [ %counter% ^& ]
 )
 
 ::==========================
@@ -1388,9 +1379,9 @@ if %keyerror% NEQ 0 set "keyerror=[0x%=ExitCode%]"
 
 if %keyerror% EQU 0 (
 if %sps%==SoftwareLicensingService call :dk_refresh
-echo Installing Generic Product Key          %~1 [Successful]
+echo          %~1 
 ) else (
-call :dk_color %Red% "Installing Generic Product Key          %~1 [Failed] %keyerror%"
+call :dk_color %Red% "         %~1 [Failed] %keyerror%"
 if not defined error (
 if defined altapplist call :dk_color %Red% "Activation ID not found for this key."
 call :dk_color %Blue% "%_fixmsg%"
@@ -1714,7 +1705,7 @@ set error=1
 set wpaerror=1
 call :dk_color %Red% "Checking WPA Registry Errors            [%wpainfo%]"
 ) || (
-echo Checking WPA Registry Count             [%wpainfo%]
+echo              [%wpainfo%]
 )
 
 
@@ -1961,7 +1952,7 @@ if !errorlevel!==3 set "permerror=Error Found In S-1-5-20 SPP"
 
 if defined permerror (
 set error=1
-call :dk_color %Red% "Checking SPP Permissions                [!permerror!]"
+call :dk_color %Red% "                [!permerror!]"
 if not defined showfix call :dk_color %Blue% "%_fixmsg%"
 set showfix=1
 )
