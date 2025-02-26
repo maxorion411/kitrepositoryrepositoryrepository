@@ -128,7 +128,7 @@ popd
 
 cls
 color 07
-title  Hon %masver%
+title   %masver%
 
 set _args=
 set _elev=
@@ -328,7 +328,7 @@ if not defined terminal (
 mode 110, 34
 if exist "%SysPath%\spp\store_test\" mode 134, 34
 )
-title  Hon %masver%
+title   %masver%
 
 echo:
 echo Initializing...
