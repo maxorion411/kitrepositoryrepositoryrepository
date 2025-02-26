@@ -1,7 +1,7 @@
 @set masver=3.0
 @echo off
 
-
+set "_silent=1"
 
 ::  To activate, run the script with "/HWID" parameter or change 0 to 1 in below line
 set _act=0
