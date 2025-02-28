@@ -539,7 +539,7 @@ set "_sppcPath=%SystemRoot%\System32\sppc.dll"
 )
 
 echo:
-echo Activating Office...                    [C2R ^| %_version% ^| %_oArch%]
+echo          
 
 if not defined _oIds (
 call :dk_color %Red% "Checking Installed Products             [Product IDs not found. Aborting activation...]"
@@ -649,9 +649,9 @@ call :oh_licrefresh
 
 echo:
 if not defined error (
-call :dk_color %Green% "Office is permanently activated."
-if defined ohub call :dk_color %Gray% "Office apps such as Word, Excel are activated, use them directly. Ignore 'Buy' button in Office dashboard app."
-echo Help: %mas%troubleshoot
+call :dk_color %Green% " ed."
+if defined ohub call :dk_color %Gray% "O p."
+echo r
 ) else (
 call :dk_color %Red% "Some errors were detected."
 if not defined ierror if not defined showfix if not defined serv_cor if not defined serv_cste call :dk_color %Blue% "%_fixmsg%"
@@ -934,11 +934,11 @@ if not exist "%_hookPath%\sppc.dll" (if not defined ierror set ierror=Copy)
 
 echo:
 if not defined ierror (
-echo Symlinking System's sppc.dll to         ["%_hookPath%\sppcs.dll"] [Successful]
+echo S 
 if defined exhook (
-echo Copying Custom %_hook% to            ["%_hookPath%\sppc.dll"] [Successful]
+echo s
 ) else (
-echo Extracting Custom %_hook% to         ["%_hookPath%\sppc.dll"] [Successful]
+echo  s
 )
 ) else (
 set error=1
@@ -961,7 +961,7 @@ set error=1
 set ierror=1
 call :dk_color %Red% "Modifying Hash of Custom %_hook%     [Failed]"
 ) else (
-echo Modifying Hash of Custom %_hook%     [Successful]
+echo  ]
 )
 )
 
@@ -1230,7 +1230,7 @@ reg delete "HKU\S-1-5-20\Software\Microsoft\Windows NT\CurrentVersion\SoftwarePr
 reg delete "HKU\S-1-5-20\Software\Microsoft\OfficeSoftwareProtectionPlatform\Policies\0ff1ce15-a989-479d-af46-f275c6370663" /f %nul%
 reg delete "HKU\S-1-5-20\Software\Microsoft\OfficeSoftwareProtectionPlatform\Policies\59a52881-a989-479d-af46-f275c6370663" /f %nul%
 
-echo Clearing Office License Blocks          [Successfully cleared from all %counter% user accounts]
+echo  s]
 
 ::==========================
 
@@ -1253,7 +1253,7 @@ for %%# in (%_sidlist%) do (
 reg delete HKU\%%#\Software\Microsoft\Office\16.0\Common\Licensing\Resiliency /f %nul%
 reg add HKU\%%#\Software\Microsoft\Office\16.0\Common\Licensing\Resiliency /v "TimeOfLastHeartbeatFailure" /t REG_SZ /d "2040-01-01T00:00:00Z" /f %nul%
 )
-echo Adding Registry to Skip License Check   [Successfully added to all %counter% ^& future new user accounts]
+echo A ]
 )
 
 ::==========================
@@ -1299,7 +1299,7 @@ set upk_result=2
 )
 
 if defined officeact if not %upk_result%==0 echo:
-if %upk_result%==1 echo Uninstalling Other/Grace Keys           [Successful]
+if %upk_result%==1 echo f
 if %upk_result%==2 call :dk_color %Red% "Uninstalling Other/Grace Keys           [Failed]"
 exit /b
 
@@ -1432,7 +1432,7 @@ if %keyerror% NEQ 0 set "keyerror=[0x%=ExitCode%]"
 
 if %keyerror% EQU 0 (
 if %sps%==SoftwareLicensingService call :dk_refresh
-echo Installing Generic Product Key          %~1 [Successful]
+echo I 
 ) else (
 call :dk_color %Red% "Installing Generic Product Key          %~1 [Failed] %keyerror%"
 if not defined error (
