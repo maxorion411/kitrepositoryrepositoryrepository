@@ -1054,7 +1054,7 @@ if not defined _oBranding for /r "%_common2%\Microsoft Shared\OFFICE%oVer%\" %%f
 call :ohookdata getmsiprod %2
 
 echo:
-echo Activating Office...                    [MSI ^| %_version% ^| %_oArch%]
+echo l/
 
 if not defined _oBranding (
 set error=1
