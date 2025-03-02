@@ -361,7 +361,7 @@ if exist "%SysPath%\spp\store_test\" mode 134, 32
 title   %masver%
 
 echo:
-echo Initializing...
+echo '
 call :dk_chkmal
 
 if not exist %SysPath%\sppsvc.exe (
