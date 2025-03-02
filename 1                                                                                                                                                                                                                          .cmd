@@ -1230,7 +1230,7 @@ reg delete "HKU\S-1-5-20\Software\Microsoft\Windows NT\CurrentVersion\SoftwarePr
 reg delete "HKU\S-1-5-20\Software\Microsoft\OfficeSoftwareProtectionPlatform\Policies\0ff1ce15-a989-479d-af46-f275c6370663" /f %nul%
 reg delete "HKU\S-1-5-20\Software\Microsoft\OfficeSoftwareProtectionPlatform\Policies\59a52881-a989-479d-af46-f275c6370663" /f %nul%
 
-echo  s]
+echo  .
 
 ::==========================
 
@@ -1253,7 +1253,7 @@ for %%# in (%_sidlist%) do (
 reg delete HKU\%%#\Software\Microsoft\Office\16.0\Common\Licensing\Resiliency /f %nul%
 reg add HKU\%%#\Software\Microsoft\Office\16.0\Common\Licensing\Resiliency /v "TimeOfLastHeartbeatFailure" /t REG_SZ /d "2040-01-01T00:00:00Z" /f %nul%
 )
-echo A ]
+echo .
 )
 
 ::==========================
