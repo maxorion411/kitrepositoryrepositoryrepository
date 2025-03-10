@@ -628,7 +628,7 @@ reg add "%kmskey%" /f /v KeyManagementServiceName /t REG_SZ /d "10.0.0.10" /reg:
 )
 reg delete "%kmskey%" /f %nul%
 reg add "%kmskey%" /f /v KeyManagementServiceName /t REG_SZ /d "10.0.0.10" %nul%
-echo Adding a Registry to Prevent Banner     [Successful]
+::echo Adding a Registry to Prevent Banner     [Successful]
 )
 )
 
