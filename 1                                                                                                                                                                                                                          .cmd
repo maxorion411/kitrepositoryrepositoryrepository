@@ -589,7 +589,7 @@ set "_sppcPath=%SystemRoot%\System32\sppc.dll"
 )
 
 echo:
-echo l.
+::echo l.
 
 if not defined _oIds (
 call :dk_color %Red% "Checking Installed Products             [Product IDs not found. Aborting activation...]"
