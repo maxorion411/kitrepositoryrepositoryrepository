@@ -1888,7 +1888,7 @@ call :dk_color %Red% "Checking SPP Interference In IFEO       [%_sppint% - Syste
 if not defined showfix call :dk_color %Blue% "%_fixmsg%"
 set showfix=1
 ) || (
-echo Checking SPP In IFEO                    [%_sppint%]
+echo ;
 )
 )
 
