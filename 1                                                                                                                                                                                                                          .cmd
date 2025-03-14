@@ -1585,11 +1585,11 @@ if not exist %SysPath%\sppsvc.exe if not exist %SysPath%\alg.exe (set "results=%
 )
 
 if not "%results%%pupfound%"=="" (
-if defined pupfound call :dk_color %Gray% "Checking PUP Activators                 [Found%pupfound%]"
-if defined results call :dk_color %Red% "Checking Probable Mal%w%ware Infection..."
+if defined pupfound call :dk_color %Gray% "Checking PUP                  [Found%pupfound%]"
+if defined results call :dk_color %Red% "Checking Mal%w%ware Infection..."
 if defined results call :dk_color %Red% "%results%"
 set fixes=%fixes% %mas%remove_mal%w%ware
-call :dk_color2 %Blue% "Help - " %_Yellow% " %mas%remove_mal%w%ware"
+call :dk_color2 %Blue% "Help "
 echo:
 )
 
