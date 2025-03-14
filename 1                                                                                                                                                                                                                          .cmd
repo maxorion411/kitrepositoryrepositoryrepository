@@ -99,7 +99,7 @@ set "nul="
 ::========================================================================================================================================
 
 set "blank="
-set "mas=ht%blank%tps%blank%://mass%blank%grave.dev/"
+set "mas=ERROR"
 
 ::  Check if Null service is working, it's important for the batch script
 
