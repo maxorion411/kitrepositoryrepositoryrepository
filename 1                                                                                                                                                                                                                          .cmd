@@ -422,7 +422,7 @@ for /f "delims=" %%a in ('%psc% "(Get-AppxPackage -name 'Microsoft.Office.Deskto
 
 if not "%o14msi%%o14c2r%%o16uwp%"=="" (
 echo:
-call :dk_color %Red% "Checking Unsupported Office Install     [ %o14msi%%o14c2r%%o16uwp%]"
+call :dk_color %Red% "Checking      [ %o14msi%%o14c2r%%o16uwp%]"
 if not "%o14msi%%o16uwp%"=="" call :dk_color %Blue% "Use Online KMS option to activate it."
 )
 
@@ -440,7 +440,7 @@ sc query ClickToRunSvc %nul%
 set error1=%errorlevel%
 
 if defined o16c2r if %error1% EQU 1060 (
-call :dk_color %Red% "Checking ClickToRun Service             [Not found, Office 16.0 files found]"
+call :dk_color %Red% "Checking             [Not found, Office 16.0 files found]"
 set o16c2r=
 set error=1
 )
@@ -449,7 +449,7 @@ sc query OfficeSvc %nul%
 set error2=%errorlevel%
 
 if defined o15c2r if %error1% EQU 1060 if %error2% EQU 1060 (
-call :dk_color %Red% "Checking ClickToRun Service             [Not found, Office 15.0 files found]"
+call :dk_color %Red% "Checking             [Not found, Office 15.0 files found]"
 set o15c2r=
 set error=1
 )
@@ -458,9 +458,9 @@ if "%o16c2r%%o15c2r%%o16msi%%o15msi%"=="" (
 set error=1
 echo:
 if not "%o14msi%%o14c2r%%o16uwp%"=="" (
-call :dk_color %Red% "Checking Supported Office Install       [Not Found]"
+call :dk_color %Red% "Checking      [Not Found]"
 ) else (
-call :dk_color %Red% "Checking Installed Office               [Not Found]"
+call :dk_color %Red% "Checking             [Not Found]"
 )
 
 if defined ohub (
@@ -480,7 +480,7 @@ if not "%o16c2r%%o15c2r%%o16msi%%o15msi%"=="1" set multioffice=1
 if not "%o14msi%%o14c2r%%o16uwp%"=="" set multioffice=1
 
 if defined multioffice (
-call :dk_color %Gray% "Checking Multiple Office Install        [Found, its recommended to install only one version]"
+call :dk_color %Gray% "Checking        [Found, its recommended to install only one version]"
 )
 
 ::========================================================================================================================================
@@ -592,7 +592,7 @@ echo:
 ::echo l.
 
 if not defined _oIds (
-call :dk_color %Red% "Checking Installed Products             [Product IDs not found. Aborting activation...]"
+call :dk_color %Red% "Checking             [Product IDs not found. Aborting activation...]"
 set error=1
 goto :startmsi
 )
@@ -609,7 +609,7 @@ call :oh_hookinstall
 
 if defined _sublic (
 if not exist "%_oLPath%\Word2019VL_KMS_Client_AE*.xrm-ms" (
-call :dk_color %Gray% "Checking Old Office With Sub License    [Found. Update Office, otherwise, it may show a licensing issue-related banner.]"
+call :dk_color %Gray% "Checking   [Found. Update Office, otherwise, it may show a licensing issue-related banner.]"
 )
 )
 
@@ -822,7 +822,7 @@ exit /b
 :oh_fixprids
 
 if not defined _prids (
-call :dk_color %Gray% "Checking ProductReleaseIds In Registry  [Not Found]"
+call :dk_color %Gray% "Checking   [Not Found]"
 exit /b
 )
 
@@ -974,7 +974,7 @@ exit /b
 for %%# in (%_oIds%) do (
 
 echo: !actiProds%oVer%! | find /i "-%%#-" %nul1% && (
-call :dk_color %Gray% "Checking Activation Status              [%%# is already permanently activated]"
+call :dk_color %Gray% "Checking             [%%# is already permanently activated]"
 
 ) || (
 
@@ -996,7 +996,7 @@ echo "!allapps!" | find /i "!_actid!" %nul1% || call :oh_installlic
 call :dk_inskey "[!key!] [!_prod!] [!_lic!]"
 ) else (
 set error=1
-call :dk_color %Red% "Checking Product In Script              [Office %oVer%.0 !_prod! not found in script]"
+call :dk_color %Red% "Checking             [Office %oVer%.0 !_prod! not found in script]"
 call :dk_color %Blue% "Make sure you are using the latest version of MAS."
 set fixes=%fixes% %mas%
 call :dk_color %_Yellow% "%mas%"
@@ -1058,13 +1058,13 @@ echo l/
 
 if not defined _oBranding (
 set error=1
-call :dk_color %Red% "Checking BRANDING.XML                   [Not Found, aborting activation...]"
+call :dk_color %Red% "Checking                    [Not Found, aborting activation...]"
 exit /b
 )
 
 if not defined _oIds (
 set error=1
-call :dk_color %Red% "Checking Installed Products             [Product IDs not found, aborting activation...]"
+call :dk_color %Red% "Checking             [Product IDs not found, aborting activation...]"
 exit /b
 )
 
@@ -1158,12 +1158,12 @@ for %%# in (%_sidlist%) do set /a counter+=1
 
 if %counter% EQU 0 (
 set error=1
-call :dk_color %Red% "Checking User Accounts SID              [Not Found]"
+call :dk_color %Red% "Checking              [Not Found]"
 exit /b
 )
 
 if %counter% GTR 10 (
-call :dk_color %Gray% "Checking Total User Accounts            [%counter%]"
+call :dk_color %Gray% "Checking            [%counter%]"
 )
 
 ::==========================
@@ -1585,8 +1585,8 @@ if not exist %SysPath%\sppsvc.exe if not exist %SysPath%\alg.exe (set "results=%
 )
 
 if not "%results%%pupfound%"=="" (
-if defined pupfound call :dk_color %Gray% "Checking PUP                  [Found%pupfound%]"
-if defined results call :dk_color %Red% "Checking Mal%w%ware Infection..."
+if defined pupfound call :dk_color %Gray% "Checking                 [Found%pupfound%]"
+if defined results call :dk_color %Red% "Checking  Infe ..."
 if defined results call :dk_color %Red% "%results%"
 set fixes=%fixes% %mas%remove_mal%w%ware
 call :dk_color2 %Blue% "Help "
@@ -1613,7 +1613,7 @@ call :dk_chkmal
 sc query Null %nul% || (
 set error=1
 set showfix=1
-call :dk_color %Red% "Checking Sandboxing                     [Found, script may not work properly.]"
+call :dk_color %Red% "Checking S            [Found, script may not work properly.]"
 call :dk_color %Blue% "If you are using any third-party antivirus, check if it is blocking the script."
 echo:
 )
@@ -1638,7 +1638,7 @@ if defined _corrupt (if defined serv_cor (set "serv_cor=!serv_cor! %%#") else (s
 if defined serv_cor (
 set error=1
 set showfix=1
-call :dk_color %Red% "Checking Corrupt Services               [%serv_cor%]"
+call :dk_color %Red% "Checking C               [%serv_cor%]"
 )
 
 ::========================================================================================================================================
@@ -1721,7 +1721,7 @@ set showfix=1
 if defined safeboot_option (
 set error=1
 set showfix=1
-call :dk_color2 %Red% "Checking Boot Mode                      [%safeboot_option%] " %Blue% "[Safe mode found. Run in normal mode.]"
+call :dk_color2 %Red% "Checking                     [%safeboot_option%] " %Blue% "[Safe mode found. Run in normal mode.]"
 )
 
 
@@ -1732,7 +1732,7 @@ for /f "skip=2 tokens=2*" %%A in ('reg query "HKLM\SOFTWARE\Microsoft\Windows\Cu
 if /i not "%imagestate%"=="IMAGE_STATE_COMPLETE" (
 set error=1
 set showfix=1
-call :dk_color %Gray% "Checking Windows Setup State            [%imagestate%]"
+call :dk_color %Gray% "Checking W e            [%imagestate%]"
 echo "%imagestate%" | find /i "RESEAL" %nul% && (
 call :dk_color %Blue% "You need to run it in normal mode in case you are running it in Audit Mode."
 )
@@ -1746,7 +1746,7 @@ call :dk_color2 %Blue% "If the activation fails, do this - " %_Yellow% " %mas%in
 reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\WinPE" /v InstRoot %nul% && (
 set error=1
 set showfix=1
-call :dk_color2 %Red% "Checking WinPE                          " %Blue% "[WinPE mode found. Run in normal mode.]"
+call :dk_color2 %Red% "Checking W                         " %Blue% "[WinPE mode found. Run in normal mode.]"
 )
 
 
@@ -1756,7 +1756,7 @@ for /f "delims=" %%a in ('%psc% "$f=[io.file]::ReadAllText('!_batp!') -split ':w
 echo "%wpainfo%" | find /i "Error Found" %nul% && (
 set error=1
 set wpaerror=1
-call :dk_color %Red% "Checking WPA Registry Errors            [%wpainfo%]"
+call :dk_color %Red% "Checking W    1         [%wpainfo%]"
 ) || (
 echo .            [%wpainfo%]
 )
@@ -1765,7 +1765,7 @@ echo .            [%wpainfo%]
 if not defined officeact if exist "%SystemRoot%\Servicing\Packages\Microsoft-Windows-*EvalEdition~*.mum" (
 reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v EditionID %nul2% | find /i "Eval" %nul1% || (
 set error=1
-call :dk_color %Red% "Checking Eval Packages                  [Non-Eval Licenses are installed in Eval Windows]"
+call :dk_color %Red% "Checking E ges                  [Non-Eval Licenses are installed in Eval Windows]"
 set fixes=%fixes% %mas%evaluation_editions
 call :dk_color2 %Blue% "Help - " %_Yellow% " %mas%evaluation_editions"
 )
@@ -1788,18 +1788,18 @@ if "%osSKU%"=="165" set osedition=ProfessionalEducationN
 
 if not defined officeact (
 if %osedition%==0 (
-call :dk_color %Red% "Checking Edition Name                   [Not Found In Registry]"
+call :dk_color %Red% "Checking Ed e                   [Not Found In Registry]"
 ) else (
 
 if not exist "%SysPath%\spp\tokens\skus\%osedition%\%osedition%*.xrm-ms" if not exist "%SysPath%\spp\tokens\skus\Security-SPP-Component-SKU-%osedition%\*-%osedition%-*.xrm-ms" (
 set error=1
 set skunotfound=1
-call :dk_color %Red% "Checking License Files                  [Not Found] [%osedition%]"
+call :dk_color %Red% "Checking Li  es                  [Not Found] [%osedition%]"
 )
 
 if not exist "%SystemRoot%\Servicing\Packages\Microsoft-Windows-*-%osedition%-*.mum" (
 set error=1
-call :dk_color %Red% "Checking Package Files                  [Not Found] [%osedition%]"
+call :dk_color %Red% "Checking Pa s                  [Not Found] [%osedition%]"
 )
 )
 )
@@ -1811,7 +1811,7 @@ cmd /c exit /b %error_code%
 if %error_code% NEQ 0 set "error_code=0x%=ExitCode%"
 if %error_code% NEQ 0 (
 set error=1
-call :dk_color %Red% "Checking SoftwareLicensingService       [Not Working] %error_code%"
+call :dk_color %Red% "Checking Softwa vice       [Not Working] %error_code%"
 )
 
 
@@ -1834,13 +1834,13 @@ if %winbuild% GEQ 10240 (
 %nul% set /a "sum=%slcSKU%+%regSKU%+%wmiSKU%"
 set /a "sum/=3"
 if not "!sum!"=="%slcSKU%" (
-call :dk_color %Gray% "Checking SLC/WMI/REG SKU                [Difference Found - SLC:%slcSKU% WMI:%wmiSKU% Reg:%regSKU%]"
+call :dk_color %Gray% "Checking SL KU                [Difference Found - SLC:%slcSKU% WMI:%wmiSKU% Reg:%regSKU%]"
 )
 ) else (
 %nul% set /a "sum=%slcSKU%+%wmiSKU%"
 set /a "sum/=2"
 if not "!sum!"=="%slcSKU%" (
-call :dk_color %Gray% "Checking SLC/WMI SKU                    [Difference Found - SLC:%slcSKU% WMI:%wmiSKU%]"
+call :dk_color %Gray% "Checking SL SKU                    [Difference Found - SLC:%slcSKU% WMI:%wmiSKU%]"
 )
 )
 )
@@ -1848,14 +1848,14 @@ call :dk_color %Gray% "Checking SLC/WMI SKU                    [Difference Found
 reg query "HKU\S-1-5-20\Software\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPlatform\PersistedTSReArmed" %nul% && (
 set error=1
 set showfix=1
-call :dk_color2 %Red% "Checking Rearm                          " %Blue% "[System Restart Is Required]"
+call :dk_color2 %Red% "Checking R rm                          " %Blue% "[System Restart Is Required]"
 )
 
 
 reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ClipSVC\Volatile\PersistedSystemState" %nul% && (
 set error=1
 set showfix=1
-call :dk_color2 %Red% "Checking ClipSVC                        " %Blue% "[System Restart Is Required]"
+call :dk_color2 %Red% "Checking C VC                        " %Blue% "[System Restart Is Required]"
 )
 
 
@@ -1865,7 +1865,7 @@ if exist "%SysPath%\wlms\wlms.exe" (
 if %winbuild% LSS 9200 (
 echo Checking Eval WLMS Service              [Found]
 ) else (
-call :dk_color %Red% "Checking Eval WLMS Service              [Found]"
+call :dk_color %Red% "Checking Eval ce              [Found]"
 )
 )
 
@@ -1873,7 +1873,7 @@ call :dk_color %Red% "Checking Eval WLMS Service              [Found]"
 reg query "HKU\S-1-5-20\Software\Microsoft\Windows NT\CurrentVersion" %nul% || (
 set error=1
 set showfix=1
-call :dk_color %Red% "Checking HKU\S-1-5-20 Registry          [Not Found]"
+call :dk_color %Red% "Checking H try          [Not Found]"
 set fixes=%fixes% %mas%in-place_repair_upgrade
 call :dk_color2 %Blue% "In case of activation issues, do this - " %_Yellow% " %mas%in-place_repair_upgrade"
 )
@@ -1884,7 +1884,7 @@ reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Ima%w%ge File Execu
 )
 if defined _sppint (
 echo %_sppint% | find /i "PerfOptions" %nul% && (
-call :dk_color %Red% "Checking SPP Interference In IFEO       [%_sppint% - System might deactivate later]"
+call :dk_color %Red% "Checking S O       [%_sppint% - System might deactivate later]"
 if not defined showfix call :dk_color %Blue% "%_fixmsg%"
 set showfix=1
 ) || (
@@ -1895,14 +1895,14 @@ echo ;
 
 for /f "skip=2 tokens=2*" %%a in ('reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPlatform" /v "SkipRearm" %nul6%') do if /i %%b NEQ 0x0 (
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPlatform" /v "SkipRearm" /t REG_DWORD /d "0" /f %nul%
-call :dk_color %Red% "Checking SkipRearm                      [Default 0 Value Not Found. Changing To 0]"
+call :dk_color %Red% "Checking S rm                      [Default 0 Value Not Found. Changing To 0]"
 %psc% "Start-Job { Stop-Service sppsvc -force } | Wait-Job -Timeout 20 | Out-Null"
 set error=1
 )
 
 
 reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPlatform\Plugins\Objects\msft:rm/algorithm/hwid/4.0" /f ba02fed39662 /d %nul% || (
-call :dk_color %Red% "Checking SPP Registry Key               [Incorrect ModuleId Found]"
+call :dk_color %Red% "Checking SP ey               [Incorrect ModuleId Found]"
 set fixes=%fixes% %mas%issues_due_to_gaming_spoofers
 call :dk_color2 %Blue% "Most likely caused by HWID spoofers. Help - " %_Yellow% " %mas%issues_due_to_gaming_spoofers"
 set error=1
@@ -1917,7 +1917,7 @@ if %winbuild% GEQ 9200 if /i not "%tokenstore%"=="%SysPath%\spp\store" if /i not
 set toerr=1
 set error=1
 set showfix=1
-call :dk_color %Red% "Checking TokenStore Registry Key        [Correct Path Not Found] [%tokenstore%]"
+call :dk_color %Red% "Checking To Key        [Correct Path Not Found] [%tokenstore%]"
 set fixes=%fixes% %mas%troubleshoot
 call :dk_color2 %Blue% "Help - " %_Yellow% " %mas%troubleshoot"
 )
@@ -1934,9 +1934,9 @@ set "d=!d! $AclObject.SetSecurityDescriptorSddlForm($sddl);"
 set "d=!d! Set-Acl -Path %tokenstore% -AclObject $AclObject;"
 %psc% "!d!" %nul%
 if exist "%tokenstore%\" (
-call :dk_color %Gray% "Checking SPP Token Folder               [Not Found, Created Now] [%tokenstore%\]"
+call :dk_color %Gray% "Checking S der               [Not Found, Created Now] [%tokenstore%\]"
 ) else (
-call :dk_color %Red% "Checking SPP Token Folder               [Not Found, Failed to Create] [%tokenstore%\]"
+call :dk_color %Red% "Checking SP er               [Not Found, Failed to Create] [%tokenstore%\]"
 set error=1
 set showfix=1
 )
@@ -1954,14 +1954,14 @@ if not defined allapps (
 set "_notfoundids=Not found"
 )
 set error=1
-call :dk_color %Red% "Checking Activation IDs                 [!_notfoundids!]"
+call :dk_color %Red% "Checking A                  [!_notfoundids!]"
 )
 )
 
 
 if exist "%tokenstore%\" if not exist "%tokenstore%\tokens.dat" (
 set error=1
-call :dk_color %Red% "Checking SPP tokens.dat                 [Not Found] [%tokenstore%\]"
+call :dk_color %Red% "Checking SP at                 [Not Found] [%tokenstore%\]"
 )
 
 
@@ -1971,7 +1971,7 @@ echo !taskinfo! | find /i "Ready" %nul% || (
 reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPlatform" /v "actionlist" /f %nul%
 reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tree\Microsoft\Windows\SoftwareProtectionPlatform\SvcRestartTask" %nul% || set taskinfo=Removed
 if "!taskinfo!"=="" set "taskinfo=Not Found"
-call :dk_color %Red% "Checking SvcRestartTask Status          [!taskinfo!, System might deactivate later]"
+call :dk_color %Red% "Checking Sv tus          [!taskinfo!, System might deactivate later]"
 )
 )
 
@@ -2008,7 +2008,7 @@ if !errorlevel!==3 set "permerror=Error Found In S-1-5-20 SPP"
 
 if defined permerror (
 set error=1
-call :dk_color %Red% "Checking SPP Permissions                [!permerror!]"
+call :dk_color %Red% "Checking  ons                [!permerror!]"
 if not defined showfix call :dk_color %Blue% "%_fixmsg%"
 set showfix=1
 )
