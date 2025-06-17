@@ -459,7 +459,7 @@ call :dk_showosinfo
 
 ::========================================================================================================================================
 
-echo Initiating Diagnostic Tests...
+echo  
 
 set "_serv=%_slser% Winmgmt"
 
@@ -591,7 +591,7 @@ if /i "%_oArch%"=="x86" (set "_hookPath=%_oRoot%\vfs\SystemX86" & set "_hook=spp
 call :oh_ppcpath
 
 echo:
-echo Activating Office...                    [C2R ^| %_version% ^| %_oArch%]
+echo                    [C2%]
 
 if not defined _oIds (
 call :dk_color %Red% "Checking Installed Products             [Product IDs not found. Aborting activation...]"
@@ -649,7 +649,7 @@ if /i "%_oArch%"=="x86" (set "_hookPath=%_oRoot%\vfs\SystemX86" & set "_hook=spp
 call :oh_ppcpath
 
 echo:
-echo Activating Office...                    [C2R ^| %_version% %_AudienceData%^| %_oArch%]
+echo                    [C2R ^| %_version% %_AudienceData%^| %_oArch%]
 
 if not defined _oIds (
 call :dk_color %Red% "Checking Installed Products             [Product IDs not found. Aborting activation...]"
@@ -700,7 +700,7 @@ reg add "%kmskey%" /f /v KeyManagementServiceName /t REG_SZ /d "10.0.0.10" /reg:
 )
 reg delete "%kmskey%" /f %nul%
 reg add "%kmskey%" /f /v KeyManagementServiceName /t REG_SZ /d "10.0.0.10" %nul%
-echo Adding a Registry to Prevent Banner     [Successful]
+echo      [Successful]
 )
 )
 
@@ -724,7 +724,7 @@ call :oh_licrefresh
 
 echo:
 if not defined error (
-call :dk_color %Green% "Office is permanently activated."
+call :dk_color %Green% 
 if defined ohub call :dk_color %Gray% "Office apps such as Word, Excel are activated, use them directly. Ignore 'Buy' button in Office dashboard app."
 echo Help: %mas%troubleshoot
 ) else (
@@ -1111,7 +1111,7 @@ goto :oh_hookinstall_error
 )
 
 echo:
-echo Symlinking System's sppc.dll            ["%_hookPath%\sppcs.dll"] [Successful]
+echo              [Successful]
 if defined exhook (
 echo Copying Custom %_hook% to            ["%_hookPath%\sppc.dll"] [Successful]
 ) else (
@@ -1210,8 +1210,8 @@ if defined exhook (
 if defined _osppPath68 (echo Copying Custom %_hook68% to            ["%_osppPath68%\OSPPC.DLL"])
 if defined _osppPath86 (echo Copying Custom %_hook86% to            ["%_osppPath86%\OSPPC.DLL"])
 ) else (
-if defined _osppPath68 (echo Extracting Custom %_hook68% to         ["%_osppPath68%\OSPPC.DLL"])
-if defined _osppPath86 (echo Extracting Custom %_hook86% to         ["%_osppPath86%\OSPPC.DLL"])
+if defined _osppPath68 
+if defined _osppPath86 
 )
 
 echo Symlinking Renamed sppcs.dll            ["%_hookPath%\sppcs.dll"]
@@ -1239,9 +1239,9 @@ if not defined exhook if not defined ierror (
 if defined hasherror (
 set error=1
 set ierror=1
-call :dk_color %Red% "Modifying Hash of Custom sppcs.dll      [Failed]"
+call :dk_color %Red% "      [Failed]"
 ) else (
-echo Modifying Hash of Custom sppcs.dll      [Successful]
+echo       [Successful]
 )
 )
 
@@ -1300,7 +1300,7 @@ call :dk_color %_Yellow% "%mas%"
 )
 
 ::  Add SharedComputerLicensing registry key if Retail Office C2R is installed on Windows Server
-::  https://learn.microsoft.com/en-us/office/troubleshoot/office-suite-issues/click-to-run-office-on-terminal-server
+
 
 if defined winserver if defined _config if exist "%_oLPath%\Word2019VL_KMS_Client_AE*.xrm-ms" (
 echo %_oIds% | find /i "Retail" %nul1% && (
@@ -1342,7 +1342,7 @@ call :oh_ppcpath
 call :msiofficedata %2
 
 echo:
-echo Activating Office...                    [MSI ^| %_version% ^| %_oArch%]
+echo                    [MSI ^| %_version% ^| %_oArch%]
 
 if not defined _oIds (
 set error=1
@@ -1375,7 +1375,7 @@ exit /b
 :oh_clearblock
 
 ::  Find remnants of Office vNext/shared/device license block and remove it because it stops other licenses from appearing
-::  https://learn.microsoft.com/en-us/office/troubleshoot/activation/reset-office-365-proplus-activation-state
+::  https://learn.microsoft.com/en-us/office  /activation/reset-office-365-proplus-activation-state
 
 set _sidlist=
 for /f "tokens=* delims=" %%a in ('%psc% "$p = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList'; Get-ChildItem $p | ForEach-Object { $pi = (Get-ItemProperty """"$p\$($_.PSChildName)"""").ProfileImagePath; if ($pi -like '*\Users\*' -and (Test-Path """"$pi\NTUSER.DAT"""") -and -not ($_.PSChildName -match '\.bak$')) { Split-Path $_.PSPath -Leaf } }" %nul6%') do (if defined _sidlist (set _sidlist=!_sidlist! %%a) else (set _sidlist=%%a))
@@ -1487,7 +1487,7 @@ reg delete "HKU\S-1-5-20\Software\Microsoft\Windows NT\CurrentVersion\SoftwarePr
 reg delete "HKU\S-1-5-20\Software\Microsoft\OfficeSoftwareProtectionPlatform\Policies\0ff1ce15-a989-479d-af46-f275c6370663" /f %nul%
 reg delete "HKU\S-1-5-20\Software\Microsoft\OfficeSoftwareProtectionPlatform\Policies\59a52881-a989-479d-af46-f275c6370663" /f %nul%
 
-echo Clearing Office License Blocks          [Successfully cleared from all %counter% user accounts]
+echo 
 
 ::==========================
 
@@ -1510,7 +1510,7 @@ for %%# in (%_sidlist%) do (
 reg delete HKU\%%#\Software\Microsoft\Office\16.0\Common\Licensing\Resiliency /f %nul%
 reg add HKU\%%#\Software\Microsoft\Office\16.0\Common\Licensing\Resiliency /v "TimeOfLastHeartbeatFailure" /t REG_SZ /d "2040-01-01T00:00:00Z" /f %nul%
 )
-echo Adding Registry to Skip License Check   [Successfully added to all %counter% ^& future new user accounts]
+echo 
 )
 
 ::==========================
@@ -1669,7 +1669,7 @@ if defined UBR (set "fullbuild=%%G.!UBR!") else (set "fullbuild=%%G.%%H")
 )
 )
 
-echo Checking OS Info                        [%winos% ^| %fullbuild% ^| %osarch%]
+echo                          [%winos% ^| %fullbuild% ^| %osarch%]
 exit /b
 
 ::  Refresh license status
@@ -1690,7 +1690,7 @@ set keyerror=%errorlevel%
 cmd /c exit /b %keyerror%
 if %keyerror% NEQ 0 set "keyerror=[0x%=ExitCode%]"
 
-if defined generickey (set "keyecho=Installing Generic Product Key         ") else (set "keyecho=Installing Product Key                 ")
+if defined generickey (set "keyecho=") else (set "keyecho=Installing Product Key                 ")
 if %keyerror% EQU 0 (
 if %sps%==SoftwareLicensingService call :dk_refresh
 echo %keyecho% %~1 [Successful]
@@ -2023,7 +2023,7 @@ set error=1
 set wpaerror=1
 call :dk_color %Red% "Checking WPA Registry Errors            [%wpainfo%]"
 ) || (
-echo Checking WPA Registry Count             [%wpainfo%]
+echo            [%wpainfo%]
 )
 
 
@@ -2261,7 +2261,7 @@ set "permerror=Error Found In SPP Registries"
 )
 )
 
-REM  https://learn.microsoft.com/en-us/office/troubleshoot/activation/license-issue-when-start-office-application
+REM  https://learn.microsoft.com/en-us/office  /activation/license-issue-when-start-office-application
 
 if not defined permerror (
 reg query "HKU\S-1-5-20\Software\Microsoft\Windows NT\CurrentVersion" %nul% && (
