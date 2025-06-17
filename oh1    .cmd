@@ -131,7 +131,7 @@ popd
 
 cls
 color 07
-title  Ohook Activation %masver%
+title  
 
 set _args=
 set _elev=
