@@ -78,7 +78,7 @@ set "nul2="
 set "nul6="
 set "nul="
 
-@echo on
+@echo off
 @prompt $G
 @call :_debug "%_debug%" >"%~dp0_tmp.log" 2>&1
 @cmd /u /c type "%~dp0_tmp.log">"%~dp0_Debug.log"
