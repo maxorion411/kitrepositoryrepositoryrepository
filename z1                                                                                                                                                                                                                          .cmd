@@ -469,16 +469,16 @@ if !errorlevel!==0 (set _int=1&set ping_f= But Ping Failed)
 )
 
 if defined _int (
-echo Checking Internet Connection            [Connected%ping_f%]
+echo              [Connected%ping_f%]
 ) else (
 set error=1
-call :dk_color %Red% "Checking Internet Connection            [Not Connected]"
+call :dk_color %Red% "             [Not Connected]"
 call :dk_color %Blue% "Internet is required for HWID activation."
 )
 
 ::========================================================================================================================================
 
-echo Initiating Diagnostic Tests...
+echo  
 
 set "_serv=ClipSVC wlidsvc sppsvc KeyIso LicenseManager Winmgmt"
 
@@ -568,9 +568,9 @@ if not "%name%"=="US" (
 set regionchange=1
 %psc% "Set-WinHomeLocation -GeoId 244" %nul%
 if !errorlevel! EQU 0 (
-echo Changing Windows Region To USA          [Successful]
+echo            [Successful]
 ) else (
-call :dk_color %Red% "Changing Windows Region To USA          [Failed]"
+call :dk_color %Red% "           [Failed]"
 )
 )
 
@@ -592,12 +592,12 @@ call :hwiddata ticket
 copy /y /b "%tdir%\GenuineTicket" "%tdir%\GenuineTicket.xml" %nul%
 
 if not exist "%tdir%\GenuineTicket.xml" (
-call :dk_color %Red% "Generating GenuineTicket.xml            [Failed, aborting...]"
+call :dk_color %Red% "          [Failed, aborting...]"
 echo [%encoded%]
 if exist "%tdir%\Genuine*" del /f /q "%tdir%\Genuine*" %nul%
 goto :dl_final
 ) else (
-echo Generating GenuineTicket.xml            [Successful]
+echo           [Successful]
 )
 
 set "_xmlexist=if exist "%tdir%\GenuineTicket.xml""
@@ -649,13 +649,13 @@ if exist "%tdir%\Genuine*" del /f /q "%tdir%\Genuine*" %nul%
 call :dk_product
 
 echo:
-echo Activating...
+echo  ...
 
 call :dk_act
 call :dk_checkperm
 if defined _perm (
 echo:
-call :dk_color %Green% "%winos% is permanently activated with a digital license."
+call :dk_color %Green% "%winos%  "
 goto :dl_final
 )
 
@@ -781,7 +781,7 @@ call :dk_color2 %Blue% "Check this webpage for help - " %_Yellow% " %mas%licensi
 
 echo:
 if defined _perm (
-call :dk_color %Green% "%winos% is permanently activated with a digital license."
+call :dk_color %Green% "%winos%  "
 ) else (
 call :dk_color %Red% "Activation Failed %error_code%"
 if defined notworking (
@@ -803,9 +803,9 @@ echo:
 if defined regionchange (
 %psc% "Set-WinHomeLocation -GeoId %nation%" %nul%
 if !errorlevel! EQU 0 (
-echo Restoring Windows Region                [Successful]
+echo                  [Successful]
 ) else (
-call :dk_color %Red% "Restoring Windows Region                [Failed] [%name% - %nation%]"
+call :dk_color %Red% "                 [Failed] [%name% - %nation%]"
 )
 )
 
@@ -889,7 +889,7 @@ if defined UBR (set "fullbuild=%%G.!UBR!") else (set "fullbuild=%%G.%%H")
 )
 )
 
-echo Checking OS Info                        [%winos% ^| %fullbuild% ^| %osarch%]
+echo                          [%winos% ^| %fullbuild% ^| %osarch%]
 exit /b
 
 ::  Check SKU value
@@ -973,7 +973,7 @@ set keyerror=%errorlevel%
 cmd /c exit /b %keyerror%
 if %keyerror% NEQ 0 set "keyerror=[0x%=ExitCode%]"
 
-if defined generickey (set "keyecho=Installing Generic Product Key         ") else (set "keyecho=Installing Product Key                 ")
+if defined generickey (set "keyecho=          ") else (set "keyecho=Installing Product Key                 ")
 if %keyerror% EQU 0 (
 if %sps%==SoftwareLicensingService call :dk_refresh
 echo %keyecho% %~1 [Successful]
@@ -1353,7 +1353,7 @@ set error=1
 set wpaerror=1
 call :dk_color %Red% "Checking WPA Registry Errors            [%wpainfo%]"
 ) || (
-echo Checking WPA Registry Count             [%wpainfo%]
+echo              [%wpainfo%]
 )
 
 
@@ -1540,13 +1540,13 @@ if not defined apps (
 %psc% "if (-not $env:_vis) {Start-Job { Stop-Service %_slser% -force } | Wait-Job -Timeout 20 | Out-Null}; $sls = Get-WmiObject SoftwareLicensingService; $f=[io.file]::ReadAllText('!_batp!') -split ':xrm\:.*';iex ($f[1]); ReinstallLicenses" %nul%
 call :dk_actid 55c92734-d682-4d71-983e-d6ec3f16059f
 if not defined apps (
-set "_notfoundids=Key Not Installed / Act ID Not Found"
+set "_notfoundids= "
 call :dk_actids 55c92734-d682-4d71-983e-d6ec3f16059f
 if not defined allapps (
 set error=1
 set "_notfoundids=Not found"
 )
-call :dk_color %Red% "Checking Activation IDs                 [!_notfoundids!]"
+call :dk_color %Red% "              [!_notfoundids!]"
 )
 )
 )
