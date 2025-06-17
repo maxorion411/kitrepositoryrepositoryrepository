@@ -419,7 +419,7 @@ mode 140, 32
 if exist "%SysPath%\spp\store_test\" mode 140, 32
 %psc% "&{$W=$Host.UI.RawUI.WindowSize;$B=$Host.UI.RawUI.BufferSize;$W.Height=32;$B.Height=300;$Host.UI.RawUI.WindowSize=$W;$Host.UI.RawUI.BufferSize=$B;}" %nul%
 )
-title  Ohook Activation %masver%
+title 
 
 echo:
 echo Initializing...
@@ -649,7 +649,7 @@ if /i "%_oArch%"=="x86" (set "_hookPath=%_oRoot%\vfs\SystemX86" & set "_hook=spp
 call :oh_ppcpath
 
 echo:
-echo                    [C2R ^| %_version% %_AudienceData%^| %_oArch%]
+echo                 
 
 if not defined _oIds (
 call :dk_color %Red% "Checking Installed Products             [Product IDs not found. Aborting activation...]"
@@ -1113,9 +1113,9 @@ goto :oh_hookinstall_error
 echo:
 echo              [Successful]
 if defined exhook (
-echo Copying Custom %_hook% to            ["%_hookPath%\sppc.dll"] [Successful]
+echo [Successful]
 ) else (
-echo Extracting Custom %_hook% to         ["%_hookPath%\sppc.dll"] [Successful]
+echo [Successful]
 )
 
 goto :oh_hookinstall_error
