@@ -1440,7 +1440,7 @@ call :dk_color %Gray% "Checking SLC/WMI SKU                    [Difference Found
 reg query "HKU\S-1-5-20\Software\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPlatform\PersistedTSReArmed" %nul% && (
 set error=1
 set showfix=1
-call :dk_color2 %Red% "Checking Rearm                          " %Blue% "[System Restart Is Required]"
+call :dk_color2 %Red% " " %Blue% "[System Restart Is Required]"
 )
 
 
