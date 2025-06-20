@@ -520,7 +520,7 @@ call :dk_color %Red% "Checking Alternate Edition For HWID     [%altedition% Acti
 
 if not defined key (
 %eline%
-echo [%winos% ^| %winbuild% ^| SKU:%osSKU%]
+echo
 if not defined skunotfound (
 echo This product does not support  .
 echo Make sure you are using the latest version of the script.
@@ -542,15 +542,14 @@ if defined notworking set error=1
 
 ::  Install key
 
-echo:
 if defined changekey (
 call :dk_color %Blue% "[%altedition%] edition product key will be used to enable  ."
-echo:
+
 )
 
 if defined winsub (
-call :dk_color %Blue% "Windows Subscription [SKU ID-%slcSKU%] detected. Script will activate base edition [SKU ID-%regSKU%]."
-echo:
+call :dk_color %Blue% "[SKU ID-%slcSKU%] [SKU ID-%regSKU%]."
+
 )
 
 set generickey=1
@@ -568,7 +567,7 @@ if not "%name%"=="US" (
 set regionchange=1
 %psc% "Set-WinHomeLocation -GeoId 244" %nul%
 if !errorlevel! EQU 0 (
-echo            [Successful]
+echo  
 ) else (
 call :dk_color %Red% "           [Failed]"
 )
@@ -593,11 +592,11 @@ copy /y /b "%tdir%\GenuineTicket" "%tdir%\GenuineTicket.xml" %nul%
 
 if not exist "%tdir%\GenuineTicket.xml" (
 call :dk_color %Red% "          [Failed, aborting...]"
-echo [%encoded%]
+echo
 if exist "%tdir%\Genuine*" del /f /q "%tdir%\Genuine*" %nul%
 goto :dl_final
 ) else (
-echo           [Successful]
+echo      
 )
 
 set "_xmlexist=if exist "%tdir%\GenuineTicket.xml""
@@ -648,8 +647,6 @@ if exist "%tdir%\Genuine*" del /f /q "%tdir%\Genuine*" %nul%
 
 call :dk_product
 
-echo:
-echo  ...
 
 call :dk_act
 call :dk_checkperm
