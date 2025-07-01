@@ -973,7 +973,7 @@ if %keyerror% NEQ 0 set "keyerror=[0x%=ExitCode%]"
 if defined generickey (set "keyecho=          ") else (set "keyecho=Installing Product Key                 ")
 if %keyerror% EQU 0 (
 if %sps%==SoftwareLicensingService call :dk_refresh
-echo %keyecho% %~1 [Successful]
+
 ) else (
 call :dk_color %Red% "%keyecho% %~1 [Failed] %keyerror%"
 if not defined error (
