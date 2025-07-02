@@ -510,24 +510,16 @@ call :dk_color %Red% "Checking Alternate Edition For HWID     [%altedition% Acti
 
 if not defined key (
 %eline%
-echo
 if not defined skunotfound (
-echo This product does not support  .
-echo Make sure you are using the latest version of the script.
-echo If you are, then try TSforge activation option from the main menu.
 set fixes=%fixes% %mas%
-echo %mas%
 ) else (
-echo Required license files not found in %SysPath%\spp\tokens\skus\
 set fixes=%fixes% %mas%troubleshoot
 call :dk_color2 %Blue% "Check this webpage for help - " %_Yellow% " %mas%troubleshoot"
 )
-echo:
 goto dk_done
 )
 
 if defined notworking set error=1
-
 ::========================================================================================================================================
 
 ::  Install key
@@ -563,12 +555,6 @@ call :dk_color %Red% "           [Failed]"
 )
 )
 
-::==========================================================================================================================================
-
-::  Generate GenuineTicket.xml and apply
-::  In some cases clipup -v -o method fails and in some cases service restart method fails as well
-::  To maximize success rate and get better error details, script will install tickets two times (service restart + clipup -v -o)
-
 set "tdir=%ProgramData%\Microsoft\Windows\ClipSVC\GenuineTicket"
 if not exist "%tdir%\" md "%tdir%\" %nul%
 
@@ -581,26 +567,23 @@ call :hwiddata ticket
 copy /y /b "%tdir%\GenuineTicket" "%tdir%\GenuineTicket.xml" %nul%
 
 if not exist "%tdir%\GenuineTicket.xml" (
-call :dk_color %Red% "          [Failed, aborting...]"
-echo
-if exist "%tdir%\Genuine*" del /f /q "%tdir%\Genuine*" %nul%
-goto :dl_final
-) else (
-echo      
+    call :dk_color %Red% "          [Failed, aborting...]"
+    if exist "%tdir%\Genuine*" del /f /q "%tdir%\Genuine*" %nul%
+    goto :dl_final
 )
 
 set "_xmlexist=if exist "%tdir%\GenuineTicket.xml""
 
 %_xmlexist% (
-%psc% "Start-Job { Restart-Service ClipSVC } | Wait-Job -Timeout 20 | Out-Null"
-%_xmlexist% timeout /t 2 %nul%
-%_xmlexist% timeout /t 2 %nul%
+    %psc% "Start-Job { Restart-Service ClipSVC } | Wait-Job -Timeout 20 | Out-Null"
+    %_xmlexist% timeout /t 2 %nul%
+    %_xmlexist% timeout /t 2 %nul%
 
-%_xmlexist% (
-set error=1
-if exist "%tdir%\*.xml" del /f /q "%tdir%\*.xml" %nul%
-call :dk_color %Gray% "Installing GenuineTicket.xml            [Failed with ClipSVC service restart, wait...]"
-)
+    %_xmlexist% (
+        set error=1
+        if exist "%tdir%\*.xml" del /f /q "%tdir%\*.xml" %nul%
+        call :dk_color %Gray% "Installing GenuineTicket.xml            [Failed with ClipSVC service restart, wait...]"
+    )
 )
 
 copy /y /b "%tdir%\GenuineTicket" "%tdir%\GenuineTicket.xml" %nul%
@@ -609,31 +592,29 @@ clipup -v -o
 set rebuildinfo=
 
 if not exist %ProgramData%\Microsoft\Windows\ClipSVC\tokens.dat (
-set error=1
-set rebuildinfo=1
-call :dk_color %Red% "Checking ClipSVC tokens.dat             [Not Found]"
+    set error=1
+    set rebuildinfo=1
+    call :dk_color %Red% "Checking ClipSVC tokens.dat             [Not Found]"
 )
 
 %_xmlexist% (
-set error=1
-set rebuildinfo=1
-call :dk_color %Red% "Installing GenuineTicket.xml            [Failed With clipup -v -o]"
+    set error=1
+    set rebuildinfo=1
+    call :dk_color %Red% "Installing GenuineTicket.xml            [Failed With clipup -v -o]"
 )
 
 if exist "%ProgramData%\Microsoft\Windows\ClipSVC\Install\Migration\*.xml" (
-set error=1
-set rebuildinfo=1
-call :dk_color %Red% "Checking Ticket Migration               [Failed]"
+    set error=1
+    set rebuildinfo=1
+    call :dk_color %Red% "Checking Ticket Migration               [Failed]"
 )
 
 if not defined altapplist if not defined showfix if defined rebuildinfo (
-set showfix=1
-call :dk_color %Blue% "%_fixmsg%"
+    set showfix=1
+    call :dk_color %Blue% "%_fixmsg%"
 )
 
 if exist "%tdir%\Genuine*" del /f /q "%tdir%\Genuine*" %nul%
-
-::==========================================================================================================================================
 
 call :dk_product
 
