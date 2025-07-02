@@ -374,32 +374,27 @@ if !errorlevel!==1 (start %selfgit% & start %github% & start %mas% & exit /b)
 
 cls
 if not defined terminal (
-mode 110, 34
-if exist "%SysPath%\spp\store_test\" mode 134, 34
+    mode 110, 34
+    if exist "%SysPath%\spp\store_test\" mode 134, 34
 )
 title    %masver%
 
-echo:
-echo Initializing...
 call :dk_chkmal
 
 for %%# in (
-sppsvc.exe
-ClipUp.exe
+    sppsvc.exe
+    ClipUp.exe
 ) do (
-if not exist %SysPath%\%%# (
-%eline%
-echo [%SysPath%\%%#] file is missing, aborting...
-echo:
-if not defined results (
-call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run DISM Restore and SFC Scan options."
-call :dk_color %Blue% "After that, restart system and try activation again."
-echo:
-set fixes=%fixes% %mas%troubleshoot
-call :dk_color2 %Blue% "Check this webpage for help - " %_Yellow% " %mas%troubleshoot"
-)
-goto dk_done
-)
+    if not exist %SysPath%\%%# (
+        %eline%
+        if not defined results (
+            call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run DISM Restore and SFC Scan options."
+            call :dk_color %Blue% "After that, restart system and try activation again."
+            set fixes=%fixes% %mas%troubleshoot
+            call :dk_color2 %Blue% "Check this webpage for help - " %_Yellow% " %mas%troubleshoot"
+        )
+        goto dk_done
+    )
 )
 
 ::========================================================================================================================================
@@ -419,12 +414,7 @@ call :dk_sppissue
 call :dk_checkperm
 if defined _perm (
 cls
-echo ___________________________________________________________________________________________
-echo:
-call :dk_color2 %_White% "     " %Green% "%winos% is already permanently activated."
-echo ___________________________________________________________________________________________
 if %_unattended%==1 goto dk_done
-echo:
 choice /C:10 /N /M ">    [1] Activate Anyway [0] %_exitmsg% : "
 if errorlevel 2 exit /b
 )
@@ -469,7 +459,7 @@ if !errorlevel!==0 (set _int=1&set ping_f= But Ping Failed)
 )
 
 if defined _int (
-echo              [Connected%ping_f%]
+
 ) else (
 set error=1
 call :dk_color %Red% "             [Not Connected]"
