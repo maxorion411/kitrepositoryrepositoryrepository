@@ -13,7 +13,7 @@
 
 
 ::  To activate, run the script with "/HWID" parameter or change 0 to 1 in below line
-set _act=0
+set _act=1
 
 ::  To disable changing edition if current edition doesn't support  , change the value to 1 from 0 or run the script with "/HWID-NoEditionChange" parameter
 set _NoEditionChange=0
@@ -151,8 +151,8 @@ if defined _args set _args=%_args:re1=%
 if defined _args set _args=%_args:re2=%
 if defined _args (
 for %%A in (%_args%) do (
-if /i "%%A"=="/HWID"                  set _act=1
-if /i "%%A"=="/HWID-NoEditionChange"  set _NoEditionChange=1
+if /i "%%A"==""                  set _act=1
+if /i "%%A"=="-NoEditionChange"  set _NoEditionChange=1
 if /i "%%A"=="-el"                    set _elev=1
 )
 )
@@ -1819,3 +1819,4 @@ exit /b
 
 ::========================================================================================================================================
 :: Leave empty line below
+
